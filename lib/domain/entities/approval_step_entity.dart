@@ -4,7 +4,12 @@ class ApprovalStepEntity {
   final String? applyForDept;
   final List<ApprovalStep>? approvalSteps;
 
-  ApprovalStepEntity({required this.id, this.categoryName, this.applyForDept, this.approvalSteps});
+  ApprovalStepEntity({
+    required this.id,
+    this.categoryName,
+    this.applyForDept,
+    this.approvalSteps,
+  });
 
   @override
   String toString() {
@@ -12,7 +17,7 @@ class ApprovalStepEntity {
   }
 }
 
-class ApprovalStep{
+class ApprovalStep {
   final String? role;
   final String? desc;
   final int? stepOrder;

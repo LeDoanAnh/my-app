@@ -83,5 +83,4 @@ class DefaultFirebaseOptions {
     projectId: 'quan-ly-phe-duyet-don',
     storageBucket: 'quan-ly-phe-duyet-don.firebasestorage.app',
   );
-
 }

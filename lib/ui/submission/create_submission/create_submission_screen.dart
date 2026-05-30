@@ -57,8 +57,8 @@ class _DeptUIState {
     this.includedInFlow = false,
     this.stepOrder = 0,
     required this.noteCtrl,
-  })  : pickedAssets = {},
-        pickedLocations = {};
+  }) : pickedAssets = {},
+       pickedLocations = {};
 
   int get totalPicked => pickedAssets.length + pickedLocations.length;
 
@@ -108,9 +108,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
 
   // ── Build groups ──────────────────────────────────────────────────────────
   List<_DeptGroup> _buildGroups(
-      List<AssetEntity> assets,
-      List<LocationEntity> locations,
-      ) {
+    List<AssetEntity> assets,
+    List<LocationEntity> locations,
+  ) {
     final Map<String, _DeptGroup> map = {};
 
     for (final dept in _allDepts) {
@@ -128,7 +128,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       final key = 'dept_${a.department?.id ?? 0}';
       map.putIfAbsent(
         key,
-            () => _DeptGroup(
+        () => _DeptGroup(
           key: key,
           deptId: a.department?.id,
           name: a.department?.deptName ?? 'Phòng ban chung',
@@ -144,7 +144,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       final key = deptId != null ? 'dept_$deptId' : 'locations_only';
       map.putIfAbsent(
         key,
-            () => _DeptGroup(
+        () => _DeptGroup(
           key: key,
           deptId: deptId,
           name: l.department?.deptName ?? 'Địa điểm',
@@ -158,7 +158,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     for (final g in map.values) {
       _deptStates.putIfAbsent(
         g.key,
-            () => _DeptUIState(noteCtrl: TextEditingController()),
+        () => _DeptUIState(noteCtrl: TextEditingController()),
       );
       _deptNames[g.key] = g.name;
     }
@@ -226,8 +226,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSt) => AlertDialog(
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text('Mượn ${asset.assetName}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -245,7 +246,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
               ListTile(
                 contentPadding: EdgeInsets.zero,
                 title: Text(
-                    'Ngày lấy: ${DateFormat('dd/MM/yyyy').format(dateGet)}'),
+                  'Ngày lấy: ${DateFormat('dd/MM/yyyy').format(dateGet)}',
+                ),
                 subtitle: const Text(
                   'Có thể lấy trước tờ trình 2 ngày',
                   style: TextStyle(fontSize: 10, color: Colors.orange),
@@ -266,19 +268,20 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
-                      'Ngày trả: ${DateFormat('dd/MM/yyyy').format(dateReturn)}'),
+                    'Ngày trả: ${DateFormat('dd/MM/yyyy').format(dateReturn)}',
+                  ),
                   subtitle: const Text(
                     'Cho phép trả muộn tối đa 2 ngày',
                     style: TextStyle(fontSize: 10, color: Colors.blueAccent),
                   ),
                   trailing: const Icon(Icons.history, size: 18),
                   onTap: () async {
-                    final last = (_programDateRange?.end ?? DateTime.now())
-                        .add(const Duration(days: 2));
+                    final last = (_programDateRange?.end ?? DateTime.now()).add(
+                      const Duration(days: 2),
+                    );
                     final d = await showDatePicker(
                       context: ctx,
-                      initialDate:
-                      dateReturn.isAfter(last) ? last : dateReturn,
+                      initialDate: dateReturn.isAfter(last) ? last : dateReturn,
                       firstDate: dateGet,
                       lastDate: last,
                     );
@@ -289,8 +292,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           ),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Hủy')),
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Hủy'),
+            ),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -317,17 +321,15 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   void _showLocationDialog(LocationEntity loc, String deptKey) {
     final s = _deptStates[deptKey]!;
     final existing = s.pickedLocations[loc.id];
-    final List<Map<String, dynamic>> slots =
-    existing?.slots.isNotEmpty == true
-        ? List.from(
-        existing!.slots.map((e) => Map<String, dynamic>.from(e)))
+    final List<Map<String, dynamic>> slots = existing?.slots.isNotEmpty == true
+        ? List.from(existing!.slots.map((e) => Map<String, dynamic>.from(e)))
         : [
-      {
-        'date': _programDateRange?.start ?? DateTime.now(),
-        'startTime': const TimeOfDay(hour: 17, minute: 0),
-        'endTime': const TimeOfDay(hour: 21, minute: 0),
-      }
-    ];
+            {
+              'date': _programDateRange?.start ?? DateTime.now(),
+              'startTime': const TimeOfDay(hour: 17, minute: 0),
+              'endTime': const TimeOfDay(hour: 21, minute: 0),
+            },
+          ];
 
     String fmtTime(TimeOfDay t) =>
         '${t.hour.toString().padLeft(2, '0')}:${t.minute.toString().padLeft(2, '0')}';
@@ -336,8 +338,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setSt) => AlertDialog(
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
           title: Text('Lịch mượn ${loc.locationName}'),
           content: SizedBox(
             width: double.maxFinite,
@@ -359,143 +362,188 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  final d = await showDatePicker(
-                                    context: ctx,
-                                    initialDate: slot['date'],
-                                    firstDate: DateTime.now()
-                                        .subtract(const Duration(days: 1)),
-                                    lastDate: DateTime(2030),
-                                  );
-                                  if (d != null)
-                                    setSt(() => slot['date'] = d);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final d = await showDatePicker(
+                                      context: ctx,
+                                      initialDate: slot['date'],
+                                      firstDate: DateTime.now().subtract(
+                                        const Duration(days: 1),
+                                      ),
+                                      lastDate: DateTime(2030),
+                                    );
+                                    if (d != null)
+                                      setSt(() => slot['date'] = d);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.calendar_today,
+                                          size: 14,
+                                          color: Colors.blueGrey,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          DateFormat(
+                                            'dd/MM/yyyy',
+                                          ).format(slot['date']),
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(children: [
-                                    const Icon(Icons.calendar_today,
-                                        size: 14, color: Colors.blueGrey),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                        DateFormat('dd/MM/yyyy')
-                                            .format(slot['date']),
-                                        style: const TextStyle(fontSize: 13)),
-                                  ]),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 6),
-                            IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: const BoxConstraints(),
-                              icon: const Icon(Icons.remove_circle_outline,
-                                  color: Colors.red, size: 20),
-                              onPressed: slots.length > 1
-                                  ? () => setSt(() => slots.removeAt(idx))
-                                  : null,
-                            ),
-                          ]),
+                              const SizedBox(width: 6),
+                              IconButton(
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                icon: const Icon(
+                                  Icons.remove_circle_outline,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
+                                onPressed: slots.length > 1
+                                    ? () => setSt(() => slots.removeAt(idx))
+                                    : null,
+                              ),
+                            ],
+                          ),
                           const SizedBox(height: 8),
-                          Row(children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  final t = await showTimePicker(
-                                    context: ctx,
-                                    initialTime:
-                                    slot['startTime'] as TimeOfDay,
-                                    builder: (context, child) => MediaQuery(
-                                      data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: true),
-                                      child: child!,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final t = await showTimePicker(
+                                      context: ctx,
+                                      initialTime:
+                                          slot['startTime'] as TimeOfDay,
+                                      builder: (context, child) => MediaQuery(
+                                        data: MediaQuery.of(
+                                          context,
+                                        ).copyWith(alwaysUse24HourFormat: true),
+                                        child: child!,
+                                      ),
+                                    );
+                                    if (t != null)
+                                      setSt(() => slot['startTime'] = t);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
                                     ),
-                                  );
-                                  if (t != null)
-                                    setSt(() => slot['startTime'] = t);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.access_time,
+                                          size: 14,
+                                          color: Colors.blueGrey,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          fmtTime(
+                                            slot['startTime'] as TimeOfDay,
+                                          ),
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  child: Row(children: [
-                                    const Icon(Icons.access_time,
-                                        size: 14, color: Colors.blueGrey),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                        fmtTime(
-                                            slot['startTime'] as TimeOfDay),
-                                        style: const TextStyle(fontSize: 13)),
-                                  ]),
                                 ),
                               ),
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 6),
-                              child: Text('–',
+                              const Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 6),
+                                child: Text(
+                                  '–',
                                   style: TextStyle(
-                                      fontSize: 16, color: Colors.blueGrey)),
-                            ),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  final t = await showTimePicker(
-                                    context: ctx,
-                                    initialTime: slot['endTime'] as TimeOfDay,
-                                    builder: (context, child) => MediaQuery(
-                                      data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: true),
-                                      child: child!,
-                                    ),
-                                  );
-                                  if (t != null)
-                                    setSt(() => slot['endTime'] = t);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                        color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
+                                    fontSize: 16,
+                                    color: Colors.blueGrey,
                                   ),
-                                  child: Row(children: [
-                                    const Icon(Icons.access_time_filled,
-                                        size: 14, color: Colors.blueGrey),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                        fmtTime(slot['endTime'] as TimeOfDay),
-                                        style: const TextStyle(fontSize: 13)),
-                                  ]),
                                 ),
                               ),
-                            ),
-                          ]),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final t = await showTimePicker(
+                                      context: ctx,
+                                      initialTime: slot['endTime'] as TimeOfDay,
+                                      builder: (context, child) => MediaQuery(
+                                        data: MediaQuery.of(
+                                          context,
+                                        ).copyWith(alwaysUse24HourFormat: true),
+                                        child: child!,
+                                      ),
+                                    );
+                                    if (t != null)
+                                      setSt(() => slot['endTime'] = t);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.grey.shade300,
+                                      ),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.access_time_filled,
+                                          size: 14,
+                                          color: Colors.blueGrey,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          fmtTime(slot['endTime'] as TimeOfDay),
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     );
                   }),
                   TextButton.icon(
-                    onPressed: () => setSt(() => slots.add({
-                      'date': _programDateRange?.start ?? DateTime.now(),
-                      'startTime': const TimeOfDay(hour: 17, minute: 0),
-                      'endTime': const TimeOfDay(hour: 21, minute: 0),
-                    })),
+                    onPressed: () => setSt(
+                      () => slots.add({
+                        'date': _programDateRange?.start ?? DateTime.now(),
+                        'startTime': const TimeOfDay(hour: 17, minute: 0),
+                        'endTime': const TimeOfDay(hour: 21, minute: 0),
+                      }),
+                    ),
                     icon: const Icon(Icons.add),
                     label: const Text('Thêm ngày'),
                   ),
@@ -505,8 +553,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           ),
           actions: [
             TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('Hủy')),
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Hủy'),
+            ),
             ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -519,7 +568,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       'startTime': st,
                       'endTime': et,
                       'display':
-                      '${DateFormat('dd/MM').format(d)} ${fmtTime(st)}–${fmtTime(et)}',
+                          '${DateFormat('dd/MM').format(d)} ${fmtTime(st)}–${fmtTime(et)}',
                     };
                   }).toList();
                   s.pickedLocations[loc.id!] = _PickedLocation(
@@ -565,10 +614,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     }
 
     // ── Sắp xếp đúng thứ tự stepOrder 1→2→3→... ─────────────────────────────
-    final sortedEntries = _deptStates.entries
-        .where((e) => e.value.includedInFlow)
-        .toList()
-      ..sort((a, b) => a.value.stepOrder.compareTo(b.value.stepOrder));
+    final sortedEntries =
+        _deptStates.entries.where((e) => e.value.includedInFlow).toList()
+          ..sort((a, b) => a.value.stepOrder.compareTo(b.value.stepOrder));
 
     // ── Build departments payload đúng cấu trúc backend ──────────────────────
     // Backend nhận: [{ dept_name, dept_id, note, priority, opinion_only, items[] }]
@@ -593,7 +641,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         final timeInfo = picked.type == 'consumable'
             ? 'Lấy: ${DateFormat('dd/MM/yyyy').format(picked.dateGet)}'
             : 'Lấy: ${DateFormat('dd/MM/yyyy').format(picked.dateGet)}'
-            ' - Trả: ${DateFormat('dd/MM/yyyy').format(picked.dateReturn!)}';
+                  ' - Trả: ${DateFormat('dd/MM/yyyy').format(picked.dateReturn!)}';
 
         items.add({
           'entity_id': asset.id,
@@ -612,10 +660,20 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           final st = slot['startTime'] as TimeOfDay;
           final et = slot['endTime'] as TimeOfDay;
 
-          final startDt =
-          DateTime(date.year, date.month, date.day, st.hour, st.minute);
-          final endDt =
-          DateTime(date.year, date.month, date.day, et.hour, et.minute);
+          final startDt = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            st.hour,
+            st.minute,
+          );
+          final endDt = DateTime(
+            date.year,
+            date.month,
+            date.day,
+            et.hour,
+            et.minute,
+          );
 
           items.add({
             'entity_id': loc.id,
@@ -633,28 +691,32 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         'dept_name': _deptNames[key] ?? key,
         'dept_id': deptId,
         'note': s.noteCtrl.text.trim(),
-        'priority': s.stepOrder,      // ← thứ tự đúng 1,2,3,...
-        'opinion_only': opinionOnly,  // ← true khi không chọn gì, chỉ xin ý kiến
-        'items': items,               // ← rỗng nếu opinion_only
+        'priority': s.stepOrder, // ← thứ tự đúng 1,2,3,...
+        'opinion_only': opinionOnly, // ← true khi không chọn gì, chỉ xin ý kiến
+        'items': items, // ← rỗng nếu opinion_only
       });
     }
 
-    context.read<SubmissionBloc>().add(SubmitCreateSubmission(
-      title: _titleCtrl.text.trim(),
-      description: _descCtrl.text.trim(),
-      workflowId: 1,
-      creatorId: widget.userId ?? 1,
-      startDate:
-      DateFormat('yyyy-MM-dd HH:mm:ss').format(_programDateRange!.start),
-      endDate:
-      DateFormat('yyyy-MM-dd HH:mm:ss').format(_programDateRange!.end),
-      departments: departmentsPayload,
-      attachments: _attachments,
-    ));
+    context.read<SubmissionBloc>().add(
+      SubmitCreateSubmission(
+        title: _titleCtrl.text.trim(),
+        description: _descCtrl.text.trim(),
+        workflowId: 1,
+        creatorId: widget.userId ?? 1,
+        startDate: DateFormat(
+          'yyyy-MM-dd HH:mm:ss',
+        ).format(_programDateRange!.start),
+        endDate: DateFormat(
+          'yyyy-MM-dd HH:mm:ss',
+        ).format(_programDateRange!.end),
+        departments: departmentsPayload,
+        attachments: _attachments,
+      ),
+    );
   }
 
-  void _snack(String msg) => ScaffoldMessenger.of(context)
-      .showSnackBar(SnackBar(content: Text(msg)));
+  void _snack(String msg) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   void _resetForm() {
     setState(() {
@@ -682,7 +744,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         title: const Text(
           'Soạn tờ trình',
           style: TextStyle(
-              color: AppColors.textDark, fontWeight: FontWeight.bold),
+            color: AppColors.textDark,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         backgroundColor: AppColors.background,
         elevation: 0,
@@ -713,10 +777,12 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   ),
                 );
               } else if (state is SubmissionDeptError) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: Colors.red,
-                ));
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(state.message),
+                    backgroundColor: Colors.red,
+                  ),
+                );
               }
             },
           ),
@@ -728,8 +794,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         ],
         child: BlocBuilder<AssetLocationListBloc, AssetLocationListState>(
           builder: (context, assetState) {
-            if (assetState is AssetLocationListLoading ||
-                _allDepts.isEmpty) {
+            if (assetState is AssetLocationListLoading || _allDepts.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
 
@@ -738,11 +803,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                 : _buildGroups([], []);
 
             final filtered = groups
-                .where((g) =>
-            _searchQuery.isEmpty ||
-                g.name
-                    .toLowerCase()
-                    .contains(_searchQuery.toLowerCase()))
+                .where(
+                  (g) =>
+                      _searchQuery.isEmpty ||
+                      g.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+                )
                 .toList();
 
             return SingleChildScrollView(
@@ -754,8 +819,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   const SizedBox(height: 12),
                   _buildField(_titleCtrl, 'Tên tờ trình...'),
                   const SizedBox(height: 10),
-                  _buildField(_descCtrl, 'Nội dung chi tiết tờ trình...',
-                      maxLines: 4),
+                  _buildField(
+                    _descCtrl,
+                    'Nội dung chi tiết tờ trình...',
+                    maxLines: 4,
+                  ),
                   const SizedBox(height: 10),
                   _buildDatePicker(),
                   const SizedBox(height: 24),
@@ -785,13 +853,15 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                       child: const Text(
                         'GỬI TỜ TRÌNH',
                         style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -805,37 +875,47 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   }
 
   // ── Section label ─────────────────────────────────────────────────────────
-  Widget _sectionLabel(String num, String title) => Row(children: [
-    CircleAvatar(
-      radius: 10,
-      backgroundColor: AppColors.primary,
-      child: Text(num,
-          style: const TextStyle(color: Colors.white, fontSize: 10)),
-    ),
-    const SizedBox(width: 8),
-    Text(title,
-        style: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w800,
-            color: Colors.blueGrey,
-            letterSpacing: 0.4)),
-  ]);
-
-  Widget _buildField(TextEditingController ctrl, String hint,
-      {int maxLines = 1}) =>
-      TextField(
-        controller: ctrl,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-          hintText: hint,
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.all(14),
-          border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none),
+  Widget _sectionLabel(String num, String title) => Row(
+    children: [
+      CircleAvatar(
+        radius: 10,
+        backgroundColor: AppColors.primary,
+        child: Text(
+          num,
+          style: const TextStyle(color: Colors.white, fontSize: 10),
         ),
-      );
+      ),
+      const SizedBox(width: 8),
+      Text(
+        title,
+        style: const TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w800,
+          color: Colors.blueGrey,
+          letterSpacing: 0.4,
+        ),
+      ),
+    ],
+  );
+
+  Widget _buildField(
+    TextEditingController ctrl,
+    String hint, {
+    int maxLines = 1,
+  }) => TextField(
+    controller: ctrl,
+    maxLines: maxLines,
+    decoration: InputDecoration(
+      hintText: hint,
+      filled: true,
+      fillColor: Colors.white,
+      contentPadding: const EdgeInsets.all(14),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
+    ),
+  );
 
   Widget _buildDatePicker() => InkWell(
     onTap: () async {
@@ -850,22 +930,26 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(14)),
-      child: Row(children: [
-        Icon(Icons.calendar_today, size: 16, color: AppColors.primary),
-        const SizedBox(width: 10),
-        Text(
-          _programDateRange == null
-              ? 'Ngày diễn ra chương trình'
-              : '${DateFormat('dd/MM/yyyy').format(_programDateRange!.start)}  →  ${DateFormat('dd/MM/yyyy').format(_programDateRange!.end)}',
-          style: TextStyle(
-            fontSize: 13,
-            color: _programDateRange == null
-                ? Colors.grey
-                : AppColors.textDark,
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.calendar_today, size: 16, color: AppColors.primary),
+          const SizedBox(width: 10),
+          Text(
+            _programDateRange == null
+                ? 'Ngày diễn ra chương trình'
+                : '${DateFormat('dd/MM/yyyy').format(_programDateRange!.start)}  →  ${DateFormat('dd/MM/yyyy').format(_programDateRange!.end)}',
+            style: TextStyle(
+              fontSize: 13,
+              color: _programDateRange == null
+                  ? Colors.grey
+                  : AppColors.textDark,
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     ),
   );
 
@@ -878,19 +962,20 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       prefixIcon: const Icon(Icons.search_rounded, size: 20),
       suffixIcon: _searchQuery.isNotEmpty
           ? IconButton(
-        icon: const Icon(Icons.clear_rounded, size: 18),
-        onPressed: () {
-          _searchCtrl.clear();
-          setState(() => _searchQuery = '');
-        },
-      )
+              icon: const Icon(Icons.clear_rounded, size: 18),
+              onPressed: () {
+                _searchCtrl.clear();
+                setState(() => _searchQuery = '');
+              },
+            )
           : null,
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(vertical: 12),
       border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none),
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
     ),
   );
 
@@ -927,65 +1012,87 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         children: [
           InkWell(
             onTap: () => setState(() => s.isExpanded = !s.isExpanded),
-            borderRadius:
-            const BorderRadius.vertical(top: Radius.circular(16)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
             child: Padding(
-              padding:
-              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-              child: Row(children: [
-                if (s.includedInFlow)
-                  Container(
-                    margin: const EdgeInsets.only(right: 8),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(999),
-                    ),
-                    child: Text('B${s.stepOrder}',
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
+                  if (s.includedInFlow)
+                    Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        'B${s.stepOrder}',
                         style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(g.name,
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          g.name,
                           style: const TextStyle(
-                              fontSize: 13, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 4),
-                      Wrap(spacing: 4, children: [
-                        if (hasAssets)
-                          _chip('Vật tư', Icons.handyman_rounded,
-                              const Color(0xFF0F6E56), const Color(0xFFE1F5EE)),
-                        if (hasLocs)
-                          _chip('Địa điểm', Icons.pin_drop_rounded,
-                              const Color(0xFF185FA5), const Color(0xFFE6F1FB)),
-                        if (!hasAssets && !hasLocs)
-                          _chip(
-                              'Xin ý kiến',
-                              Icons.chat_bubble_outline_rounded,
-                              const Color(0xFF854F0B),
-                              const Color(0xFFFAEEDA)),
-                        if (s.totalPicked > 0)
-                          _chip(
-                              '${s.totalPicked} đã chọn',
-                              Icons.check_circle_rounded,
-                              const Color(0xFF27500A),
-                              const Color(0xFFEAF3DE)),
-                      ]),
-                    ],
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Wrap(
+                          spacing: 4,
+                          children: [
+                            if (hasAssets)
+                              _chip(
+                                'Vật tư',
+                                Icons.handyman_rounded,
+                                const Color(0xFF0F6E56),
+                                const Color(0xFFE1F5EE),
+                              ),
+                            if (hasLocs)
+                              _chip(
+                                'Địa điểm',
+                                Icons.pin_drop_rounded,
+                                const Color(0xFF185FA5),
+                                const Color(0xFFE6F1FB),
+                              ),
+                            if (!hasAssets && !hasLocs)
+                              _chip(
+                                'Xin ý kiến',
+                                Icons.chat_bubble_outline_rounded,
+                                const Color(0xFF854F0B),
+                                const Color(0xFFFAEEDA),
+                              ),
+                            if (s.totalPicked > 0)
+                              _chip(
+                                '${s.totalPicked} đã chọn',
+                                Icons.check_circle_rounded,
+                                const Color(0xFF27500A),
+                                const Color(0xFFEAF3DE),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Icon(
-                  s.isExpanded
-                      ? Icons.keyboard_arrow_up_rounded
-                      : Icons.keyboard_arrow_down_rounded,
-                  color: Colors.grey,
-                ),
-              ]),
+                  Icon(
+                    s.isExpanded
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -1018,21 +1125,26 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(tab.icon,
-                                  size: 14,
+                              Icon(
+                                tab.icon,
+                                size: 14,
+                                color: selected
+                                    ? AppColors.primary
+                                    : Colors.grey,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                tab.label,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: selected
+                                      ? FontWeight.w600
+                                      : FontWeight.normal,
                                   color: selected
                                       ? AppColors.primary
-                                      : Colors.grey),
-                              const SizedBox(width: 4),
-                              Text(tab.label,
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: selected
-                                          ? FontWeight.w600
-                                          : FontWeight.normal,
-                                      color: selected
-                                          ? AppColors.primary
-                                          : Colors.grey)),
+                                      : Colors.grey,
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -1075,17 +1187,22 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       color: const Color(0xFFFAEEDA),
       borderRadius: BorderRadius.circular(10),
     ),
-    child: const Row(children: [
-      Icon(Icons.chat_bubble_outline_rounded,
-          size: 16, color: Color(0xFF854F0B)),
-      SizedBox(width: 8),
-      Expanded(
-        child: Text(
-          'Thêm phòng này vào luồng để xin ý kiến (không mượn vật tư hay địa điểm)',
-          style: TextStyle(fontSize: 12, color: Color(0xFF854F0B)),
+    child: const Row(
+      children: [
+        Icon(
+          Icons.chat_bubble_outline_rounded,
+          size: 16,
+          color: Color(0xFF854F0B),
         ),
-      ),
-    ]),
+        SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            'Thêm phòng này vào luồng để xin ý kiến (không mượn vật tư hay địa điểm)',
+            style: TextStyle(fontSize: 12, color: Color(0xFF854F0B)),
+          ),
+        ),
+      ],
+    ),
   );
 
   Widget _buildAssetPane(_DeptGroup g, _DeptUIState s) {
@@ -1104,12 +1221,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           onTap: () => _toggleAsset(asset, g.key),
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: isPicked
-                  ? const Color(0xFFEAF3DE)
-                  : Colors.grey.shade50,
+              color: isPicked ? const Color(0xFFEAF3DE) : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isPicked
@@ -1117,74 +1231,83 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     : Colors.grey.shade200,
               ),
             ),
-            child: Row(children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color:
-                  isPicked ? const Color(0xFF3B6D11) : Colors.white,
-                  border: Border.all(
-                    color: isPicked
-                        ? const Color(0xFF3B6D11)
-                        : Colors.grey.shade400,
-                    width: 1.5,
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: isPicked ? const Color(0xFF3B6D11) : Colors.white,
+                    border: Border.all(
+                      color: isPicked
+                          ? const Color(0xFF3B6D11)
+                          : Colors.grey.shade400,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  borderRadius: BorderRadius.circular(5),
+                  child: isPicked
+                      ? const Icon(
+                          Icons.check_rounded,
+                          size: 14,
+                          color: Colors.white,
+                        )
+                      : null,
                 ),
-                child: isPicked
-                    ? const Icon(Icons.check_rounded,
-                    size: 14, color: Colors.white)
-                    : null,
-              ),
-              const SizedBox(width: 10),
-              Icon(
-                isConsumable
-                    ? Icons.water_drop_rounded
-                    : Icons.handyman_rounded,
-                size: 15,
-                color: isPicked
-                    ? const Color(0xFF3B6D11)
-                    : const Color(0xFF1D9E75),
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      asset.assetName ?? '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: isPicked
-                            ? const Color(0xFF27500A)
-                            : AppColors.textDark,
+                const SizedBox(width: 10),
+                Icon(
+                  isConsumable
+                      ? Icons.water_drop_rounded
+                      : Icons.handyman_rounded,
+                  size: 15,
+                  color: isPicked
+                      ? const Color(0xFF3B6D11)
+                      : const Color(0xFF1D9E75),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        asset.assetName ?? '',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: isPicked
+                              ? const Color(0xFF27500A)
+                              : AppColors.textDark,
+                        ),
+                      ),
+                      if (isPicked) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          'SL: ${picked.qty}  •  Lấy: ${DateFormat('dd/MM').format(picked.dateGet)}'
+                          '${picked.dateReturn != null ? '  •  Trả: ${DateFormat('dd/MM').format(picked.dateReturn!)}' : ''}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFF3B6D11),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (isPicked)
+                  GestureDetector(
+                    onTap: () => _showAssetDialog(asset, g.key),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.edit_rounded,
+                        size: 14,
+                        color: Color(0xFF3B6D11),
                       ),
                     ),
-                    if (isPicked) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        'SL: ${picked.qty}  •  Lấy: ${DateFormat('dd/MM').format(picked.dateGet)}'
-                            '${picked.dateReturn != null ? '  •  Trả: ${DateFormat('dd/MM').format(picked.dateReturn!)}' : ''}',
-                        style: const TextStyle(
-                            fontSize: 10, color: Color(0xFF3B6D11)),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (isPicked)
-                GestureDetector(
-                  onTap: () => _showAssetDialog(asset, g.key),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    child: const Icon(Icons.edit_rounded,
-                        size: 14, color: Color(0xFF3B6D11)),
                   ),
-                ),
-            ]),
+              ],
+            ),
           ),
         );
       },
@@ -1206,12 +1329,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           onTap: () => _toggleLocation(loc, g.key),
           borderRadius: BorderRadius.circular(10),
           child: Container(
-            padding:
-            const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: isPicked
-                  ? const Color(0xFFE6F1FB)
-                  : Colors.grey.shade50,
+              color: isPicked ? const Color(0xFFE6F1FB) : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isPicked
@@ -1219,70 +1339,82 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     : Colors.grey.shade200,
               ),
             ),
-            child: Row(children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                width: 20,
-                height: 20,
-                decoration: BoxDecoration(
-                  color:
-                  isPicked ? const Color(0xFF185FA5) : Colors.white,
-                  border: Border.all(
-                    color: isPicked
-                        ? const Color(0xFF185FA5)
-                        : Colors.grey.shade400,
-                    width: 1.5,
+            child: Row(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 150),
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: isPicked ? const Color(0xFF185FA5) : Colors.white,
+                    border: Border.all(
+                      color: isPicked
+                          ? const Color(0xFF185FA5)
+                          : Colors.grey.shade400,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  borderRadius: BorderRadius.circular(5),
+                  child: isPicked
+                      ? const Icon(
+                          Icons.check_rounded,
+                          size: 14,
+                          color: Colors.white,
+                        )
+                      : null,
                 ),
-                child: isPicked
-                    ? const Icon(Icons.check_rounded,
-                    size: 14, color: Colors.white)
-                    : null,
-              ),
-              const SizedBox(width: 10),
-              const Icon(Icons.pin_drop_rounded,
-                  size: 15, color: Color(0xFF378ADD)),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      loc.locationName ?? '',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                        color: isPicked
-                            ? const Color(0xFF0C447C)
-                            : AppColors.textDark,
+                const SizedBox(width: 10),
+                const Icon(
+                  Icons.pin_drop_rounded,
+                  size: 15,
+                  color: Color(0xFF378ADD),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        loc.locationName ?? '',
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: isPicked
+                              ? const Color(0xFF0C447C)
+                              : AppColors.textDark,
+                        ),
+                      ),
+                      if (isPicked && picked.slots.isNotEmpty) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          picked.slots
+                              .map((e) => e['display'] as String)
+                              .join(' | '),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: Color(0xFF185FA5),
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (isPicked)
+                  GestureDetector(
+                    onTap: () => _showLocationDialog(loc, g.key),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      child: const Icon(
+                        Icons.edit_rounded,
+                        size: 14,
+                        color: Color(0xFF185FA5),
                       ),
                     ),
-                    if (isPicked && picked.slots.isNotEmpty) ...[
-                      const SizedBox(height: 2),
-                      Text(
-                        picked.slots
-                            .map((e) => e['display'] as String)
-                            .join(' | '),
-                        style: const TextStyle(
-                            fontSize: 10, color: Color(0xFF185FA5)),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-              if (isPicked)
-                GestureDetector(
-                  onTap: () => _showLocationDialog(loc, g.key),
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    child: const Icon(Icons.edit_rounded,
-                        size: 14, color: Color(0xFF185FA5)),
                   ),
-                ),
-            ]),
+              ],
+            ),
           ),
         );
       },
@@ -1293,14 +1425,20 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     if (s.includedInFlow) {
       return OutlinedButton.icon(
         onPressed: () => _toggleFlow(key),
-        icon: const Icon(Icons.remove_circle_outline_rounded,
-            size: 16, color: Colors.red),
-        label: Text('Bỏ khỏi luồng duyệt (Bước ${s.stepOrder})',
-            style: const TextStyle(fontSize: 12, color: Colors.red)),
+        icon: const Icon(
+          Icons.remove_circle_outline_rounded,
+          size: 16,
+          color: Colors.red,
+        ),
+        label: Text(
+          'Bỏ khỏi luồng duyệt (Bước ${s.stepOrder})',
+          style: const TextStyle(fontSize: 12, color: Colors.red),
+        ),
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: Colors.red),
-          shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 8),
           minimumSize: const Size(double.infinity, 0),
         ),
@@ -1308,15 +1446,16 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     }
     return OutlinedButton.icon(
       onPressed: () => _toggleFlow(key),
-      icon: Icon(Icons.add_circle_outline_rounded,
-          size: 16, color: AppColors.primary),
-      label: const Text('Thêm vào luồng duyệt',
-          style: TextStyle(fontSize: 12)),
+      icon: Icon(
+        Icons.add_circle_outline_rounded,
+        size: 16,
+        color: AppColors.primary,
+      ),
+      label: const Text('Thêm vào luồng duyệt', style: TextStyle(fontSize: 12)),
       style: OutlinedButton.styleFrom(
         foregroundColor: AppColors.primary,
         side: BorderSide(color: AppColors.primary.withOpacity(0.5)),
-        shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(vertical: 8),
         minimumSize: const Size(double.infinity, 0),
       ),
@@ -1324,10 +1463,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   }
 
   Widget _buildStepsSummary() {
-    final steps = _deptStates.entries
-        .where((e) => e.value.includedInFlow)
-        .toList()
-      ..sort((a, b) => a.value.stepOrder.compareTo(b.value.stepOrder));
+    final steps =
+        _deptStates.entries.where((e) => e.value.includedInFlow).toList()
+          ..sort((a, b) => a.value.stepOrder.compareTo(b.value.stepOrder));
 
     if (steps.isEmpty) {
       return Container(
@@ -1365,48 +1503,67 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 14, vertical: 12),
-                child: Row(children: [
-                  CircleAvatar(
-                    radius: 13,
-                    backgroundColor: AppColors.primary.withOpacity(0.12),
-                    child: Text('${s.stepOrder}',
+                  horizontal: 14,
+                  vertical: 12,
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 13,
+                      backgroundColor: AppColors.primary.withOpacity(0.12),
+                      child: Text(
+                        '${s.stepOrder}',
                         style: TextStyle(
-                            fontSize: 11,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.primary)),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(realName,
-                            style: const TextStyle(
-                                fontSize: 13, fontWeight: FontWeight.w600)),
-                        const SizedBox(height: 4),
-                        Wrap(spacing: 4, children: [
-                          if (assetCount > 0)
-                            _chip('$assetCount vật tư', Icons.handyman_rounded,
-                                const Color(0xFF0F6E56),
-                                const Color(0xFFE1F5EE)),
-                          if (locCount > 0)
-                            _chip(
-                                '$locCount địa điểm',
-                                Icons.pin_drop_rounded,
-                                const Color(0xFF185FA5),
-                                const Color(0xFFE6F1FB)),
-                          if (assetCount == 0 && locCount == 0)
-                            _chip(
-                                'Xin ý kiến',
-                                Icons.chat_bubble_outline_rounded,
-                                const Color(0xFF854F0B),
-                                const Color(0xFFFAEEDA)),
-                        ]),
-                      ],
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.primary,
+                        ),
+                      ),
                     ),
-                  ),
-                ]),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            realName,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Wrap(
+                            spacing: 4,
+                            children: [
+                              if (assetCount > 0)
+                                _chip(
+                                  '$assetCount vật tư',
+                                  Icons.handyman_rounded,
+                                  const Color(0xFF0F6E56),
+                                  const Color(0xFFE1F5EE),
+                                ),
+                              if (locCount > 0)
+                                _chip(
+                                  '$locCount địa điểm',
+                                  Icons.pin_drop_rounded,
+                                  const Color(0xFF185FA5),
+                                  const Color(0xFFE6F1FB),
+                                ),
+                              if (assetCount == 0 && locCount == 0)
+                                _chip(
+                                  'Xin ý kiến',
+                                  Icons.chat_bubble_outline_rounded,
+                                  const Color(0xFF854F0B),
+                                  const Color(0xFFFAEEDA),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
@@ -1422,14 +1579,20 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   Widget _buildNoteField(_DeptUIState s, String deptName) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      Row(children: [
-        Icon(Icons.edit_note_rounded,
-            size: 14, color: Colors.blueGrey.shade400),
-        const SizedBox(width: 4),
-        Text('Ghi chú gửi phòng này',
-            style:
-            TextStyle(fontSize: 11, color: Colors.blueGrey.shade400)),
-      ]),
+      Row(
+        children: [
+          Icon(
+            Icons.edit_note_rounded,
+            size: 14,
+            color: Colors.blueGrey.shade400,
+          ),
+          const SizedBox(width: 4),
+          Text(
+            'Ghi chú gửi phòng này',
+            style: TextStyle(fontSize: 11, color: Colors.blueGrey.shade400),
+          ),
+        ],
+      ),
       const SizedBox(height: 6),
       TextField(
         controller: s.noteCtrl,
@@ -1441,8 +1604,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           fillColor: AppColors.fieldBg,
           contentPadding: const EdgeInsets.all(12),
           border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none),
+            borderRadius: BorderRadius.circular(12),
+            borderSide: BorderSide.none,
+          ),
         ),
       ),
     ],
@@ -1456,59 +1620,85 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       borderRadius: BorderRadius.circular(16),
       border: Border.all(color: AppColors.primary.withOpacity(0.2)),
     ),
-    child: Column(children: [
-      if (_attachments.isEmpty)
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text('Chưa có tệp nào được chọn',
-              style:
-              TextStyle(color: Colors.grey.shade500, fontSize: 13)),
+    child: Column(
+      children: [
+        if (_attachments.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              'Chưa có tệp nào được chọn',
+              style: TextStyle(color: Colors.grey.shade500, fontSize: 13),
+            ),
+          ),
+        ..._attachments.map(
+          (file) => Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.fieldBg,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.insert_drive_file_rounded,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    file.name,
+                    style: const TextStyle(fontSize: 12),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                InkWell(
+                  onTap: () => setState(() => _attachments.remove(file)),
+                  child: const Icon(
+                    Icons.cancel_rounded,
+                    size: 18,
+                    color: Colors.red,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-      ..._attachments.map((file) => Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            color: AppColors.fieldBg,
-            borderRadius: BorderRadius.circular(10)),
-        child: Row(children: [
-          Icon(Icons.insert_drive_file_rounded,
-              size: 18, color: AppColors.primary),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(file.name,
-                style: const TextStyle(fontSize: 12),
-                overflow: TextOverflow.ellipsis),
+        TextButton.icon(
+          onPressed: _pickFiles,
+          icon: const Icon(Icons.attach_file_rounded, size: 16),
+          label: const Text(
+            'Chọn tệp đính kèm',
+            style: TextStyle(fontSize: 13),
           ),
-          InkWell(
-            onTap: () =>
-                setState(() => _attachments.remove(file)),
-            child: const Icon(Icons.cancel_rounded,
-                size: 18, color: Colors.red),
-          ),
-        ]),
-      )),
-      TextButton.icon(
-        onPressed: _pickFiles,
-        icon: const Icon(Icons.attach_file_rounded, size: 16),
-        label: const Text('Chọn tệp đính kèm',
-            style: TextStyle(fontSize: 13)),
-        style:
-        TextButton.styleFrom(foregroundColor: AppColors.primary),
-      ),
-    ]),
+          style: TextButton.styleFrom(foregroundColor: AppColors.primary),
+        ),
+      ],
+    ),
   );
 
   Widget _chip(String label, IconData icon, Color fg, Color bg) => Container(
     padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
     decoration: BoxDecoration(
-        color: bg, borderRadius: BorderRadius.circular(999)),
-    child: Row(mainAxisSize: MainAxisSize.min, children: [
-      Icon(icon, size: 10, color: fg),
-      const SizedBox(width: 3),
-      Text(label,
+      color: bg,
+      borderRadius: BorderRadius.circular(999),
+    ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(icon, size: 10, color: fg),
+        const SizedBox(width: 3),
+        Text(
+          label,
           style: TextStyle(
-              fontSize: 10, color: fg, fontWeight: FontWeight.w500)),
-    ]),
+            fontSize: 10,
+            color: fg,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
   );
 }
 

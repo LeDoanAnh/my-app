@@ -10,7 +10,6 @@ import 'package:my_app/ui/location_asset/location_asset_list/asset_location_list
 import 'package:my_app/ui/location_asset/location_asset_list/asset_location_list_state.dart';
 import 'package:my_app/domain/entities/asset_entity.dart';
 import 'package:my_app/domain/entities/location_entity.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class AssetLocationListScreen extends StatefulWidget {
   const AssetLocationListScreen({super.key});
@@ -54,7 +53,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
         return Scaffold(
           backgroundColor: AppColors.fieldBg,
           appBar: AppBar(
-            title: const TrText(
+            title: const Text(
               "Quản lý Vật chất",
               style: TextStyle(
                 color: AppColors.textDark,
@@ -111,7 +110,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
         ],
       );
     } else if (state is AssetLocationListError) {
-      return Center(child: TrText(state.message));
+      return Center(child: Text(state.message));
     }
     return const SizedBox();
   }
@@ -221,7 +220,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
                   children: [
                     Row(
                       children: [
-                        TrText(
+                        Text(
                           tag,
                           style: TextStyle(
                             color: tagColor,
@@ -230,7 +229,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
                           ),
                         ),
                         const SizedBox(width: 8),
-                        TrText(
+                        Text(
                           status.toLowerCase(),
                           style: const TextStyle(
                             color: Colors.green,
@@ -241,7 +240,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
                       ],
                     ),
                     const SizedBox(height: 4),
-                    TrText(
+                    Text(
                       title,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -249,7 +248,7 @@ class _AssetLocationListScreenState extends State<AssetLocationListScreen>
                         color: AppColors.textDark,
                       ),
                     ),
-                    TrText(
+                    Text(
                       subtitle,
                       style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),

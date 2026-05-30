@@ -5,7 +5,6 @@ import 'package:my_app/ui/calendar/calendar_event.dart';
 import 'package:my_app/ui/calendar/calendar_state.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:my_app/core/theme/app_colors.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -77,7 +76,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Lịch mượn & Phê duyệt",
           style: TextStyle(
             color: AppColors.textDark,
@@ -166,7 +165,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                   color: AppColors.primary.withOpacity(0.1),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                child: TrText(
+                                child: Text(
                                   "+${events.length - 1}",
                                   style: const TextStyle(
                                     fontSize: 8,
@@ -232,7 +231,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       color: AppColors.primary,
                     ),
                     const SizedBox(width: 8),
-                    TrText(
+                    Text(
                       "Sự kiện ngày ${_selectedDay?.day ?? _focusedDay.day}/${_selectedDay?.month ?? _focusedDay.month}",
                       style: const TextStyle(
                         fontWeight: FontWeight.w800,
@@ -257,7 +256,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               Expanded(
                 child: state is CalendarError
                     ? Center(
-                        child: TrText(
+                        child: Text(
                           state.message,
                           style: const TextStyle(color: AppColors.error),
                         ),
@@ -329,7 +328,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
             color: color,
           ),
         ),
-        title: TrText(
+        title: Text(
           title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -341,7 +340,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 4),
-            TrText(
+            Text(
               time,
               style: const TextStyle(fontSize: 12, color: AppColors.textGrey),
             ),
@@ -352,7 +351,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: TrText(
+              child: Text(
                 status.toUpperCase(),
                 style: TextStyle(
                   color: color,
@@ -387,7 +386,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
               color: AppColors.textGrey.withOpacity(0.5),
             ),
             const SizedBox(height: 16),
-            const TrText(
+            const Text(
               "Không có lịch trình nào",
               style: TextStyle(
                 fontWeight: FontWeight.w600,

@@ -9,21 +9,24 @@ class SearchRepositoryImpl implements SearchRepository {
 
   @override
   Future<List<SearchResultEntity>> search(
-      int userId,
-      String query, {
-        String filter = 'all',
-      }) async {
+    int userId,
+    String query, {
+    String filter = 'all',
+  }) async {
     try {
       final res = await api.search(userId, query, filter: filter);
       return res.data
-          ?.map((m) => SearchResultEntity(
-        id: m.id ?? 0,
-        title: m.title ?? '-',
-        category: m.category ?? 'unknown',
-        status: m.status ?? '-',
-        refId: m.refId ?? m.id ?? 0,
-      ))
-          .toList() ?? [];
+              ?.map(
+                (m) => SearchResultEntity(
+                  id: m.id ?? 0,
+                  title: m.title ?? '-',
+                  category: m.category ?? 'unknown',
+                  status: m.status ?? '-',
+                  refId: m.refId ?? m.id ?? 0,
+                ),
+              )
+              .toList() ??
+          [];
     } catch (e) {
       throw Exception('Tìm kiếm thất bại: $e');
     }
@@ -33,8 +36,7 @@ class SearchRepositoryImpl implements SearchRepository {
   List<String> getSearchHistory() => SearchHistoryBox.getAll();
 
   @override
-  Future<void> saveSearchHistory(String query) =>
-      SearchHistoryBox.save(query);
+  Future<void> saveSearchHistory(String query) => SearchHistoryBox.save(query);
 
   @override
   Future<void> clearSearchHistory() => SearchHistoryBox.clearAll();

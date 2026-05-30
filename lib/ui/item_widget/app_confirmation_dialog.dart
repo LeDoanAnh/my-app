@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
-
 import '../../core/theme/app_colors.dart';
-import '../../l10n/app_localizations.dart';
+
 
 class AppConfirmationDialog extends StatelessWidget {
   final String title;
@@ -30,10 +28,9 @@ class AppConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final effectiveConfirmColor = confirmColor ?? AppColors.primary;
-    final effectiveConfirmText = confirmText ?? l10n.confirm;
-    final effectiveCancelText = cancelText ?? l10n.cancel;
+    final effectiveConfirmText = confirmText ?? 'Xác nhận';
+    final effectiveCancelText = cancelText ?? 'Hủy';
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -71,7 +68,7 @@ class AppConfirmationDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            TrText(
+            Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
@@ -82,7 +79,7 @@ class AppConfirmationDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            TrText(
+            Text(
               content,
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -113,7 +110,7 @@ class AppConfirmationDialog extends StatelessWidget {
                         borderRadius: BorderRadius.circular(16),
                       ),
                     ),
-                    child: TrText(
+                    child: Text(
                       effectiveConfirmText,
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -135,7 +132,7 @@ class AppConfirmationDialog extends StatelessWidget {
                         foregroundColor: AppColors.textGrey,
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: TrText(
+                      child: Text(
                         effectiveCancelText,
                         style: const TextStyle(fontWeight: FontWeight.w500),
                       ),

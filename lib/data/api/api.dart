@@ -26,7 +26,6 @@ import 'package:my_app/data/model/user_model.dart';
 import 'package:my_app/data/model/workflow_list_model.dart';
 import 'package:retrofit/retrofit.dart';
 
-
 part 'api.g.dart';
 
 @RestApi()
@@ -47,36 +46,35 @@ abstract class AuthApi {
 
   @POST("/notifications/save-fcm-token")
   Future<dynamic> saveFcmToken(
-      @Header("Authorization") String bearerToken,
-      @Body() Map<String, dynamic> body,
+    @Header("Authorization") String bearerToken,
+    @Body() Map<String, dynamic> body,
   );
 
   @GET("/v1/user/statistics")
   Future<SubmissionStatsModel> getStatistics(@Query("user_id") int userId);
 
   @GET("/v1/submissions/recent")
-  Future<List<SubmissionModel>> getRecentSubmissions(@Query("user_id") int userId);
+  Future<List<SubmissionModel>> getRecentSubmissions(
+    @Query("user_id") int userId,
+  );
 
   @GET("/submissions/calendar")
   Future<CalendarResponseModel> getCalendarSubmissions(
-      @Query("month") int month,
-      @Query("year") int year,
-      );
+    @Query("month") int month,
+    @Query("year") int year,
+  );
 
   @GET("/v1/submissions")
   Future<SubmissionResponseModel> getMySubmissions(
-      @Query("user_id") int userId,
-      @Query("type") String type,
-      );
+    @Query("user_id") int userId,
+    @Query("type") String type,
+  );
 
   @GET("/actor/list")
   Future<ActorResponseModel> getActorList();
 
   @GET("/actor/detail/{id}")
-  Future<UserResponse> getActorDetail(
-      @Path("id") int id,
-      );
-
+  Future<UserResponse> getActorDetail(@Path("id") int id);
 
   @GET("/department/list")
   Future<DepartmentResponseModel> getDepartmentList();
@@ -86,7 +84,7 @@ abstract class AuthApi {
 
   @GET("/location/list")
   Future<LocationResponseModel> getLocationList();
-  
+
   @GET("/workflow/list")
   Future<WorkflowListResponseModel> getWorkflowList();
 
@@ -101,7 +99,7 @@ abstract class AuthApi {
 
   @GET("/notifications/list")
   Future<NotificationResponseModel> getNotificationList(
-      @Query("user_id") int userId,
+    @Query("user_id") int userId,
   );
 
   @POST("/notifications/{id}/read")
@@ -109,7 +107,7 @@ abstract class AuthApi {
 
   @POST("/notifications/read_all/{user_id}")
   Future<dynamic> markAllAsRead(@Path("user_id") int userId);
-  
+
   @GET("/v1/submissions/{id}/detail")
   Future<SubmissionStepModel> getSubmissionDetail(@Path("id") int id);
 
@@ -118,15 +116,15 @@ abstract class AuthApi {
 
   @POST("/v1/submissions")
   Future<CreateResponse> createSubmission(
-      @Part(name: "title") String title,
-      @Part(name: "workflow_id") int workflowId,
-      @Part(name: "start_date") String startDate,
-      @Part(name: "end_date") String endDate,
-      @Part(name: "creator_id") int creatorId,
-      @Part(name: "departments") String departmentsJson,
-      @Part(name: "description") String? description,
-      @Part(name: "attachments[]") List<dio.MultipartFile>? attachments,
-      );
+    @Part(name: "title") String title,
+    @Part(name: "workflow_id") int workflowId,
+    @Part(name: "start_date") String startDate,
+    @Part(name: "end_date") String endDate,
+    @Part(name: "creator_id") int creatorId,
+    @Part(name: "departments") String departmentsJson,
+    @Part(name: "description") String? description,
+    @Part(name: "attachments[]") List<dio.MultipartFile>? attachments,
+  );
   @POST("/actor/create")
   Future<CreateResponse> createUser(@Body() Map<String, dynamic> body);
 
@@ -138,10 +136,10 @@ abstract class AuthApi {
 
   @POST("/department/create")
   Future<CreateResponse> createDepartment(
-      @Part(name: "dept_name") String deptName,
-      @Part(name: "location_desc") String locationDesc,
-      @Part(name: "parent_dept_id") int? parentDeptId,
-      );
+    @Part(name: "dept_name") String deptName,
+    @Part(name: "location_desc") String locationDesc,
+    @Part(name: "parent_dept_id") int? parentDeptId,
+  );
 
   @POST("/asset/create")
   Future<CreateResponse> createAsset(@Body() Map<String, dynamic> body);
@@ -152,86 +150,86 @@ abstract class AuthApi {
   // data/api/api.dart — thêm vào AuthApi
   @GET("/v1/approver/submission/{submissionId}")
   Future<ApproverSubmissionResponse> getApproverSubmission(
-      @Path("submissionId") int submissionId,
-      @Query("dept_id") int deptId,
-      );
+    @Path("submissionId") int submissionId,
+    @Query("dept_id") int deptId,
+  );
 
   @POST("/v1/approver/submission/{submissionId}/decide")
   Future<CreateResponse> decideSubmission(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @GET("/asset/asset-tasks")
   Future<AssetTaskListResponse> getAssetTasks(
-      @Query("dept_id") int deptId, {
-        @Query("search") String? search,
-        @Query("status") String? status,
-      });
+    @Query("dept_id") int deptId, {
+    @Query("search") String? search,
+    @Query("status") String? status,
+  });
 
   @GET("/asset/asset-tasks/{submissionId}")
   Future<AssetTaskDetailResponse> getAssetTaskDetail(
-      @Path("submissionId") int submissionId,
-      @Query("dept_id") int deptId,
-      );
+    @Path("submissionId") int submissionId,
+    @Query("dept_id") int deptId,
+  );
 
   @POST("/asset/asset-tasks/{submissionId}/handover")
   Future<HandoverResponse> handoverAssets(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @GET("/v1/borrow/list")
   Future<BorrowListResponse> getBorrowList(
-      @Query("user_id") int userId, {
-        @Query("search") String? search,
-      });
+    @Query("user_id") int userId, {
+    @Query("search") String? search,
+  });
 
   @POST("/v1/borrow/{submissionId}/confirm-receive")
   Future<BorrowActionResponse> confirmReceive(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @POST("/v1/borrow/{submissionId}/return")
   Future<BorrowActionResponse> returnAssets(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
   @GET("/v1/manager/recovery/list")
   Future<RecoveryListResponse> getRecoveryList(
-      @Query("handler_id") int handlerId, {
-        @Query("search") String? search,
-      });
+    @Query("handler_id") int handlerId, {
+    @Query("search") String? search,
+  });
 
   @POST("/v1/manager/{submissionId}/confirm-recovery")
   Future<RecoveryActionResponseModel> confirmRecovery(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @POST("/v1/manager/{submissionId}/remind-return")
   Future<RecoveryActionResponseModel> remindReturn(
-      @Path("submissionId") int submissionId,
-      @Body() Map<String, dynamic> body,
-      );
+    @Path("submissionId") int submissionId,
+    @Body() Map<String, dynamic> body,
+  );
 
   @GET("/v1/history/borrow")
   Future<BorrowHistoryListResponse> getBorrowHistory(
-      @Query("user_id") int userId, {
-        @Query("search") String? search,
-      });
+    @Query("user_id") int userId, {
+    @Query("search") String? search,
+  });
 
   @GET("/v1/history/handover")
   Future<HandoverHistoryListResponse> getHandoverHistory(
-      @Query("user_id") int userId, {
-        @Query("search") String? search,
-      });
+    @Query("user_id") int userId, {
+    @Query("search") String? search,
+  });
 
   @GET("/v1/search")
   Future<SearchListResponse> search(
-      @Query("user_id") int userId,
-      @Query("q") String query, {
-        @Query("filter") String filter = 'all',
-      });
+    @Query("user_id") int userId,
+    @Query("q") String query, {
+    @Query("filter") String filter = 'all',
+  });
 }

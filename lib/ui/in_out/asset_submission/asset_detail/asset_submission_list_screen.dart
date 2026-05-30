@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/asset_task_entity.dart';
 import 'package:my_app/ui/in_out/asset_submission/asset_detail/asset_task_bloc.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class AssetSubmissionListScreen extends StatefulWidget {
   final int handlerId;
@@ -50,7 +49,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Danh sách đơn vật tư",
           style: TextStyle(
             color: AppColors.textDark,
@@ -82,13 +81,13 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                           size: 48,
                         ),
                         const SizedBox(height: 12),
-                        TrText(state.message, textAlign: TextAlign.center),
+                        Text(state.message, textAlign: TextAlign.center),
                         const SizedBox(height: 12),
                         ElevatedButton(
                           onPressed: () => context.read<AssetTaskBloc>().add(
                             LoadAssetTasks(deptId: widget.deptId),
                           ),
-                          child: const TrText("Thử lại"),
+                          child: const Text("Thử lại"),
                         ),
                       ],
                     ),
@@ -120,7 +119,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
         controller: _searchController,
         onChanged: _onSearch,
         decoration: InputDecoration(
-          hintText: uiText(context, "Tìm mã đơn hoặc tên vật tư..."),
+          hintText: "Tìm mã đơn hoặc tên vật tư...",
           prefixIcon: const Icon(Icons.search, size: 20),
           filled: true,
           fillColor: const Color(0xFFF1F3F6),
@@ -179,7 +178,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                         color: const Color(0xFFEEF2FF),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: TrText(
+                      child: Text(
                         "#${task.id}",
                         style: const TextStyle(
                           color: Color(0xFF4F46E5),
@@ -188,14 +187,14 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                         ),
                       ),
                     ),
-                    TrText(
+                    Text(
                       task.date ?? "-",
                       style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ],
                 ),
                 const SizedBox(height: 14),
-                TrText(
+                Text(
                   task.title ?? "Không có tiêu đề",
                   style: const TextStyle(
                     fontSize: 17,
@@ -214,7 +213,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                       ),
                       const SizedBox(width: 4),
                       Expanded(
-                        child: TrText(
+                        child: Text(
                           task.sender!,
                           style: const TextStyle(
                             color: Colors.blueGrey,
@@ -239,7 +238,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                           color: Colors.green,
                         ),
                         const SizedBox(width: 4),
-                        TrText(
+                        Text(
                           "Duyệt bởi: ${task.approvedBy!.name ?? '-'}",
                           style: const TextStyle(
                             color: Colors.green,
@@ -262,7 +261,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                           color: Colors.blueGrey,
                         ),
                         const SizedBox(width: 6),
-                        TrText(
+                        Text(
                           "${task.itemCount ?? 0} vật phẩm",
                           style: const TextStyle(
                             color: Colors.blueGrey,
@@ -289,7 +288,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                             color: Color(0xFF10B981),
                           ),
                           SizedBox(width: 4),
-                          TrText(
+                          Text(
                             "Đã duyệt",
                             style: TextStyle(
                               color: Color(0xFF065F46),
@@ -317,7 +316,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
         children: [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             "Không tìm thấy đơn vật tư nào",
             style: TextStyle(color: Colors.grey[500]),
           ),

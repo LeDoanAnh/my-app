@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/submission_entity.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/submission/submission_list/submission_list_bloc.dart';
 import 'package:my_app/ui/submission/submission_list/submission_list_event.dart';
 import 'package:my_app/ui/submission/submission_list/submission_list_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class SubmissionListScreen extends StatefulWidget {
   final UserEntity user;
@@ -46,7 +44,6 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final isApprover = widget.user.roles!.any((role) => role.id == 3);
     final tabCount = isApprover ? 4 : 3;
 
@@ -57,8 +54,8 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.background,
           elevation: 0,
-          title: TrText(
-            l10n.submissionList,
+          title: Text(
+            'Danh sách tờ đơn',
             style: const TextStyle(
               color: AppColors.textDark,
               fontWeight: FontWeight.bold,
@@ -76,10 +73,10 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                   indicatorColor: AppColors.primary,
                   isScrollable: isApprover,
                   tabs: [
-                    Tab(text: l10n.pending),
-                    Tab(text: l10n.approved),
-                    Tab(text: l10n.rejected),
-                    if (isApprover) Tab(text: l10n.needApproval),
+                    Tab(text: 'Đang chờ'),
+                    Tab(text: 'Đã duyệt'),
+                    Tab(text: 'Từ chối'),
+                    if (isApprover) Tab(text: 'Cần duyệt'),
                   ],
                 ),
               ],
@@ -102,7 +99,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                     height: MediaQuery.of(context).size.height * 0.6,
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(16),
-                    child: TrText(
+                    child: Text(
                       state.message,
                       style: const TextStyle(color: AppColors.error),
                       textAlign: TextAlign.center,
@@ -136,7 +133,6 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
   }
 
   Widget _buildSearchBar() {
-    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Container(
@@ -149,7 +145,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
           controller: _searchController,
           onChanged: (value) => setState(() => _searchKeyword = value),
           decoration: InputDecoration(
-            hintText: l10n.searchSubmissionHint,
+            hintText: 'Tìm mã đơn hoặc tiêu đề...',
             prefixIcon: const Icon(Icons.search, color: AppColors.textGrey),
             border: InputBorder.none,
           ),
@@ -163,7 +159,6 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
     String statusCode, {
     bool isApproverTab = false,
   }) {
-    final l10n = AppLocalizations.of(context)!;
     final filteredList = data.where((item) {
       final matchesStatus =
           item.statusCode?.toLowerCase() == statusCode.toLowerCase();
@@ -195,8 +190,8 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
           child: Container(
             height: MediaQuery.of(context).size.height * 0.6,
             alignment: Alignment.center,
-            child: TrText(
-              l10n.noDataForThisSection,
+            child: Text(
+              'Không có dữ liệu cho mục này',
               style: TextStyle(color: AppColors.textGrey.withOpacity(0.8)),
             ),
           ),
@@ -219,7 +214,6 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
   }
 
   Widget _buildSubmissionCard(SubmissionEntity item, bool isApproverTab) {
-    final l10n = AppLocalizations.of(context)!;
     Color statusColor;
     switch (item.statusCode?.toLowerCase()) {
       case 'approved':
@@ -285,7 +279,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                       color: AppColors.secondary,
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: TrText(
+                    child: Text(
                       item.submissionCode ?? 'N/A',
                       style: const TextStyle(
                         color: AppColors.primary,
@@ -294,7 +288,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                       ),
                     ),
                   ),
-                  TrText(
+                  Text(
                     _formatDate(item.date),
                     style: const TextStyle(
                       color: AppColors.textGrey,
@@ -304,8 +298,8 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                 ],
               ),
               const SizedBox(height: 12),
-              TrText(
-                item.title ?? l10n.untitled,
+              Text(
+                item.title ?? 'Không có tiêu đề',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -322,10 +316,10 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                   ),
                   const SizedBox(width: 4),
                   Expanded(
-                    child: TrText(
+                    child: Text(
                       isApproverTab
-                          ? '${l10n.creator}: ${item.creatorName}'
-                          : '${l10n.approver}: ${item.approverName ?? l10n.waiting}',
+                          ? '${'Người tạo'}: ${item.creatorName}'
+                          : '${'Người duyệt'}: ${item.approverName ?? 'Đang chờ'}',
                       style: const TextStyle(
                         color: AppColors.textDark,
                         fontSize: 12,
@@ -344,8 +338,8 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                     color: AppColors.textGrey,
                   ),
                   const SizedBox(width: 4),
-                  TrText(
-                    item.categoryName ?? l10n.category,
+                  Text(
+                    item.categoryName ?? 'Loại đơn',
                     style: const TextStyle(
                       color: AppColors.textGrey,
                       fontSize: 13,
@@ -361,7 +355,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                       color: statusColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: TrText(
+                    child: Text(
                       item.status ?? 'N/A',
                       style: TextStyle(
                         color: statusColor,

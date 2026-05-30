@@ -4,14 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/item_widget/app_button.dart';
 import 'package:my_app/ui/item_widget/app_card_container.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
 import 'package:my_app/ui/item_widget/app_logo_widget.dart';
 import 'package:my_app/ui/item_widget/app_text_field.dart';
-import 'package:my_app/l10n/ui_text.dart';
-
 import 'auth_bloc.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
@@ -46,8 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
@@ -85,8 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 40),
                   AppCardContainer(
                     children: [
-                      TrText(
-                        l10n.welcomeBack,
+                      Text(
+                        'Chào mừng trở lại',
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -94,8 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TrText(
-                        l10n.systemSubtitle,
+                      Text(
+                        'Hệ thống quản lý tờ trình nội bộ',
                         style: const TextStyle(
                           color: AppColors.textGrey,
                           fontSize: 13,
@@ -104,15 +99,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 30),
                       AppTextField(
                         controller: _userController,
-                        label: l10n.username,
-                        hint: l10n.enterUsername,
+                        label: 'Tài khoản',
+                        hint: 'Nhập tên đăng nhập',
                         icon: Icons.account_circle_outlined,
                       ),
                       const SizedBox(height: 20),
                       AppTextField(
                         controller: _passController,
-                        label: l10n.password,
-                        hint: l10n.enterPassword,
+                        label: 'Mật khẩu',
+                        hint: 'Nhập mật khẩu',
                         icon: Icons.lock_outline,
                         isPassword: true,
                         isVisible: _isPasswordVisible,
@@ -126,8 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () => _showForgotPasswordDialog(context),
-                          child: TrText(
-                            l10n.forgotPassword,
+                          child: Text(
+                            'Quên mật khẩu?',
                             style: const TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
@@ -139,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       BlocBuilder<AuthBloc, AuthState>(
                         builder: (context, state) {
                           return AppButton(
-                            title: l10n.login.toUpperCase(),
+                            title: 'Đăng nhập'.toUpperCase(),
                             isLoading: state is AuthLoading,
                             onPressed: () {
                               final username = _userController.text.trim();
@@ -156,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 40),
-                  const TrText(
+                  const Text(
                     '(c) 2026 Portal Submission System',
                     style: TextStyle(color: Colors.black26, fontSize: 11),
                   ),
@@ -170,13 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showErrorDialog(BuildContext context, String msg) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AppConfirmationDialog(
-        title: l10n.errorNotice,
+        title: 'Thông báo lỗi',
         content: msg,
-        confirmText: l10n.retry,
+        confirmText: 'Thử lại',
         confirmColor: AppColors.error,
         onConfirm: () {},
       ),
@@ -184,13 +178,13 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showForgotPasswordDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AppConfirmationDialog(
-        title: l10n.forgotPassword,
-        content: l10n.forgotPasswordContent,
-        confirmText: l10n.understood,
+        title: 'Quên mật khẩu?',
+        content:
+            'Vui lòng liên hệ Quản trị viên (IT Support) để cấp lại mật khẩu mới.',
+        confirmText: 'Đã hiểu',
         onConfirm: () {},
       ),
     );

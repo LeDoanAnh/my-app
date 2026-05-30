@@ -43,14 +43,15 @@ class DepartmentModel {
     this.users,
     this.assetsCount,
     this.submissionsCount,
-    this.parent
+    this.parent,
   });
 
-  factory DepartmentModel.fromJson(Map<String, dynamic> json) => _$DepartmentModelFromJson(json);
+  factory DepartmentModel.fromJson(Map<String, dynamic> json) =>
+      _$DepartmentModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$DepartmentModelToJson(this);
 
-  DepartmentEntity toEntity(){
+  DepartmentEntity toEntity() {
     return DepartmentEntity(
       id: id ?? 1,
       deptName: deptName,
@@ -62,9 +63,10 @@ class DepartmentModel {
       users: users,
       assetsCount: assetsCount,
       submissionsCount: submissionsCount,
-      parent: parent
+      parent: parent,
     );
   }
+
   @override
   String toString() {
     return 'DepartmentModel{id: $id, deptName: $deptName, locationDesc: $locationDesc, parentDeptId: $parentDeptId, usersCount: $usersCount, createdAt: $createdAt, updatedAt: $updatedAt, assetsCount: $assetsCount, submissionsCount: $submissionsCount, parent: $parent, assets: $assets, locations: $locations, users: $users}';
@@ -77,29 +79,29 @@ class DepartmentResponseModel {
 
   DepartmentResponseModel({this.data});
 
-  factory DepartmentResponseModel.fromJson(Map<String, dynamic> json) => _$DepartmentResponseModelFromJson(json);
+  factory DepartmentResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$DepartmentResponseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$DepartmentResponseModelToJson(this);
 }
+
 @JsonSerializable()
-class DepartmentDetailResponseModel{
+class DepartmentDetailResponseModel {
   final DepartmentModel? data;
   DepartmentDetailResponseModel({this.data});
 
-  factory DepartmentDetailResponseModel.fromJson(Map<String, dynamic> json) => _$DepartmentDetailResponseModelFromJson(json);
+  factory DepartmentDetailResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$DepartmentDetailResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$DepartmentDetailResponseModelToJson(this);
-
 }
 
 @JsonSerializable()
-class CreateDepartmentResponse{
+class CreateDepartmentResponse {
   final bool success;
   final String message;
 
-  CreateDepartmentResponse({
-    required this.success,
-    required this.message,
-  });
-  factory CreateDepartmentResponse.fromJson(Map<String, dynamic> json) => _$CreateDepartmentResponseFromJson(json);
+  CreateDepartmentResponse({required this.success, required this.message});
+  factory CreateDepartmentResponse.fromJson(Map<String, dynamic> json) =>
+      _$CreateDepartmentResponseFromJson(json);
   Map<String, dynamic> toJson() => _$CreateDepartmentResponseToJson(this);
 }

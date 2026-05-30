@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/core/theme/app_colors.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class CreateWorkflowScreen extends StatefulWidget {
   const CreateWorkflowScreen({super.key});
@@ -81,7 +80,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
               ),
               margin: const EdgeInsets.only(bottom: 20),
             ),
-            TrText(
+            Text(
               title,
               style: const TextStyle(
                 fontWeight: FontWeight.w800,
@@ -95,7 +94,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                 itemCount: data.length,
                 separatorBuilder: (_, __) => const Divider(height: 1),
                 itemBuilder: (context, i) => ListTile(
-                  title: TrText(
+                  title: Text(
                     data[i]['name'],
                     style: const TextStyle(fontWeight: FontWeight.w500),
                   ),
@@ -117,7 +116,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Cấu hình Loại đơn & Luồng duyệt",
           style: TextStyle(
             color: Colors.black87,
@@ -161,7 +160,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TrText(
+          const Text(
             "THÔNG TIN LOẠI ĐƠN MỚI",
             style: TextStyle(
               fontSize: 11,
@@ -211,7 +210,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TrText(
+          const Text(
             "QUY TRÌNH DUYỆT (ROLE 3 BẮT BUỘC)",
             style: TextStyle(
               fontSize: 11,
@@ -248,7 +247,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                   shape: BoxShape.circle,
                 ),
                 child: Center(
-                  child: TrText(
+                  child: Text(
                     "${index + 1}",
                     style: const TextStyle(
                       color: Colors.white,
@@ -288,7 +287,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TrText(
+                      const Text(
                         "Đơn vị phê duyệt",
                         style: TextStyle(
                           fontSize: 10,
@@ -322,7 +321,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const TrText(
+                  const Text(
                     "Chức vụ phê duyệt (Mặc định)",
                     style: TextStyle(
                       fontSize: 10,
@@ -339,7 +338,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                         color: AppColors.primary,
                       ),
                       const SizedBox(width: 8),
-                      TrText(
+                      Text(
                         step['target_role_name'],
                         style: const TextStyle(
                           fontSize: 14,
@@ -380,7 +379,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                 color: AppColors.primary,
               ),
               SizedBox(width: 8),
-              TrText(
+              Text(
                 "Thêm bước duyệt",
                 style: TextStyle(
                   color: AppColors.primary,
@@ -427,7 +426,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
           ),
           elevation: 0,
         ),
-        child: const TrText(
+        child: const Text(
           "Lưu Loại đơn & Luồng duyệt",
           style: TextStyle(
             color: Colors.white,
@@ -512,7 +511,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   label,
                   style: const TextStyle(
                     fontSize: 10,
@@ -520,7 +519,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TrText(
+                Text(
                   value,
                   style: const TextStyle(
                     fontSize: 14,
@@ -548,7 +547,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
         child: Row(
           children: [
             Expanded(
-              child: TrText(
+              child: Text(
                 value,
                 style: const TextStyle(
                   fontSize: 14,

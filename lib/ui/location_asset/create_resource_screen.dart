@@ -7,7 +7,6 @@ import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
 import 'package:my_app/ui/location_asset/form_resource_bloc.dart';
 import 'package:my_app/ui/location_asset/form_resource_event.dart';
 import 'package:my_app/ui/location_asset/form_resource_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class CreateResourceScreen extends StatefulWidget {
   const CreateResourceScreen({super.key});
@@ -51,7 +50,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
     if (_formKey.currentState!.validate()) {
       if (_selectedDept == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: TrText("Vui lòng chọn đơn vị phụ trách")),
+          const SnackBar(content: Text("Vui lòng chọn đơn vị phụ trách")),
         );
         return;
       }
@@ -152,7 +151,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              const TrText(
+              const Text(
                 "Tạo thành công!",
                 style: TextStyle(
                   fontSize: 18,
@@ -161,7 +160,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                 ),
               ),
               const SizedBox(height: 10),
-              TrText(
+              Text(
                 message,
                 textAlign: TextAlign.center,
                 style: TextStyle(
@@ -188,7 +187,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const TrText(
+                      child: const Text(
                         "Tạo tiếp",
                         style: TextStyle(
                           color: Colors.white,
@@ -208,7 +207,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                       style: TextButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 12),
                       ),
-                      child: const TrText(
+                      child: const Text(
                         "Hoàn tất & Thoát",
                         style: TextStyle(
                           color: Colors.grey,
@@ -235,7 +234,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
         } else if (state is FormResourceError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: TrText(state.message),
+              content: Text(state.message),
               backgroundColor: Colors.redAccent,
             ),
           );
@@ -257,7 +256,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
         return Scaffold(
           backgroundColor: AppColors.fieldBg,
           appBar: AppBar(
-            title: const TrText(
+            title: const Text(
               "Thêm mới CSVC",
               style: TextStyle(
                 color: AppColors.textDark,
@@ -407,7 +406,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<DepartmentEntity>(
           value: _selectedDept,
-          hint: TrText(
+          hint: Text(
             "Chọn phòng ban...",
             style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
           ),
@@ -416,7 +415,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
               .map(
                 (dept) => DropdownMenuItem(
                   value: dept,
-                  child: TrText(
+                  child: Text(
                     dept.deptName ?? "Không rõ",
                     style: const TextStyle(fontSize: 14),
                   ),
@@ -467,7 +466,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                 : [],
           ),
           child: Center(
-            child: TrText(
+            child: Text(
               label,
               style: TextStyle(
                 color: isSel ? AppColors.primary : Colors.grey,
@@ -512,7 +511,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                   onTap: () =>
                       setState(() => _selectedAssetMode = "returnable"),
                   child: Center(
-                    child: TrText(
+                    child: Text(
                       "Mượn trả",
                       style: TextStyle(
                         color: isReturnable ? Colors.white : Colors.grey,
@@ -528,7 +527,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                   onTap: () =>
                       setState(() => _selectedAssetMode = "consumable"),
                   child: Center(
-                    child: TrText(
+                    child: Text(
                       "Tiêu hao",
                       style: TextStyle(
                         color: !isReturnable ? Colors.white : Colors.grey,
@@ -549,7 +548,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
   Widget _buildLabel(String text) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8, left: 4),
-      child: TrText(
+      child: Text(
         text,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
@@ -610,7 +609,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
           elevation: 5,
           shadowColor: AppColors.primary.withOpacity(0.3),
         ),
-        child: const TrText(
+        child: const Text(
           "XÁC NHẬN TẠO",
           style: TextStyle(
             color: Colors.white,

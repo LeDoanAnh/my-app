@@ -24,6 +24,7 @@ class CreateUserParams {
     required this.roleIds,
     required this.status,
   });
-  factory CreateUserParams.fromJson(Map<String, dynamic> json) => _$CreateUserParamsFromJson(json);
+  factory CreateUserParams.fromJson(Map<String, dynamic> json) =>
+      _$CreateUserParamsFromJson(json);
   Map<String, dynamic> toJson() => _$CreateUserParamsToJson(this);
 }

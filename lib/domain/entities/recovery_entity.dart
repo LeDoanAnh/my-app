@@ -4,10 +4,10 @@ class RecoveryEntity {
   final String? title;
   final String? borrowerName;
   final int? borrowerId;
-  final bool isReturned;     // người mượn đã nhấn TRẢ ĐỒ
-  final bool userConfirmed;  // người mượn đã XÁC NHẬN NHẬN ĐỒ
-  final bool isUrgent;       // deadline < 24h
-  final String? returnDate;  // formatted string "HH:mm - dd/MM/yyyy"
+  final bool isReturned; // người mượn đã nhấn TRẢ ĐỒ
+  final bool userConfirmed; // người mượn đã XÁC NHẬN NHẬN ĐỒ
+  final bool isUrgent; // deadline < 24h
+  final String? returnDate; // formatted string "HH:mm - dd/MM/yyyy"
   final List<RecoveryItemEntity> items;
 
   RecoveryEntity({

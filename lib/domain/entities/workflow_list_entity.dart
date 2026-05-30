@@ -14,7 +14,6 @@ class WorkflowListEntity {
     this.applyTo,
     this.stepsCount,
     this.status,
-    this.steps
+    this.steps,
   });
-
 }

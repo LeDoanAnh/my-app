@@ -6,7 +6,6 @@ import 'package:my_app/domain/entities/asset_detail_entity.dart';
 import 'package:my_app/ui/location_asset/asset_detail/asset_detail_bloc.dart';
 import 'package:my_app/ui/location_asset/asset_detail/asset_detail_event.dart';
 import 'package:my_app/ui/location_asset/asset_detail/asset_detail_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class AssetDetailScreen extends StatefulWidget {
   final int assetId;
@@ -30,7 +29,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Chi tiết Vật tư",
           style: TextStyle(
             color: AppColors.textDark,
@@ -124,7 +123,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Center(
-                child: TrText(
+                child: Text(
                   "Chưa có lịch sử hoạt động",
                   style: TextStyle(color: Colors.grey),
                 ),
@@ -159,7 +158,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             asset.assetName ?? "N/A",
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -173,7 +172,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
               ),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: TrText(
+            child: Text(
               (asset.status ?? "N/A").toUpperCase(),
               style: TextStyle(
                 color: isAvailable ? Colors.green : Colors.orange,
@@ -206,7 +205,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: TrText(
+                child: Text(
                   req.borrower ?? "N/A",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -257,12 +256,12 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         children: [
           Icon(icon, size: 16, color: Colors.grey),
           const SizedBox(width: 10),
-          TrText(
+          Text(
             "$label: ",
             style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
           Expanded(
-            child: TrText(
+            child: Text(
               value,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
@@ -283,13 +282,10 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         children: [
           Icon(icon, size: 20, color: AppColors.primary.withOpacity(0.7)),
           const SizedBox(width: 12),
-          TrText(
-            label,
-            style: const TextStyle(color: Colors.grey, fontSize: 14),
-          ),
+          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 14)),
           const SizedBox(width: 20),
           Expanded(
-            child: TrText(
+            child: Text(
               value,
               textAlign: TextAlign.right,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
@@ -303,7 +299,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 12),
-      child: TrText(
+      child: Text(
         title,
         style: const TextStyle(
           fontSize: 13,
@@ -345,7 +341,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   history.user ?? "N/A",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
@@ -353,7 +349,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                TrText(
+                Text(
                   history.action ?? "N/A",
                   style: const TextStyle(fontSize: 12, color: Colors.green),
                 ),
@@ -361,7 +357,7 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
             ),
           ),
           const SizedBox(width: 10),
-          TrText(
+          Text(
             history.date ?? "",
             style: const TextStyle(fontSize: 11, color: Colors.grey),
           ),
@@ -377,13 +373,13 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
         children: [
           const Icon(Icons.error_outline, size: 48, color: Colors.red),
           const SizedBox(height: 16),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () => context.read<AssetDetailBloc>().add(
               GetAssetDetail(widget.assetId),
             ),
-            child: const TrText("Thử lại"),
+            child: const Text("Thử lại"),
           ),
         ],
       ),

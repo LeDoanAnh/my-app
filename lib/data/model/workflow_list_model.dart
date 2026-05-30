@@ -22,10 +22,11 @@ class WorkflowListModel {
     this.applyTo,
     this.stepsCount,
     this.status,
-    this.steps
+    this.steps,
   });
 
-  factory WorkflowListModel.fromJson(Map<String, dynamic> json) => _$WorkflowListModelFromJson(json);
+  factory WorkflowListModel.fromJson(Map<String, dynamic> json) =>
+      _$WorkflowListModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$WorkflowListModelToJson(this);
 
@@ -37,21 +38,19 @@ class WorkflowListModel {
       stepsCount: stepsCount,
       applyTo: applyTo,
       status: status,
-      steps: steps
+      steps: steps,
     );
   }
-
 }
 
 @JsonSerializable()
-class WorkflowListResponseModel{
+class WorkflowListResponseModel {
   final List<WorkflowListModel> data;
 
-  WorkflowListResponseModel({
-    required this.data
-  });
+  WorkflowListResponseModel({required this.data});
 
-  factory WorkflowListResponseModel.fromJson(Map<String, dynamic> json) => _$WorkflowListResponseModelFromJson(json);
+  factory WorkflowListResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$WorkflowListResponseModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$WorkflowListResponseModelToJson(this);
 }

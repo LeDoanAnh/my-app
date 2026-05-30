@@ -88,6 +88,7 @@ import 'package:my_app/ui/workflow/workflow_list/workflow_list_bloc.dart';
 
 import 'domain/repositories/department_repository.dart';
 import 'domain/repositories/submission_detail_repository.dart';
+
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -101,68 +102,65 @@ Future<void> init() async {
 
   // --- Repositories ---
   sl.registerLazySingleton<AuthRepository>(
-        () => AuthRepositoryImpl(sl<AuthApi>()),
+    () => AuthRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<HomeRepository>(
-        () => HomeRepositoryImpl(sl<AuthApi>()),
+    () => HomeRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<CalendarRepository>(
-        () => CalendarRepositoryImpl(sl<AuthApi>()),
+    () => CalendarRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<SubmissionListRepository>(
-        () => SubmissionListRepositoryImpl(sl<AuthApi>()),
+    () => SubmissionListRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<ActorRepository>(
-        () => ActorRepositoryImpl(sl<AuthApi>()),
+    () => ActorRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<DepartmentRepository>(
-        () => DepartmentRepositoryImpl(sl<AuthApi>()),
+    () => DepartmentRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<AssetRepository>(
-        () => AssetRepositoryImpl(sl<AuthApi>()),
+    () => AssetRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<LocationRepository>(
-        () => LocationRepositoryImpl(sl<AuthApi>()),
+    () => LocationRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<WorkflowListRepository>(
-        () => WorkflowRepositoryImpl(sl<AuthApi>()),
+    () => WorkflowRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<ApprovalStepRepository>(
-      () => ApprovalStepRepositoryImpl(sl<AuthApi>()),
+    () => ApprovalStepRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<NotificationRepository>(
-      () => NotificationRepositoryImpl(api: sl<AuthApi>()),
+    () => NotificationRepositoryImpl(api: sl<AuthApi>()),
   );
   sl.registerLazySingleton<SubmissionDetailRepository>(
-      () => SubmissionDetailImpl(api: sl<AuthApi>()),
+    () => SubmissionDetailImpl(api: sl<AuthApi>()),
   );
   sl.registerLazySingleton<SubmissionRepository>(
-      () => SubmissionRepositoryImpl(sl<AuthApi>()),
+    () => SubmissionRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<UserRepository>(
-      () => UserRepositoryImpl(sl<AuthApi>()),
+    () => UserRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<ApproverRepository>(
-      () =>  ApproverRepositoryImpl(sl<AuthApi>()),
+    () => ApproverRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<AssetTaskRepository>(
-      () =>  AssetTaskRepositoryImpl(sl<AuthApi>()),
+    () => AssetTaskRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<BorrowRepository>(
-      () =>  BorrowRepositoryImpl(sl<AuthApi>()),
+    () => BorrowRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<RecoveryRepository>(
-      () =>  RecoveryRepositoryImpl(sl<AuthApi>()),
+    () => RecoveryRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<HistoryRepository>(
-      () =>  HistoryRepositoryImpl(sl<AuthApi>()),
+    () => HistoryRepositoryImpl(sl<AuthApi>()),
   );
   sl.registerLazySingleton<SearchRepository>(
-      () =>  SearchRepositoryImpl(sl<AuthApi>()),
+    () => SearchRepositoryImpl(sl<AuthApi>()),
   );
-
-
-
 
   // --- UseCases ---
   sl.registerLazySingleton(() => LoginUsecase(sl()));
@@ -175,47 +173,52 @@ Future<void> init() async {
   sl.registerLazySingleton(() => LocationUseCase(repository: sl()));
   sl.registerLazySingleton(() => WorkflowListUseCase(repository: sl()));
   sl.registerLazySingleton(() => ApprovalStepUseCase(repository: sl()));
-  sl.registerLazySingleton(() => NotificationUseCase( sl()));
+  sl.registerLazySingleton(() => NotificationUseCase(sl()));
   sl.registerLazySingleton(() => SubmissionDetailUseCase(repository: sl()));
   sl.registerLazySingleton(() => CreateSubmissionUseCase(sl()));
   sl.registerLazySingleton(() => CreateUserUseCase(sl()));
-  sl.registerLazySingleton(() => ApproverUseCase( repository: sl()));
-  sl.registerLazySingleton(() => AssetTaskUseCase( repository: sl()));
+  sl.registerLazySingleton(() => ApproverUseCase(repository: sl()));
+  sl.registerLazySingleton(() => AssetTaskUseCase(repository: sl()));
   sl.registerLazySingleton(() => BorrowUseCase(repository: sl()));
   sl.registerLazySingleton(() => RecoveryUseCase(repository: sl()));
   sl.registerLazySingleton(() => HistoryUseCase(repository: sl()));
   sl.registerLazySingleton(() => SearchUseCase(repository: sl()));
-
-
-
-
 
   // --- Blocs ---
   sl.registerFactory(() => AuthBloc(sl()));
   sl.registerFactory(() => HomeBloc(homeUseCase: sl()));
   sl.registerFactory(() => CalendarBloc(calendarUseCase: sl()));
   sl.registerFactory(() => SubmissionListBloc(submissionListUseCase: sl()));
-  sl.registerFactory(() => ActorListBloc(actorUseCase: sl(), departmentUseCase: sl()));
-  sl.registerFactory(() => AssetLocationListBloc(assetUseCase: sl(), locationUseCase: sl()));
+  sl.registerFactory(
+    () => ActorListBloc(actorUseCase: sl(), departmentUseCase: sl()),
+  );
+  sl.registerFactory(
+    () => AssetLocationListBloc(assetUseCase: sl(), locationUseCase: sl()),
+  );
   sl.registerFactory(() => WorkflowListBloc(workflowListUseCase: sl()));
   sl.registerFactory(() => WorkflowDetailBloc(useCase: sl()));
   sl.registerFactory(() => AssetDetailBloc(useCase: sl()));
   sl.registerFactory(() => LocationDetailBloc(useCase: sl()));
   sl.registerFactory(() => NotificationBloc(useCase: sl()));
   sl.registerFactory(() => SubmissionDetailBloc(useCase: sl()));
-  sl.registerFactory(() => SubmissionBloc( sl(), sl()));
+  sl.registerFactory(() => SubmissionBloc(sl(), sl()));
   sl.registerFactory(() => CreateUserBloc(sl(), sl()));
   sl.registerFactory(() => DepartmentListBloc(departmentListUseCase: sl()));
   sl.registerFactory(() => DepartmentDetailBloc(useCase: sl()));
   sl.registerFactory(() => FormDepartmentBloc(departmentListUseCase: sl()));
-  sl.registerFactory(() => UserDetailBloc( sl()));
-  sl.registerFactory(() => FormResourceBloc(departmentListUseCase: sl(), locationUseCase: sl(), assetUseCase: sl()));
-  sl.registerFactory(() => ApproverBloc(useCase:  sl()));
+  sl.registerFactory(() => UserDetailBloc(sl()));
+  sl.registerFactory(
+    () => FormResourceBloc(
+      departmentListUseCase: sl(),
+      locationUseCase: sl(),
+      assetUseCase: sl(),
+    ),
+  );
+  sl.registerFactory(() => ApproverBloc(useCase: sl()));
   sl.registerFactory(() => AssetTaskBloc(useCase: sl()));
   sl.registerFactory(() => BorrowBloc(useCase: sl()));
   sl.registerFactory(() => RecoveryBloc(useCase: sl()));
   sl.registerFactory(() => BorrowHistoryBloc(useCase: sl()));
   sl.registerFactory(() => HandoverHistoryBloc(useCase: sl()));
   sl.registerFactory(() => SearchBloc(useCase: sl()));
-
 }

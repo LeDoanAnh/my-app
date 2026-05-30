@@ -25,7 +25,8 @@ class LocationModel {
     this.department,
   });
 
-  factory LocationModel.fromJson(Map<String, dynamic> json) => _$LocationModelFromJson(json);
+  factory LocationModel.fromJson(Map<String, dynamic> json) =>
+      _$LocationModelFromJson(json);
   Map<String, dynamic> toJson() => _$LocationModelToJson(this);
 
   LocationEntity toEntity() {
@@ -46,12 +47,13 @@ class LocationResponseModel {
 
   LocationResponseModel({required this.data});
 
-  factory LocationResponseModel.fromJson(Map<String, dynamic> json) => _$LocationResponseModelFromJson(json);
+  factory LocationResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$LocationResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$LocationResponseModelToJson(this);
 }
 
 @JsonSerializable()
-class LocationParam{
+class LocationParam {
   final String name;
   final String capacity;
   final String address;
@@ -65,7 +67,7 @@ class LocationParam{
     required this.deptId,
   });
 
-  factory LocationParam.fromJson(Map<String, dynamic> json) => _$LocationParamFromJson(json);
+  factory LocationParam.fromJson(Map<String, dynamic> json) =>
+      _$LocationParamFromJson(json);
   Map<String, dynamic> toJson() => _$LocationParamToJson(this);
-
 }

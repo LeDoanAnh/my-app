@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
 import '../../../../core/theme/app_colors.dart'; // Import file màu của bạn vào đây
 
 class StatusBadge extends StatelessWidget {
@@ -34,7 +33,7 @@ class StatusBadge extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: color.withOpacity(0.5)),
       ),
-      child: TrText(
+      child: Text(
         text,
         style: TextStyle(
           color: color,

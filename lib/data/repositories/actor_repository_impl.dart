@@ -12,7 +12,7 @@ class ActorRepositoryImpl extends ActorRepository {
     try {
       final response = await api.getActorList();
       return response.data!.map((model) => model.toEntity()).toList();
-    }catch(e){
+    } catch (e) {
       throw Exception("Lấy danh sách đơn thất bại: ${e.toString()}");
     }
   }

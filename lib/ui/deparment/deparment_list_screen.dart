@@ -6,7 +6,6 @@ import 'package:my_app/domain/entities/department_entity.dart';
 import 'package:my_app/ui/deparment/department_list_bloc.dart';
 import 'package:my_app/ui/deparment/department_list_event.dart';
 import 'package:my_app/ui/deparment/department_list_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class DepartmentListScreen extends StatefulWidget {
   const DepartmentListScreen({super.key});
@@ -56,7 +55,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
         elevation: 0,
         backgroundColor: Colors.white,
         centerTitle: false,
-        title: const TrText(
+        title: const Text(
           "Đơn vị & Phòng ban",
           style: TextStyle(
             color: Color(0xFF1E293B),
@@ -125,7 +124,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
           controller: _searchController,
           style: const TextStyle(fontSize: 14),
           decoration: InputDecoration(
-            hintText: uiText(context, "Tìm kiếm mã hoặc tên đơn vị..."),
+            hintText: "Tìm kiếm mã hoặc tên đơn vị...",
             hintStyle: TextStyle(
               color: Colors.grey.withOpacity(0.6),
               fontSize: 14,
@@ -184,7 +183,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TrText(
+                            Text(
                               "Mã đơn vị: #${dept.id}",
                               style: const TextStyle(
                                 color: Color(0xFF64748B),
@@ -200,7 +199,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        TrText(
+                        Text(
                           dept.deptName ?? 'Không tên',
                           style: const TextStyle(
                             fontSize: 17,
@@ -220,7 +219,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                               ),
                               const SizedBox(width: 4),
                               Expanded(
-                                child: TrText(
+                                child: Text(
                                   dept.locationDesc!,
                                   style: const TextStyle(
                                     color: Color(0xFF64748B),
@@ -240,7 +239,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                               color: AppColors.primary,
                             ),
                             const SizedBox(width: 6),
-                            TrText(
+                            Text(
                               "${dept.usersCount ?? 0} nhân sự",
                               style: const TextStyle(
                                 fontSize: 13,
@@ -249,7 +248,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                               ),
                             ),
                             const Spacer(),
-                            const TrText(
+                            const Text(
                               "Chi tiết",
                               style: TextStyle(
                                 color: AppColors.primary,
@@ -282,7 +281,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
             color: Colors.red.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             message,
             style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 15),
             textAlign: TextAlign.center,
@@ -291,7 +290,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
           ElevatedButton(
             onPressed: () =>
                 context.read<DepartmentListBloc>().add(GetDepartments()),
-            child: const TrText('Thử lại'),
+            child: const Text('Thử lại'),
           ),
         ],
       ),
@@ -309,7 +308,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
             color: Colors.grey.withOpacity(0.5),
           ),
           const SizedBox(height: 16),
-          const TrText(
+          const Text(
             "Không tìm thấy đơn vị phù hợp",
             style: TextStyle(color: Color(0xFF94A3B8), fontSize: 15),
           ),

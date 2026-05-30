@@ -18,5 +18,4 @@ class AssetEntity {
     this.status,
     this.department,
   });
-
 }

@@ -22,14 +22,11 @@ class AssetSubmissionEntity {
   });
 }
 
-class Creator{
+class Creator {
   final int? id;
   final String? name;
 
-  Creator({
-    required this.id,
-    required this.name,
-  });
+  Creator({required this.id, required this.name});
 }
 
 class ItemAssetSubmission {

@@ -28,10 +28,11 @@ class SubmissionStepModel {
     this.currentStep,
     this.totalSteps,
     this.departmentSteps,
-    this.lastDeptName
+    this.lastDeptName,
   });
 
-  factory SubmissionStepModel.fromJson(Map<String, dynamic> json) => _$SubmissionStepModelFromJson(json);
+  factory SubmissionStepModel.fromJson(Map<String, dynamic> json) =>
+      _$SubmissionStepModelFromJson(json);
   Map<String, dynamic> toJson() => _$SubmissionStepModelToJson(this);
 
   SubmissionStep toEntity() {
@@ -50,7 +51,7 @@ class SubmissionStepModel {
 }
 
 @JsonSerializable()
-class DepartmentStepModel{
+class DepartmentStepModel {
   @JsonKey(name: 'dept_name')
   final String? deptName;
   final String? status;
@@ -59,9 +60,16 @@ class DepartmentStepModel{
   @JsonKey(name: 'request_content')
   final String? requestContent;
 
-  DepartmentStepModel({this.deptName, this.status, this.time, this.comment, this.requestContent});
+  DepartmentStepModel({
+    this.deptName,
+    this.status,
+    this.time,
+    this.comment,
+    this.requestContent,
+  });
 
-  factory DepartmentStepModel.fromJson(Map<String, dynamic> json) => _$DepartmentStepModelFromJson(json);
+  factory DepartmentStepModel.fromJson(Map<String, dynamic> json) =>
+      _$DepartmentStepModelFromJson(json);
   Map<String, dynamic> toJson() => _$DepartmentStepModelToJson(this);
 
   DepartmentStep toEntity() {

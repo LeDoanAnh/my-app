@@ -19,13 +19,19 @@ class BorrowRepositoryImpl extends BorrowRepository {
   }
 
   @override
-  Future<BorrowActionResponse> confirmReceive(int submissionId, int userId) async {
+  Future<BorrowActionResponse> confirmReceive(
+    int submissionId,
+    int userId,
+  ) async {
     return await api.confirmReceive(submissionId, {'user_id': userId});
   }
 
   @override
   Future<BorrowActionResponse> returnAssets(
-      int submissionId, int userId, List<int> assetRequestIds) async {
+    int submissionId,
+    int userId,
+    List<int> assetRequestIds,
+  ) async {
     return await api.returnAssets(submissionId, {
       'user_id': userId,
       'asset_request_ids': assetRequestIds,
@@ -40,13 +46,19 @@ class BorrowRepositoryImpl extends BorrowRepository {
     userConfirmed: m.userConfirmed ?? true,
     isUrgent: m.isUrgent ?? false,
     staffName: m.staffName,
-    items: m.items?.map((i) => BorrowItemEntity(
-      assetRequestId: i.assetRequestId,
-      name: i.name,
-      qty: i.qty,
-      isConsumable: i.isConsumable ?? false,
-      status: i.status,
-      expectedReturn: i.expectedReturn,
-    )).toList() ?? [],
+    items:
+        m.items
+            ?.map(
+              (i) => BorrowItemEntity(
+                assetRequestId: i.assetRequestId,
+                name: i.name,
+                qty: i.qty,
+                isConsumable: i.isConsumable ?? false,
+                status: i.status,
+                expectedReturn: i.expectedReturn,
+              ),
+            )
+            .toList() ??
+        [],
   );
 }

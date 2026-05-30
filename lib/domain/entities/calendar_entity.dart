@@ -6,7 +6,6 @@ class CalendarEntity {
   final String color;
   final DateTime date;
 
-
   CalendarEntity({
     required this.title,
     required this.type,

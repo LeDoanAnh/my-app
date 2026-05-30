@@ -8,5 +8,14 @@ class NotificationEntity {
   final int? submissionId;
   final String? timeAgo;
 
-  NotificationEntity({required this.id, this.type, this.userId, this.title, this.message, this.isRead, this.submissionId, this.timeAgo});
+  NotificationEntity({
+    required this.id,
+    this.type,
+    this.userId,
+    this.title,
+    this.message,
+    this.isRead,
+    this.submissionId,
+    this.timeAgo,
+  });
 }

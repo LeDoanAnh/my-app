@@ -32,7 +32,6 @@ import 'package:my_app/ui/user/user_detail_screen.dart';
 import 'package:my_app/ui/workflow/create_workflow_screen.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_screen.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_screen.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 /// Lắng nghe BLoC stream để GoRouter tự redirect khi auth thay đổi
 class GoRouterRefreshStream extends ChangeNotifier {
@@ -309,6 +308,6 @@ class AppRouter {
 
     // ── 404 ──────────────────────────────────────────────────────
     errorBuilder: (context, state) =>
-        const Scaffold(body: Center(child: TrText('Trang không tồn tại'))),
+        const Scaffold(body: Center(child: Text('Trang không tồn tại'))),
   );
 }

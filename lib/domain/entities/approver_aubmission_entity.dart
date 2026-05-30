@@ -13,9 +13,17 @@ class ApproverSubmissionEntity {
   final MyDecisionEntity? myDecision;
 
   ApproverSubmissionEntity({
-    required this.id, this.title, this.content, this.status,
-    this.sender, this.startTime, this.endTime, this.noteForDept,
-    this.locations, this.assets, this.myDecision,
+    required this.id,
+    this.title,
+    this.content,
+    this.status,
+    this.sender,
+    this.startTime,
+    this.endTime,
+    this.noteForDept,
+    this.locations,
+    this.assets,
+    this.myDecision,
   });
 }
 

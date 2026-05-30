@@ -16,7 +16,10 @@ class BorrowUseCase {
   }
 
   Future<BorrowActionResponse> returnAssets(
-      int submissionId, int userId, List<int> assetRequestIds) {
+    int submissionId,
+    int userId,
+    List<int> assetRequestIds,
+  ) {
     return repository.returnAssets(submissionId, userId, assetRequestIds);
   }
 }

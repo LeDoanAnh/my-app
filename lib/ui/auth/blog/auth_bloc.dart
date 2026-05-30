@@ -9,7 +9,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this.repository) : super(AuthInitial()) {
     on<LoginSubmitted>(_onLoginSubmitted);
     on<LogoutPressed>(_onLogoutPressed);
-    on<LanguageChanged>(_onLanguageChanged);
     on<AppStarted>(_onAppStarted);
     on<UpdateFcmTokenEvent>(_onUpdateFcmTokenEvent);
   }
@@ -47,18 +46,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     await repository.logout();
     emit(Unauthenticated());
-  }
-
-  Future<void> _onLanguageChanged(
-    LanguageChanged event,
-    Emitter<AuthState> emit,
-  ) async {
-    if (state is Authenticated) {
-      final currentUser = (state as Authenticated).user;
-      emit(Authenticated(user: currentUser));
-    } else {
-      emit(Unauthenticated());
-    }
   }
 
   Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {

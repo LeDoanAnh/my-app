@@ -9,7 +9,6 @@ import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
 import 'package:my_app/ui/user/form_user/form_user_bloc.dart';
 import 'package:my_app/ui/user/form_user/form_user_event.dart';
 import 'package:my_app/ui/user/form_user/form_user_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class CreateUserScreen extends StatefulWidget {
   const CreateUserScreen({super.key});
@@ -85,14 +84,14 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedRoleIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: TrText('Vui lòng chọn ít nhất một vai trò')),
+        const SnackBar(content: Text('Vui lòng chọn ít nhất một vai trò')),
       );
       return;
     }
     if (_selectedDept == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: TrText('Vui lòng chọn phòng ban')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Vui lòng chọn phòng ban')));
       return;
     }
 
@@ -148,17 +147,14 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         }
         if (state is CreateUserError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: TrText(state.message),
-              backgroundColor: Colors.red,
-            ),
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
           );
         }
       },
       child: Scaffold(
         backgroundColor: AppColors.fieldBg,
         appBar: AppBar(
-          title: const TrText(
+          title: const Text(
             "Tạo tài khoản mới",
             style: TextStyle(
               color: AppColors.textDark,
@@ -277,7 +273,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             return null;
           },
           decoration: InputDecoration(
-            hintText: uiText(context, "Mật khẩu ban đầu"),
+            hintText: "Mật khẩu ban đầu",
             prefixIcon: const Icon(
               Icons.lock_open_rounded,
               size: 20,
@@ -315,7 +311,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             children: [
               Icon(Icons.auto_awesome, size: 14, color: AppColors.primary),
               const SizedBox(width: 4),
-              TrText(
+              Text(
                 "Tạo mật khẩu tự động",
                 style: TextStyle(
                   fontSize: 12,
@@ -340,7 +336,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           size: 20,
           color: AppColors.primary,
         ),
-        hintText: uiText(context, "Phòng ban / Đơn vị"),
+        hintText: "Phòng ban / Đơn vị",
         filled: true,
         fillColor: AppColors.fieldBg,
         border: OutlineInputBorder(
@@ -352,7 +348,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           .map(
             (dept) => DropdownMenuItem(
               value: dept,
-              child: TrText(dept.deptName ?? 'Không tên'),
+              child: Text(dept.deptName ?? 'Không tên'),
             ),
           )
           .toList(),
@@ -365,7 +361,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     if (_roles.isEmpty) {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: 8),
-        child: TrText(
+        child: Text(
           "Đang tải danh sách vai trò...",
           style: TextStyle(color: Colors.grey, fontSize: 13),
         ),
@@ -382,7 +378,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               color: AppColors.primary,
             ),
             SizedBox(width: 12),
-            TrText(
+            Text(
               "Vai trò người dùng (Có thể chọn nhiều)",
               style: TextStyle(
                 fontSize: 14,
@@ -399,7 +395,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           children: _roles.map((role) {
             final isSelected = _selectedRoleIds.contains(role.id);
             return FilterChip(
-              label: TrText(role.roleName ?? 'Không tên'),
+              label: Text(role.roleName ?? 'Không tên'),
               selected: isSelected,
               onSelected: (_) => _toggleRole(role.id ?? 0),
               selectedColor: AppColors.primary.withOpacity(0.2),
@@ -431,13 +427,13 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           CircleAvatar(
             radius: 10,
             backgroundColor: AppColors.primary,
-            child: TrText(
+            child: Text(
               step,
               style: const TextStyle(color: Colors.white, fontSize: 10),
             ),
           ),
           const SizedBox(width: 8),
-          TrText(
+          Text(
             title,
             style: const TextStyle(
               fontSize: 12,
@@ -496,7 +492,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const TrText(
+          const Text(
             "Trạng thái hoạt động",
             style: TextStyle(color: Colors.grey),
           ),
@@ -528,7 +524,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                 color: Colors.white,
                 strokeWidth: 2,
               )
-            : const TrText(
+            : const Text(
                 "TẠO TÀI KHOẢN",
                 style: TextStyle(
                   color: Colors.white,

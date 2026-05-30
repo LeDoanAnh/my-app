@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppButton extends StatelessWidget {
@@ -42,7 +41,7 @@ class AppButton extends StatelessWidget {
                   strokeWidth: 2,
                 ),
               )
-            : TrText(
+            : Text(
                 title,
                 style: const TextStyle(
                   color: Colors.white,

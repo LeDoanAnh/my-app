@@ -30,8 +30,6 @@ class UserModel {
   @JsonKey(name: "unread_notifications")
   final int? unreadNotifications;
 
-
-
   UserModel({
     required this.id,
     this.username,
@@ -49,7 +47,8 @@ class UserModel {
     this.unreadNotifications,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserModelToJson(this);
 
@@ -62,11 +61,17 @@ class UserModel {
       sessionId: sessionId ?? "",
       token: token,
       status: status,
-      roles: roles?.map((roleModel) => RoleEntity(
-          id: roleModel.id,
-          roleName: roleModel.roleName,
-          description: roleModel.description
-      )).toList() ?? [],
+      roles:
+          roles
+              ?.map(
+                (roleModel) => RoleEntity(
+                  id: roleModel.id,
+                  roleName: roleModel.roleName,
+                  description: roleModel.description,
+                ),
+              )
+              .toList() ??
+          [],
       departmentId: departmentId,
       departmentName: departmentName,
       createdAt: createdAt,
@@ -81,9 +86,8 @@ class UserModel {
 class UserResponse {
   final UserModel? data;
 
-  UserResponse({
-    this.data,
-  });
-  factory UserResponse.fromJson(Map<String, dynamic> json) => _$UserResponseFromJson(json);
+  UserResponse({this.data});
+  factory UserResponse.fromJson(Map<String, dynamic> json) =>
+      _$UserResponseFromJson(json);
   Map<String, dynamic> toJson() => _$UserResponseToJson(this);
 }

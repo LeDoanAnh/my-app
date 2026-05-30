@@ -12,24 +12,25 @@ class LocationRepositoryImpl extends LocationRepository {
   LocationRepositoryImpl(this.api);
 
   @override
-  Future<List<LocationEntity>> getLocationList() async{
-    try{
+  Future<List<LocationEntity>> getLocationList() async {
+    try {
       final LocationResponseModel models = await api.getLocationList();
       return models.data!.map((model) => model.toEntity()).toList();
-    }catch(e){
+    } catch (e) {
       throw Exception("Lấy danh sách đơn thất bại: ${e.toString()}");
     }
   }
 
   @override
-  Future<LocationDetailEntity> getLocationDetail(int locationId) async{
-    try{
+  Future<LocationDetailEntity> getLocationDetail(int locationId) async {
+    try {
       final LocationDetailModel model = await api.getLocationDetail(locationId);
       return model.toEntity();
-    }catch(e){
+    } catch (e) {
       throw Exception("Lấy chi tiết đơn thất bại: ${e.toString()}");
     }
   }
+
   @override
   Future<CreateResponse> createLocation(Map<String, dynamic> body) async {
     return await api.createLocation(body);

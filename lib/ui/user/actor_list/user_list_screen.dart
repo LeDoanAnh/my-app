@@ -6,7 +6,6 @@ import 'package:my_app/domain/entities/actor_entity.dart';
 import 'package:my_app/ui/user/actor_list/actor_list_bloc.dart';
 import 'package:my_app/ui/user/actor_list/actor_list_event.dart';
 import 'package:my_app/ui/user/actor_list/actor_list_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key});
@@ -39,7 +38,7 @@ class _UserListScreenState extends State<UserListScreen> {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Quản lý tài khoản",
           style: TextStyle(
             color: AppColors.textDark,
@@ -110,7 +109,7 @@ class _UserListScreenState extends State<UserListScreen> {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: TrText(
+                child: Text(
                   state.message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(color: Colors.red),
@@ -160,7 +159,7 @@ class _FilterBar extends StatelessWidget {
           TextField(
             controller: searchController,
             decoration: InputDecoration(
-              hintText: uiText(context, "Tìm kiếm tên hoặc mã người dùng..."),
+              hintText: "Tìm kiếm tên hoặc mã người dùng...",
               prefixIcon: const Icon(Icons.search, size: 20),
               filled: true,
               fillColor: AppColors.fieldBg,
@@ -239,7 +238,7 @@ class _UserList extends StatelessWidget {
 
     if (filtered.isEmpty) {
       return const Center(
-        child: TrText(
+        child: Text(
           "Không tìm thấy kết quả phù hợp",
           style: TextStyle(color: Colors.grey),
         ),
@@ -282,7 +281,7 @@ class _UserCard extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: AppColors.primary.withOpacity(0.1),
-          child: TrText(
+          child: Text(
             (user.fullName?.isNotEmpty == true)
                 ? user.fullName![0].toUpperCase()
                 : "?",
@@ -292,14 +291,14 @@ class _UserCard extends StatelessWidget {
             ),
           ),
         ),
-        title: TrText(
+        title: Text(
           user.fullName ?? "N/A",
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TrText(
+            Text(
               user.department?.deptName ?? "Chưa rõ phòng ban",
               style: const TextStyle(fontSize: 12),
             ),
@@ -345,7 +344,7 @@ class _Dropdown extends StatelessWidget {
               .map(
                 (e) => DropdownMenuItem(
                   value: e,
-                  child: TrText(e, overflow: TextOverflow.ellipsis),
+                  child: Text(e, overflow: TextOverflow.ellipsis),
                 ),
               )
               .toList(),
@@ -371,7 +370,7 @@ class _StatusChip extends StatelessWidget {
         color: (isActive ? Colors.green : Colors.red).withOpacity(0.1),
         borderRadius: BorderRadius.circular(4),
       ),
-      child: TrText(
+      child: Text(
         isActive ? "Đang hoạt động" : "Ngừng hoạt động",
         style: TextStyle(
           color: isActive ? Colors.green : Colors.red,

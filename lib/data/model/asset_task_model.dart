@@ -22,13 +22,21 @@ class AssetTaskModel {
   final String? status;
   final String? date;
   final String? sender;
-  @JsonKey(name: 'item_count') final int? itemCount;
-  @JsonKey(name: 'approved_by') final ApprovedByModel? approvedBy;
+  @JsonKey(name: 'item_count')
+  final int? itemCount;
+  @JsonKey(name: 'approved_by')
+  final ApprovedByModel? approvedBy;
   final List<AssetTaskItemModel>? assets;
 
   AssetTaskModel({
-    required this.id, this.title, this.status, this.date,
-    this.sender, this.itemCount, this.approvedBy, this.assets,
+    required this.id,
+    this.title,
+    this.status,
+    this.date,
+    this.sender,
+    this.itemCount,
+    this.approvedBy,
+    this.assets,
   });
 
   factory AssetTaskModel.fromJson(Map<String, dynamic> json) =>
@@ -42,9 +50,17 @@ class ApprovedByModel {
   final String? dept;
   final String? action;
   final String? comment;
-  @JsonKey(name: 'approved_at') final String? approvedAt;
+  @JsonKey(name: 'approved_at')
+  final String? approvedAt;
 
-  ApprovedByModel({this.id, this.name, this.dept, this.action, this.comment, this.approvedAt});
+  ApprovedByModel({
+    this.id,
+    this.name,
+    this.dept,
+    this.action,
+    this.comment,
+    this.approvedAt,
+  });
 
   factory ApprovedByModel.fromJson(Map<String, dynamic> json) =>
       _$ApprovedByModelFromJson(json);
@@ -52,19 +68,31 @@ class ApprovedByModel {
 
 @JsonSerializable()
 class AssetTaskItemModel {
-  @JsonKey(name: 'asset_id') final int? assetId;
-  @JsonKey(name: 'asset_name') final String? assetName;
-  @JsonKey(name: 'asset_code') final String? assetCode;
+  @JsonKey(name: 'asset_id')
+  final int? assetId;
+  @JsonKey(name: 'asset_name')
+  final String? assetName;
+  @JsonKey(name: 'asset_code')
+  final String? assetCode;
   final String? unit;
   final String? type;
   final String? status;
-  @JsonKey(name: 'borrow_date') final String? borrowDate;
-  @JsonKey(name: 'expected_return') final String? expectedReturn;
+  @JsonKey(name: 'borrow_date')
+  final String? borrowDate;
+  @JsonKey(name: 'expected_return')
+  final String? expectedReturn;
   final AssetTaskBorrowerModel? borrower;
 
   AssetTaskItemModel({
-    this.assetId, this.assetName, this.assetCode, this.unit,
-    this.type, this.status, this.borrowDate, this.expectedReturn, this.borrower,
+    this.assetId,
+    this.assetName,
+    this.assetCode,
+    this.unit,
+    this.type,
+    this.status,
+    this.borrowDate,
+    this.expectedReturn,
+    this.borrower,
   });
 
   factory AssetTaskItemModel.fromJson(Map<String, dynamic> json) =>
@@ -102,12 +130,18 @@ class AssetTaskDetailModel {
   final String? status;
   final String? date;
   final String? sender;
-  @JsonKey(name: 'approved_by') final ApprovedByModel? approvedBy;
+  @JsonKey(name: 'approved_by')
+  final ApprovedByModel? approvedBy;
   final List<AssetTaskItemModel>? assets;
 
   AssetTaskDetailModel({
-    required this.id, this.title, this.status,
-    this.date, this.sender, this.approvedBy, this.assets,
+    required this.id,
+    this.title,
+    this.status,
+    this.date,
+    this.sender,
+    this.approvedBy,
+    this.assets,
   });
   factory AssetTaskDetailModel.fromJson(Map<String, dynamic> json) =>
       _$AssetTaskDetailModelFromJson(json);
@@ -117,9 +151,14 @@ class AssetTaskDetailModel {
 class HandoverResponse {
   final bool success;
   final String message;
-  @JsonKey(name: 'all_handed_over') final bool? allHandedOver;
+  @JsonKey(name: 'all_handed_over')
+  final bool? allHandedOver;
 
-  HandoverResponse({required this.success, required this.message, this.allHandedOver});
+  HandoverResponse({
+    required this.success,
+    required this.message,
+    this.allHandedOver,
+  });
   factory HandoverResponse.fromJson(Map<String, dynamic> json) =>
       _$HandoverResponseFromJson(json);
 }

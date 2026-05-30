@@ -6,7 +6,6 @@ import 'package:my_app/ui/submission/submission_detail/submission_detail_bloc.da
 import 'package:my_app/ui/submission/submission_detail/submission_detail_event.dart';
 import 'package:my_app/ui/submission/submission_detail/submission_detail_state.dart';
 import 'package:my_app/domain/entities/submission_step.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class SubmissionDetailScreen extends StatefulWidget {
   final int submissionId;
@@ -32,7 +31,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Chi tiết tờ đơn",
           style: TextStyle(
             color: Colors.black87,
@@ -53,7 +52,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
 
           if (state is SubmissionDetailError) {
             return Center(
-              child: TrText(
+              child: Text(
                 state.message,
                 style: const TextStyle(color: Colors.red),
               ),
@@ -72,7 +71,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                     children: [
                       _buildInfoCard(data),
                       const SizedBox(height: 24),
-                      const TrText(
+                      const Text(
                         "TIẾN ĐỘ PHÊ DUYỆT",
                         style: TextStyle(
                           fontSize: 11,
@@ -135,7 +134,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                   color: const Color(0xFF5856D6).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: TrText(
+                child: Text(
                   data.code ?? "N/A",
                   style: const TextStyle(
                     color: Color(0xFF5856D6),
@@ -148,7 +147,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             data.title ?? "Không có tiêu đề",
             style: const TextStyle(
               fontSize: 19,
@@ -157,7 +156,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             data.content ?? "Không có nội dung",
             style: TextStyle(
               color: Colors.blueGrey[400],
@@ -216,7 +215,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            TrText(
+                            Text(
                               step.deptName ?? "Phòng ban",
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
@@ -224,7 +223,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                                 color: Color(0xFF334155),
                               ),
                             ),
-                            TrText(
+                            Text(
                               step.time ?? "",
                               style: const TextStyle(
                                 color: Colors.grey,
@@ -234,7 +233,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        TrText(
+                        Text(
                           step.comment ?? "Không có phản hồi",
                           style: TextStyle(
                             color: step.status == 'rejected'
@@ -301,7 +300,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
                     color: isRejected ? Colors.orange : Colors.green,
                   ),
                   const SizedBox(width: 6),
-                  TrText(
+                  Text(
                     message,
                     style: TextStyle(
                       color: Colors.blueGrey[700],
@@ -332,7 +331,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
               if (status == 'approved' &&
                   data.departmentSteps?.isNotEmpty == true) ...[
                 const SizedBox(height: 8),
-                TrText(
+                Text(
                   "Nhận tại: ${data.departmentSteps!.last.deptName}",
                   style: TextStyle(
                     fontSize: 10,
@@ -358,7 +357,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
     return OutlinedButton.icon(
       onPressed: onTap,
       icon: Icon(icon, size: 18),
-      label: TrText(
+      label: Text(
         label,
         style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
       ),
@@ -402,7 +401,7 @@ class _SubmissionDetailScreenState extends State<SubmissionDetailScreen> {
         color: color.withOpacity(0.1),
         borderRadius: BorderRadius.circular(12),
       ),
-      child: TrText(
+      child: Text(
         text,
         style: TextStyle(
           color: color,

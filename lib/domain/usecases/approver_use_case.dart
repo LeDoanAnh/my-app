@@ -11,7 +11,8 @@ class ApproverUseCase {
     return repository.getSubmission(submissionId, deptId);
   }
 
-  Future<CreateResponse> decide(int submissionId, {
+  Future<CreateResponse> decide(
+    int submissionId, {
     required int approverId,
     required String action,
     required String password,

@@ -13,25 +13,29 @@ class ApprovalStepModel {
   @JsonKey(name: 'approval_steps')
   final List<ApprovalStepDetail>? approvalSteps;
 
-  ApprovalStepModel({this.id, this.categoryName, this.applyForDept, this.approvalSteps});
-  factory ApprovalStepModel.fromJson(Map<String, dynamic> json) => _$ApprovalStepModelFromJson(json);
+  ApprovalStepModel({
+    this.id,
+    this.categoryName,
+    this.applyForDept,
+    this.approvalSteps,
+  });
+  factory ApprovalStepModel.fromJson(Map<String, dynamic> json) =>
+      _$ApprovalStepModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApprovalStepModelToJson(this);
 
-  ApprovalStepEntity toEntity(){
-    return ApprovalStepEntity
-      (
+  ApprovalStepEntity toEntity() {
+    return ApprovalStepEntity(
       id: id,
       categoryName: categoryName,
       applyForDept: applyForDept,
       approvalSteps: approvalSteps?.map((step) => step.toEntity()).toList(),
     );
   }
-
 }
 
 @JsonSerializable()
-class ApprovalStepDetail{
+class ApprovalStepDetail {
   final String? role;
   final String? desc;
   @JsonKey(name: 'step_order')
@@ -41,23 +45,26 @@ class ApprovalStepDetail{
 
   ApprovalStepDetail({this.role, this.desc, this.stepOrder, this.deptId});
 
-  factory ApprovalStepDetail.fromJson(Map<String, dynamic> json) => _$ApprovalStepDetailFromJson(json);
+  factory ApprovalStepDetail.fromJson(Map<String, dynamic> json) =>
+      _$ApprovalStepDetailFromJson(json);
   Map<String, dynamic> toJson() => _$ApprovalStepDetailToJson(this);
 
-  ApprovalStep toEntity(){
+  ApprovalStep toEntity() {
     return ApprovalStep(
-        role: role,
-        desc: desc,
-        stepOrder: stepOrder,
-        deptId: deptId,
+      role: role,
+      desc: desc,
+      stepOrder: stepOrder,
+      deptId: deptId,
     );
   }
 }
+
 @JsonSerializable()
-class WorkflowDetail{
+class WorkflowDetail {
   final ApprovalStepModel data;
   WorkflowDetail({required this.data});
 
-  factory WorkflowDetail.fromJson(Map<String, dynamic> json) => _$WorkflowDetailFromJson(json);
+  factory WorkflowDetail.fromJson(Map<String, dynamic> json) =>
+      _$WorkflowDetailFromJson(json);
   Map<String, dynamic> toJson() => _$WorkflowDetailToJson(this);
 }

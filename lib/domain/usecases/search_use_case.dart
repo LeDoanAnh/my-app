@@ -6,10 +6,10 @@ class SearchUseCase {
   SearchUseCase({required this.repository});
 
   Future<List<SearchResultEntity>> search(
-      int userId,
-      String query, {
-        String filter = 'all',
-      }) => repository.search(userId, query, filter: filter);
+    int userId,
+    String query, {
+    String filter = 'all',
+  }) => repository.search(userId, query, filter: filter);
 
   List<String> getSearchHistory() => repository.getSearchHistory();
 

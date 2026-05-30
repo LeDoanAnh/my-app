@@ -4,7 +4,6 @@ import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/asset_task_entity.dart';
 import 'package:my_app/ui/in_out/asset_submission/asset_detail/asset_task_bloc.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class AssetSubmissionDetailScreen extends StatefulWidget {
   final int submissionId;
@@ -46,7 +45,7 @@ class _AssetSubmissionDetailScreenState
 
     if (assetRequestIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: TrText("Không có vật tư nào cần bàn giao")),
+        const SnackBar(content: Text("Không có vật tư nào cần bàn giao")),
       );
       return;
     }
@@ -80,7 +79,7 @@ class _AssetSubmissionDetailScreenState
         if (state is AssetTaskHandoverSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: TrText(state.message),
+              content: Text(state.message),
               backgroundColor: Colors.green,
             ),
           );
@@ -97,7 +96,7 @@ class _AssetSubmissionDetailScreenState
         } else if (state is AssetTaskError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: TrText(state.message),
+              content: Text(state.message),
               backgroundColor: Colors.redAccent,
             ),
           );
@@ -121,7 +120,7 @@ class _AssetSubmissionDetailScreenState
                     size: 48,
                   ),
                   const SizedBox(height: 12),
-                  TrText(state.message, textAlign: TextAlign.center),
+                  Text(state.message, textAlign: TextAlign.center),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () => context.read<AssetTaskBloc>().add(
@@ -130,7 +129,7 @@ class _AssetSubmissionDetailScreenState
                         deptId: widget.deptId,
                       ),
                     ),
-                    child: const TrText("Thử lại"),
+                    child: const Text("Thử lại"),
                   ),
                 ],
               ),
@@ -152,7 +151,7 @@ class _AssetSubmissionDetailScreenState
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
       appBar: AppBar(
-        title: TrText(
+        title: Text(
           "Chi tiết đơn #${detail.id}",
           style: const TextStyle(
             color: AppColors.textDark,
@@ -215,7 +214,7 @@ class _AssetSubmissionDetailScreenState
             color: Color(0xFF10B981),
           ),
           SizedBox(width: 8),
-          TrText(
+          Text(
             "Đơn đã được ký duyệt - Sẵn sàng bàn giao",
             style: TextStyle(
               color: Color(0xFF065F46),
@@ -275,11 +274,11 @@ class _AssetSubmissionDetailScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const TrText(
+                const Text(
                   "Người ký duyệt",
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
-                TrText(
+                Text(
                   approvedBy.name ?? "-",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -288,7 +287,7 @@ class _AssetSubmissionDetailScreenState
                 ),
                 if (approvedBy.comment != null &&
                     approvedBy.comment!.isNotEmpty)
-                  TrText(
+                  Text(
                     "\"${approvedBy.comment}\"",
                     style: const TextStyle(
                       fontSize: 12,
@@ -299,7 +298,7 @@ class _AssetSubmissionDetailScreenState
               ],
             ),
           ),
-          TrText(
+          Text(
             approvedBy.approvedAt ?? "-",
             style: const TextStyle(
               color: Colors.blueGrey,
@@ -353,12 +352,12 @@ class _AssetSubmissionDetailScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TrText(
+                        Text(
                           asset.assetName ?? "-",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 2),
-                        TrText(
+                        Text(
                           asset.assetCode ?? "",
                           style: const TextStyle(
                             fontSize: 11,
@@ -384,7 +383,7 @@ class _AssetSubmissionDetailScreenState
                           : Colors.orange.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: TrText(
+                    child: Text(
                       isBorrowed
                           ? "Đã giao"
                           : isReturned
@@ -414,7 +413,7 @@ class _AssetSubmissionDetailScreenState
                       color: Colors.blueGrey,
                     ),
                     const SizedBox(width: 6),
-                    TrText(
+                    Text(
                       "Người mượn: ${asset.borrower!.name} - ${asset.borrower!.dept}",
                       style: const TextStyle(
                         fontSize: 12,
@@ -435,7 +434,7 @@ class _AssetSubmissionDetailScreenState
                       color: Colors.orange,
                     ),
                     const SizedBox(width: 6),
-                    TrText(
+                    Text(
                       "Ngày trả dự kiến: ${asset.expectedReturn}",
                       style: const TextStyle(
                         fontSize: 12,
@@ -462,7 +461,7 @@ class _AssetSubmissionDetailScreenState
             : Colors.blue.withOpacity(0.1),
         borderRadius: BorderRadius.circular(6),
       ),
-      child: TrText(
+      child: Text(
         isReturnable ? "Mượn tạm thời" : "Tiêu hao / Cấp phát",
         style: TextStyle(
           color: isReturnable ? Colors.orange[800] : Colors.blue[800],
@@ -476,7 +475,7 @@ class _AssetSubmissionDetailScreenState
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 12),
-      child: TrText(
+      child: Text(
         title,
         style: const TextStyle(
           fontWeight: FontWeight.bold,
@@ -495,12 +494,12 @@ class _AssetSubmissionDetailScreenState
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TrText(
+            Text(
               label,
               style: const TextStyle(color: Colors.grey, fontSize: 12),
             ),
             const SizedBox(height: 2),
-            TrText(
+            Text(
               value,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
@@ -540,7 +539,7 @@ class _AssetSubmissionDetailScreenState
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: const TrText(
+          child: const Text(
             "BÀN GIAO",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),

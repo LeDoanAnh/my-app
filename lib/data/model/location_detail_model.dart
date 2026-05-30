@@ -37,7 +37,7 @@ class LocationDetailModel {
 
   Map<String, dynamic> toJson() => _$LocationDetailModelToJson(this);
 
-  LocationDetailEntity toEntity(){
+  LocationDetailEntity toEntity() {
     return LocationDetailEntity(
       id: id,
       locationName: locationName,
@@ -66,7 +66,7 @@ class BookingModel {
 
   Map<String, dynamic> toJson() => _$BookingModelToJson(this);
 
-  BookingEntity toEntity(){
+  BookingEntity toEntity() {
     return BookingEntity(
       title: title,
       time: time,
@@ -88,11 +88,7 @@ class UpcomingEventModel {
 
   Map<String, dynamic> toJson() => _$UpcomingEventModelToJson(this);
 
-  UpcomingEventEntity toEntity(){
-    return UpcomingEventEntity(
-      title: title,
-      date: date,
-    );
+  UpcomingEventEntity toEntity() {
+    return UpcomingEventEntity(title: title, date: date);
   }
 }
-

@@ -16,19 +16,30 @@ class BorrowListResponse {
 
 @JsonSerializable()
 class BorrowModel {
-  @JsonKey(name: 'submission_id') final int submissionId;
-  @JsonKey(name: 'submission_code') final String? submissionCode;
+  @JsonKey(name: 'submission_id')
+  final int submissionId;
+  @JsonKey(name: 'submission_code')
+  final String? submissionCode;
   final String? title;
-  @JsonKey(name: 'is_returned') final bool? isReturned;
-  @JsonKey(name: 'user_confirmed') final bool? userConfirmed;
-  @JsonKey(name: 'is_urgent') final bool? isUrgent;
-  @JsonKey(name: 'staff_name') final String? staffName;
+  @JsonKey(name: 'is_returned')
+  final bool? isReturned;
+  @JsonKey(name: 'user_confirmed')
+  final bool? userConfirmed;
+  @JsonKey(name: 'is_urgent')
+  final bool? isUrgent;
+  @JsonKey(name: 'staff_name')
+  final String? staffName;
   final List<BorrowItemModel>? items;
 
   BorrowModel({
-    required this.submissionId, this.submissionCode, this.title,
-    this.isReturned, this.userConfirmed, this.isUrgent,
-    this.staffName, this.items,
+    required this.submissionId,
+    this.submissionCode,
+    this.title,
+    this.isReturned,
+    this.userConfirmed,
+    this.isUrgent,
+    this.staffName,
+    this.items,
   });
   factory BorrowModel.fromJson(Map<String, dynamic> json) =>
       _$BorrowModelFromJson(json);
@@ -36,16 +47,23 @@ class BorrowModel {
 
 @JsonSerializable()
 class BorrowItemModel {
-  @JsonKey(name: 'asset_request_id') final int? assetRequestId;
+  @JsonKey(name: 'asset_request_id')
+  final int? assetRequestId;
   final String? name;
   final int? qty;
-  @JsonKey(name: 'is_consumable') final bool? isConsumable;
+  @JsonKey(name: 'is_consumable')
+  final bool? isConsumable;
   final String? status;
-  @JsonKey(name: 'expected_return') final String? expectedReturn;
+  @JsonKey(name: 'expected_return')
+  final String? expectedReturn;
 
   BorrowItemModel({
-    this.assetRequestId, this.name, this.qty,
-    this.isConsumable, this.status, this.expectedReturn,
+    this.assetRequestId,
+    this.name,
+    this.qty,
+    this.isConsumable,
+    this.status,
+    this.expectedReturn,
   });
   factory BorrowItemModel.fromJson(Map<String, dynamic> json) =>
       _$BorrowItemModelFromJson(json);
@@ -55,9 +73,14 @@ class BorrowItemModel {
 class BorrowActionResponse {
   final bool success;
   final String message;
-  @JsonKey(name: 'all_returned') final bool? allReturned;
+  @JsonKey(name: 'all_returned')
+  final bool? allReturned;
 
-  BorrowActionResponse({required this.success, required this.message, this.allReturned});
+  BorrowActionResponse({
+    required this.success,
+    required this.message,
+    this.allReturned,
+  });
   factory BorrowActionResponse.fromJson(Map<String, dynamic> json) =>
       _$BorrowActionResponseFromJson(json);
 }

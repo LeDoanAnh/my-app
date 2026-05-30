@@ -7,7 +7,6 @@ import 'package:my_app/ui/deparment/form_department/form_department_bloc.dart';
 import 'package:my_app/ui/deparment/form_department/form_department_event.dart';
 import 'package:my_app/ui/deparment/form_department/form_department_state.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class CreateDepartmentScreen extends StatefulWidget {
   const CreateDepartmentScreen({super.key});
@@ -100,7 +99,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
       child: Scaffold(
         backgroundColor: AppColors.fieldBg,
         appBar: AppBar(
-          title: const TrText(
+          title: const Text(
             "Tạo phòng ban mới",
             style: TextStyle(
               color: AppColors.textDark,
@@ -127,7 +126,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
             if (state is FormDepartmentSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: TrText(state.message),
+                  content: Text(state.message),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -135,7 +134,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
             } else if (state is FormDepartmentError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: TrText(state.message),
+                  content: Text(state.message),
                   backgroundColor: Colors.redAccent,
                 ),
               );
@@ -162,7 +161,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const TrText(
+                    const Text(
                       "Nhập thông tin để thiết lập đơn vị mới trong hệ thống.",
                       style: TextStyle(color: Colors.blueGrey, fontSize: 14),
                     ),
@@ -220,7 +219,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           size: 20,
           color: AppColors.primary,
         ),
-        hintText: uiText(context, "Trực thuộc đơn vị (Parent Department)"),
+        hintText: "Trực thuộc đơn vị (Parent Department)",
         filled: true,
         fillColor: AppColors.fieldBg,
         border: OutlineInputBorder(
@@ -228,16 +227,16 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           borderSide: BorderSide.none,
         ),
       ),
-      hint: const TrText("Trực thuộc đơn vị", style: TextStyle(fontSize: 14)),
+      hint: const Text("Trực thuộc đơn vị", style: TextStyle(fontSize: 14)),
       items: [
         const DropdownMenuItem<DepartmentEntity>(
           value: null,
-          child: TrText("Không có (Đơn vị gốc)"),
+          child: Text("Không có (Đơn vị gốc)"),
         ),
         ...departments.map(
           (dept) => DropdownMenuItem<DepartmentEntity>(
             value: dept,
-            child: TrText(dept.deptName ?? "Không rõ"),
+            child: Text(dept.deptName ?? "Không rõ"),
           ),
         ),
       ],
@@ -255,13 +254,13 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           CircleAvatar(
             radius: 10,
             backgroundColor: AppColors.primary,
-            child: TrText(
+            child: Text(
               step,
               style: const TextStyle(color: Colors.white, fontSize: 10),
             ),
           ),
           const SizedBox(width: 8),
-          TrText(
+          Text(
             title,
             style: const TextStyle(
               fontSize: 12,
@@ -321,7 +320,7 @@ class _CreateDepartmentScreenState extends State<CreateDepartmentScreen> {
           ),
           elevation: 0,
         ),
-        child: const TrText(
+        child: const Text(
           "TẠO PHÒNG BAN",
           style: TextStyle(
             color: Colors.white,

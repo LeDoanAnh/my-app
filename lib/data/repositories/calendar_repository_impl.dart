@@ -3,16 +3,21 @@ import 'package:my_app/data/model/calendar_model.dart';
 import 'package:my_app/domain/entities/calendar_entity.dart';
 import 'package:my_app/domain/repositories/calendar_repository.dart';
 
-
 class CalendarRepositoryImpl extends CalendarRepository {
   final AuthApi api;
 
   CalendarRepositoryImpl(this.api);
 
   @override
-  Future<List<CalendarEntity>> getCalendarSubmissions(int month, int year) async {
+  Future<List<CalendarEntity>> getCalendarSubmissions(
+    int month,
+    int year,
+  ) async {
     try {
-      final CalendarResponseModel response = await api.getCalendarSubmissions(month, year);
+      final CalendarResponseModel response = await api.getCalendarSubmissions(
+        month,
+        year,
+      );
 
       final List<CalendarEntity> allEntities = [];
 
@@ -25,7 +30,6 @@ class CalendarRepositoryImpl extends CalendarRepository {
         });
       }
       return allEntities;
-
     } catch (e) {
       throw Exception("Lấy danh sách lịch thất bại: ${e.toString()}");
     }

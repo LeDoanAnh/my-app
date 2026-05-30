@@ -18,7 +18,7 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<List<RoleEntity>> getRoleList() async{
+  Future<List<RoleEntity>> getRoleList() async {
     try {
       final RoleResponseModel models = await _authApi.getRoleList();
       return models.data!.map((model) => model.toEntity()).toList();

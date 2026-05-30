@@ -34,9 +34,6 @@ dependencies:
   flutter_secure_storage: ^10.0.0 # Lưu Token an toàn
   get_it: ^9.2.1              # Dependency Injection (Service Locator)
   equatable: ^2.0.5           # So sánh object dễ dàng
-  flutter_localizations:
-    sdk: flutter
-  easy_localization: ^3.0.7
   dio: ^5.4.1 # Động cơ mạng
   retrofit: ^4.1.0 # Vỏ bọc API
   json_annotation: ^4.11.0 # JSON Parsing
@@ -94,7 +91,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  generate: true
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

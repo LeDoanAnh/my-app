@@ -3,11 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/notification_entity.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/notification/notification_bloc.dart';
 import 'package:my_app/ui/notification/notification_event.dart';
 import 'package:my_app/ui/notification/notification_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class NotificationScreen extends StatefulWidget {
   final int userId;
@@ -27,13 +25,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: TrText(
-          l10n.notifications,
+        title: Text(
+          'Thông báo',
           style: const TextStyle(
             color: AppColors.textDark,
             fontWeight: FontWeight.bold,
@@ -49,8 +45,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 MarkAllAsRead(widget.userId),
               );
             },
-            child: TrText(
-              l10n.markAllRead,
+            child: Text(
+              'Đọc tất cả',
               style: const TextStyle(color: AppColors.primary),
             ),
           ),
@@ -74,7 +70,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     },
                   );
           } else if (state is NotificationError) {
-            return Center(child: TrText(state.message));
+            return Center(child: Text(state.message));
           }
           return _buildEmptyState();
         },
@@ -168,7 +164,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: TrText(
+                            child: Text(
                               item.title ?? '',
                               style: TextStyle(
                                 fontWeight: (item.isRead ?? false)
@@ -191,7 +187,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         ],
                       ),
                       const SizedBox(height: 6),
-                      TrText(
+                      Text(
                         item.message ?? '',
                         style: const TextStyle(
                           color: AppColors.textGrey,
@@ -200,7 +196,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         ),
                       ),
                       const SizedBox(height: 8),
-                      TrText(
+                      Text(
                         item.timeAgo ?? '',
                         style: TextStyle(
                           color: AppColors.textGrey.withOpacity(0.6),
@@ -219,7 +215,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
   }
 
   Widget _buildEmptyState() {
-    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -230,8 +225,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
             color: AppColors.textGrey.withOpacity(0.3),
           ),
           const SizedBox(height: 16),
-          TrText(
-            l10n.noNotifications,
+          Text(
+            'Bạn chưa có thông báo nào',
             style: const TextStyle(
               color: AppColors.textGrey,
               fontWeight: FontWeight.w500,

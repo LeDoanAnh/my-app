@@ -9,7 +9,10 @@ class ApproverRepositoryImpl extends ApproverRepository {
   ApproverRepositoryImpl(this.api);
 
   @override
-  Future<ApproverSubmissionEntity> getSubmission(int submissionId, int deptId) async {
+  Future<ApproverSubmissionEntity> getSubmission(
+    int submissionId,
+    int deptId,
+  ) async {
     try {
       final response = await api.getApproverSubmission(submissionId, deptId);
       print("RAW RESPONSE: ${response}");
@@ -23,20 +26,30 @@ class ApproverRepositoryImpl extends ApproverRepository {
         startTime: d.startTime,
         endTime: d.endTime,
         noteForDept: d.noteForDept,
-        locations: d.locations?.map((l) => ApproverLocationEntity(
-          locationName: l.locationName,
-          startTime: l.startTime,
-          endTime: l.endTime,
-        )).toList(),
-        assets: d.assets?.map((a) => ApproverAssetEntity(
-          assetName: a.assetName,
-          quantity: a.quantity,
-        )).toList(),
-        myDecision: d.myDecision == null ? null : MyDecisionEntity(
-          action: d.myDecision!.action,
-          comment: d.myDecision!.comment,
-          decidedAt: d.myDecision!.decidedAt,
-        ),
+        locations: d.locations
+            ?.map(
+              (l) => ApproverLocationEntity(
+                locationName: l.locationName,
+                startTime: l.startTime,
+                endTime: l.endTime,
+              ),
+            )
+            .toList(),
+        assets: d.assets
+            ?.map(
+              (a) => ApproverAssetEntity(
+                assetName: a.assetName,
+                quantity: a.quantity,
+              ),
+            )
+            .toList(),
+        myDecision: d.myDecision == null
+            ? null
+            : MyDecisionEntity(
+                action: d.myDecision!.action,
+                comment: d.myDecision!.comment,
+                decidedAt: d.myDecision!.decidedAt,
+              ),
       );
     } catch (e) {
       throw Exception("Lấy thông tin tờ trình thất bại: ${e.toString()}");
@@ -44,7 +57,10 @@ class ApproverRepositoryImpl extends ApproverRepository {
   }
 
   @override
-  Future<CreateResponse> decide(int submissionId, Map<String, dynamic> body) async {
+  Future<CreateResponse> decide(
+    int submissionId,
+    Map<String, dynamic> body,
+  ) async {
     return await api.decideSubmission(submissionId, body);
   }
 }

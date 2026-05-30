@@ -10,8 +10,14 @@ class AssetTaskEntity {
   final List<AssetTaskItemEntity>? assets;
 
   AssetTaskEntity({
-    required this.id, this.title, this.status, this.date,
-    this.sender, this.itemCount, this.approvedBy, this.assets,
+    required this.id,
+    this.title,
+    this.status,
+    this.date,
+    this.sender,
+    this.itemCount,
+    this.approvedBy,
+    this.assets,
   });
 }
 
@@ -23,7 +29,14 @@ class ApprovedByEntity {
   final String? comment;
   final String? approvedAt;
 
-  ApprovedByEntity({this.id, this.name, this.dept, this.action, this.comment, this.approvedAt});
+  ApprovedByEntity({
+    this.id,
+    this.name,
+    this.dept,
+    this.action,
+    this.comment,
+    this.approvedAt,
+  });
 }
 
 class AssetTaskItemEntity {
@@ -38,8 +51,15 @@ class AssetTaskItemEntity {
   final AssetTaskBorrowerEntity? borrower;
 
   AssetTaskItemEntity({
-    this.assetId, this.assetName, this.assetCode, this.unit,
-    this.type, this.status, this.borrowDate, this.expectedReturn, this.borrower,
+    this.assetId,
+    this.assetName,
+    this.assetCode,
+    this.unit,
+    this.type,
+    this.status,
+    this.borrowDate,
+    this.expectedReturn,
+    this.borrower,
   });
 }
 
@@ -61,7 +81,12 @@ class AssetTaskDetailEntity {
   final List<AssetTaskItemEntity>? assets;
 
   AssetTaskDetailEntity({
-    required this.id, this.title, this.status,
-    this.date, this.sender, this.approvedBy, this.assets,
+    required this.id,
+    this.title,
+    this.status,
+    this.date,
+    this.sender,
+    this.approvedBy,
+    this.assets,
   });
 }

@@ -1,11 +1,17 @@
-class DepartmentStep{
+class DepartmentStep {
   final String? deptName;
   final String? status;
   final String? time;
   final String? comment;
   final String? requestContent;
 
-  DepartmentStep({this.deptName, this.status, this.time, this.comment, this.requestContent});
+  DepartmentStep({
+    this.deptName,
+    this.status,
+    this.time,
+    this.comment,
+    this.requestContent,
+  });
 }
 
 class SubmissionStep {
@@ -19,7 +25,6 @@ class SubmissionStep {
   final List<DepartmentStep>? departmentSteps;
   final String? lastDeptName;
 
-
   SubmissionStep({
     required this.id,
     this.code,
@@ -29,6 +34,6 @@ class SubmissionStep {
     this.currentStep,
     this.totalSteps,
     this.departmentSteps,
-    this.lastDeptName
+    this.lastDeptName,
   });
 }

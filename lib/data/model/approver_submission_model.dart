@@ -10,17 +10,29 @@ class ApproverSubmissionModel {
   final String? content;
   final String? status;
   final String? sender;
-  @JsonKey(name: 'start_time') final String? startTime;
-  @JsonKey(name: 'end_time') final String? endTime;
-  @JsonKey(name: 'note_for_dept') final String? noteForDept;
+  @JsonKey(name: 'start_time')
+  final String? startTime;
+  @JsonKey(name: 'end_time')
+  final String? endTime;
+  @JsonKey(name: 'note_for_dept')
+  final String? noteForDept;
   final List<ApproverLocationModel>? locations;
   final List<ApproverAssetModel>? assets;
-  @JsonKey(name: 'my_decision') final MyDecisionModel? myDecision;
+  @JsonKey(name: 'my_decision')
+  final MyDecisionModel? myDecision;
 
   ApproverSubmissionModel({
-    required this.id, this.title, this.content, this.status,
-    this.sender, this.startTime, this.endTime, this.noteForDept,
-    this.locations, this.assets, this.myDecision,
+    required this.id,
+    this.title,
+    this.content,
+    this.status,
+    this.sender,
+    this.startTime,
+    this.endTime,
+    this.noteForDept,
+    this.locations,
+    this.assets,
+    this.myDecision,
   });
 
   factory ApproverSubmissionModel.fromJson(Map<String, dynamic> json) =>
@@ -29,9 +41,12 @@ class ApproverSubmissionModel {
 
 @JsonSerializable()
 class ApproverLocationModel {
-  @JsonKey(name: 'location_name') final String? locationName;
-  @JsonKey(name: 'start_time') final String? startTime;
-  @JsonKey(name: 'end_time') final String? endTime;
+  @JsonKey(name: 'location_name')
+  final String? locationName;
+  @JsonKey(name: 'start_time')
+  final String? startTime;
+  @JsonKey(name: 'end_time')
+  final String? endTime;
 
   ApproverLocationModel({this.locationName, this.startTime, this.endTime});
   factory ApproverLocationModel.fromJson(Map<String, dynamic> json) =>
@@ -40,7 +55,8 @@ class ApproverLocationModel {
 
 @JsonSerializable()
 class ApproverAssetModel {
-  @JsonKey(name: 'asset_name') final String? assetName;
+  @JsonKey(name: 'asset_name')
+  final String? assetName;
   final int? quantity;
 
   ApproverAssetModel({this.assetName, this.quantity});
@@ -52,7 +68,8 @@ class ApproverAssetModel {
 class MyDecisionModel {
   final String? action;
   final String? comment;
-  @JsonKey(name: 'decided_at') final String? decidedAt;
+  @JsonKey(name: 'decided_at')
+  final String? decidedAt;
 
   MyDecisionModel({this.action, this.comment, this.decidedAt});
   factory MyDecisionModel.fromJson(Map<String, dynamic> json) =>

@@ -5,9 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-
   print('Got a message whilst in the background!');
   print('Message data: ${message.notification?.title}');
 }
@@ -29,7 +29,6 @@ class NotificationService {
 
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   }
-
 
   Future<AccessCredentials> _getAccessToken() async {
     final serviceAccountPath = dotenv.env['PATH_TO_SECRET'];
@@ -92,5 +91,4 @@ class NotificationService {
       return false;
     }
   }
-
 }

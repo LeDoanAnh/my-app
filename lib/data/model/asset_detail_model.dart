@@ -20,9 +20,20 @@ class AssetDetailModel {
   final CurrentRequestModel? currentRequest;
   final List<HistoryModel>? history;
 
-  AssetDetailModel({required this.id, this.assetName, this.assetCode, this.unit, this.status, this.deptName, this.isConsumable, this.currentRequest, this.history});
+  AssetDetailModel({
+    required this.id,
+    this.assetName,
+    this.assetCode,
+    this.unit,
+    this.status,
+    this.deptName,
+    this.isConsumable,
+    this.currentRequest,
+    this.history,
+  });
 
-  factory AssetDetailModel.fromJson(Map<String, dynamic> json) => _$AssetDetailModelFromJson(json);
+  factory AssetDetailModel.fromJson(Map<String, dynamic> json) =>
+      _$AssetDetailModelFromJson(json);
   Map<String, dynamic> toJson() => _$AssetDetailModelToJson(this);
 
   @override
@@ -30,7 +41,7 @@ class AssetDetailModel {
     return 'AssetDetailEntity(id: $id, assetName: $assetName, assetCode: $assetCode, unit: $unit, status: $status, deptName: $deptName, isConsumable: $isConsumable, currentRequest: $currentRequest, history: $history)';
   }
 
-  AssetDetailEntity toEntity(){
+  AssetDetailEntity toEntity() {
     return AssetDetailEntity(
       id: id,
       assetName: assetName,
@@ -63,7 +74,8 @@ class CurrentRequestModel {
     this.note,
   });
 
-  factory CurrentRequestModel.fromJson(Map<String, dynamic> json) => _$CurrentRequestModelFromJson(json);
+  factory CurrentRequestModel.fromJson(Map<String, dynamic> json) =>
+      _$CurrentRequestModelFromJson(json);
   Map<String, dynamic> toJson() => _$CurrentRequestModelToJson(this);
 
   @override
@@ -71,7 +83,7 @@ class CurrentRequestModel {
     return 'CurrentRequest(borrower: $borrower, handler: $handler, borrowDate: $borrowDate, expectedReturn: $expectedReturn, note: $note)';
   }
 
-  CurrentRequest toEntity(){
+  CurrentRequest toEntity() {
     return CurrentRequest(
       borrower: borrower,
       handler: handler,
@@ -88,13 +100,10 @@ class HistoryModel {
   final String? action;
   final String? date;
 
-  HistoryModel({
-    this.user,
-    this.action,
-    this.date,
-  });
+  HistoryModel({this.user, this.action, this.date});
 
-  factory HistoryModel.fromJson(Map<String, dynamic> json) => _$HistoryModelFromJson(json);
+  factory HistoryModel.fromJson(Map<String, dynamic> json) =>
+      _$HistoryModelFromJson(json);
   Map<String, dynamic> toJson() => _$HistoryModelToJson(this);
 
   @override
@@ -102,17 +111,13 @@ class HistoryModel {
     return 'History(user: $user, action: $action, date: $date)';
   }
 
-  History toEntity(){
-    return History(
-      user: user,
-      action: action,
-      date: date,
-    );
+  History toEntity() {
+    return History(user: user, action: action, date: date);
   }
 }
 
 @JsonSerializable()
-class AssetParam{
+class AssetParam {
   final String name;
   final String description;
   final String unit;
@@ -129,6 +134,7 @@ class AssetParam{
     required this.deptId,
   });
 
-  factory AssetParam.fromJson(Map<String, dynamic> json) => _$AssetParamFromJson(json);
+  factory AssetParam.fromJson(Map<String, dynamic> json) =>
+      _$AssetParamFromJson(json);
   Map<String, dynamic> toJson() => _$AssetParamToJson(this);
 }

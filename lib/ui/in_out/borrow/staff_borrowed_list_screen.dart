@@ -5,7 +5,6 @@ import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/borrow_entity.dart';
 import 'package:my_app/ui/in_out/borrow/borrow_bloc.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class StaffBorrowedListScreen extends StatefulWidget {
   final int userId;
@@ -64,7 +63,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
 
     if (returnableIds.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: TrText("Không có vật tư nào cần trả")),
+        const SnackBar(content: Text("Không có vật tư nào cần trả")),
       );
       return;
     }
@@ -94,7 +93,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "ĐỒ ĐANG MƯỢN",
           style: TextStyle(
             color: AppColors.textDark,
@@ -111,14 +110,14 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
           if (state is BorrowActionSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: TrText(state.message),
+                content: Text(state.message),
                 backgroundColor: Colors.green,
               ),
             );
           } else if (state is BorrowError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: TrText(state.message),
+                content: Text(state.message),
                 backgroundColor: Colors.redAccent,
               ),
             );
@@ -161,7 +160,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         controller: _searchController,
         onChanged: _onSearch,
         decoration: InputDecoration(
-          hintText: uiText(context, "Tìm kiếm tờ trình..."),
+          hintText: "Tìm kiếm tờ trình...",
           prefixIcon: const Icon(Icons.search),
           filled: true,
           fillColor: const Color(0xFFF1F3F6),
@@ -196,7 +195,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrText(
+              Text(
                 sub.submissionCode ?? "#${sub.submissionId}",
                 style: const TextStyle(
                   color: Colors.blueGrey,
@@ -208,7 +207,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
             ],
           ),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             sub.title ?? "Không có tiêu đề",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -225,7 +224,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
                 color: Colors.blueGrey,
               ),
               const SizedBox(width: 6),
-              TrText(
+              Text(
                 "Người giao: ${sub.staffName ?? '-'}",
                 style: TextStyle(
                   color: Colors.grey[600],
@@ -276,7 +275,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TrText(
+                        Text(
                           i.name ?? "-",
                           style: const TextStyle(
                             fontSize: 13,
@@ -284,7 +283,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
                           ),
                         ),
                         if (i.isConsumable)
-                          const TrText(
+                          const Text(
                             "• Sản phẩm không cần trả",
                             style: TextStyle(
                               fontSize: 10,
@@ -295,7 +294,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
                       ],
                     ),
                   ),
-                  TrText(
+                  Text(
                     "x${i.qty ?? 1}",
                     style: const TextStyle(
                       fontSize: 13,
@@ -320,7 +319,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TrText(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
+        Text(label, style: const TextStyle(fontSize: 12, color: Colors.grey)),
         ElevatedButton(
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
@@ -329,7 +328,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
             elevation: 0,
             shape: const StadiumBorder(),
           ),
-          child: TrText(
+          child: Text(
             btnText,
             style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
           ),
@@ -358,11 +357,11 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TrText(
+            const Text(
               "Hạn trả:",
               style: TextStyle(color: Colors.grey, fontSize: 11),
             ),
-            TrText(
+            Text(
               deadline ?? "-",
               style: TextStyle(
                 color: isUrgent ? Colors.red : AppColors.textDark,
@@ -380,7 +379,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
             elevation: 0,
             shape: const StadiumBorder(),
           ),
-          child: const TrText(
+          child: const Text(
             "TRẢ ĐỒ",
             style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
           ),
@@ -406,7 +405,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         children: [
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 8),
-          TrText(
+          Text(
             text,
             style: TextStyle(
               color: color,
@@ -438,7 +437,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: TrText(
+      child: Text(
         text,
         style: TextStyle(
           color: color,
@@ -456,7 +455,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         children: [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             "Không có đồ đang mượn",
             style: TextStyle(color: Colors.grey[500]),
           ),
@@ -472,13 +471,13 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
         children: [
           const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
           const SizedBox(height: 12),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () => context.read<BorrowBloc>().add(
               LoadBorrowList(userId: widget.userId),
             ),
-            child: const TrText("Thử lại"),
+            child: const Text("Thử lại"),
           ),
         ],
       ),

@@ -5,9 +5,13 @@ class HistoryUseCase {
   final HistoryRepository repository;
   HistoryUseCase({required this.repository});
 
-  Future<List<BorrowHistoryEntity>> getBorrowHistory(int userId, {String? search}) =>
-      repository.getBorrowHistory(userId, search: search);
+  Future<List<BorrowHistoryEntity>> getBorrowHistory(
+    int userId, {
+    String? search,
+  }) => repository.getBorrowHistory(userId, search: search);
 
-  Future<List<HandoverHistoryEntity>> getHandoverHistory(int userId, {String? search}) =>
-      repository.getHandoverHistory(userId, search: search);
+  Future<List<HandoverHistoryEntity>> getHandoverHistory(
+    int userId, {
+    String? search,
+  }) => repository.getHandoverHistory(userId, search: search);
 }

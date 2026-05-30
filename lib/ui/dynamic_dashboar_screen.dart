@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class DynamicDashboardScreen extends StatelessWidget {
   final UserEntity user;
@@ -17,7 +16,7 @@ class DynamicDashboardScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: TrText(
+        title: Text(
           _getAppBarTitle(),
           style: const TextStyle(
             color: AppColors.textDark,
@@ -236,7 +235,7 @@ class DynamicDashboardScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TrText(
+                    Text(
                       "Xin chào, ${user.fullName}!",
                       style: const TextStyle(
                         color: Colors.white,
@@ -244,7 +243,7 @@ class DynamicDashboardScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    TrText(
+                    Text(
                       _hasRole(1)
                           ? "Quyền hạn: Quản trị viên"
                           : "Quyền hạn: Nhân sự đơn vị",
@@ -253,7 +252,7 @@ class DynamicDashboardScreen extends StatelessWidget {
                         fontSize: 12,
                       ),
                     ),
-                    const TrText(
+                    const Text(
                       "Vận hành hệ thống & tờ trình",
                       style: TextStyle(color: Colors.white70, fontSize: 12),
                     ),
@@ -270,7 +269,7 @@ class DynamicDashboardScreen extends StatelessWidget {
               color: AppColors.primary,
               size: 22,
             ),
-            label: const TrText(
+            label: const Text(
               "TẠO TỜ TRÌNH MỚI",
               style: TextStyle(
                 color: AppColors.primary,
@@ -325,7 +324,7 @@ class DynamicDashboardScreen extends StatelessWidget {
                 child: Icon(mainIcon, color: AppColors.primary, size: 20),
               ),
               const SizedBox(width: 12),
-              TrText(
+              Text(
                 title,
                 style: const TextStyle(
                   fontWeight: FontWeight.w900,
@@ -380,7 +379,7 @@ class DynamicDashboardScreen extends StatelessWidget {
                         Icon(action.icon, size: 20, color: AppColors.primary),
                         const SizedBox(width: 10),
                         Flexible(
-                          child: TrText(
+                          child: Text(
                             action.title,
                             style: const TextStyle(
                               fontSize: 12,

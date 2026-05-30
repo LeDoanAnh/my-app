@@ -23,7 +23,9 @@ class HomeRepositoryImpl extends HomeRepository {
   @override
   Future<List<SubmissionEntity>> getRecentSubmissions(int userId) async {
     try {
-      final List<SubmissionModel> models = await api.getRecentSubmissions(userId);
+      final List<SubmissionModel> models = await api.getRecentSubmissions(
+        userId,
+      );
       return models.map((model) => model.toEntity()).toList();
     } catch (e) {
       throw Exception("Lấy danh sách tờ trình thất bại: ${e.toString()}");

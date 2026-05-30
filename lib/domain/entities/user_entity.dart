@@ -16,5 +16,20 @@ class UserEntity {
   final int? totalSubmissions;
   final int? unreadNotifications;
 
-  UserEntity({required this.id,  this.username, this.fullName, this.email, this.sessionId, this.token, this.roles,  this.departmentId, this.status, this.departmentName, this.createdAt, this.updatedAt, this.totalSubmissions, this.unreadNotifications});
+  UserEntity({
+    required this.id,
+    this.username,
+    this.fullName,
+    this.email,
+    this.sessionId,
+    this.token,
+    this.roles,
+    this.departmentId,
+    this.status,
+    this.departmentName,
+    this.createdAt,
+    this.updatedAt,
+    this.totalSubmissions,
+    this.unreadNotifications,
+  });
 }

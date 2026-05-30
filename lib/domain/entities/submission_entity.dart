@@ -1,4 +1,4 @@
-class SubmissionEntity{
+class SubmissionEntity {
   final int id;
   final String? submissionCode;
   final String? title;

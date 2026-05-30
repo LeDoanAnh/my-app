@@ -6,8 +6,6 @@ import 'package:my_app/data/model/user_model.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
 import 'package:my_app/domain/repositories/auth_repository.dart';
 
-
-
 class AuthRepositoryImpl extends AuthRepository {
   final AuthApi api;
   String? _sessionId;
@@ -23,10 +21,12 @@ class AuthRepositoryImpl extends AuthRepository {
       await api.validateWithLogin({
         "username": username,
         "password": password,
-        "request_token": requestToken
+        "request_token": requestToken,
       });
 
-      final sessionRes = await api.createSession({"request_token": requestToken});
+      final sessionRes = await api.createSession({
+        "request_token": requestToken,
+      });
       _sessionId = sessionRes["session_id"];
 
       final userModel = await api.getAccount(_sessionId!);
@@ -54,11 +54,17 @@ class AuthRepositoryImpl extends AuthRepository {
       email: user.email,
       sessionId: user.sessionId,
       departmentId: user.departmentId,
-      roles: user.roles?.map((e) => RoleModel(
-          id: e.id ?? 0,
-          roleName: e.roleName ?? "Không xác định",
-          description: e.description ?? "Không xác định"
-      )).toList()??[],
+      roles:
+          user.roles
+              ?.map(
+                (e) => RoleModel(
+                  id: e.id ?? 0,
+                  roleName: e.roleName ?? "Không xác định",
+                  description: e.description ?? "Không xác định",
+                ),
+              )
+              .toList() ??
+          [],
     );
 
     final String userJson = jsonEncode(userModel.toJson());
@@ -80,14 +86,13 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<void> saveFcmToken(String token) async{
+  Future<void> saveFcmToken(String token) async {
     try {
       String? tokenToUse = _sessionId;
 
       if (tokenToUse == null) {
         final user = await getUserFromLocal();
         tokenToUse = user?.sessionId;
-
       }
       if (tokenToUse != null) {
         await api.saveFcmToken("Bearer $tokenToUse", {"token": token});

@@ -11,15 +11,15 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
   final DepartmentListUseCase _departmentListUseCase;
 
   SubmissionBloc(this._createSubmissionUseCase, this._departmentListUseCase)
-      : super(SubmissionInitial()) {
+    : super(SubmissionInitial()) {
     on<SubmitCreateSubmission>(_onSubmitCreateSubmission);
     on<GetDepartmentList>(_onGetDepartmentList);
   }
 
   Future<void> _onSubmitCreateSubmission(
-      SubmitCreateSubmission event,
-      Emitter<SubmissionState> emit,
-      ) async {
+    SubmitCreateSubmission event,
+    Emitter<SubmissionState> emit,
+  ) async {
     emit(SubmissionDeptLoading());
 
     try {
@@ -33,12 +33,8 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
         departments: event.departments,
         attachments: event.attachments
             .map(
-              (f) => FileAttachment(
-            name: f.name,
-            path: f.path,
-            bytes: f.bytes,
-          ),
-        )
+              (f) => FileAttachment(name: f.name, path: f.path, bytes: f.bytes),
+            )
             .toList(),
       );
 
@@ -73,9 +69,9 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
   }
 
   Future<void> _onGetDepartmentList(
-      GetDepartmentList event,
-      Emitter<SubmissionState> emit,
-      ) async {
+    GetDepartmentList event,
+    Emitter<SubmissionState> emit,
+  ) async {
     emit(SubmissionDeptLoading());
     try {
       final result = await _departmentListUseCase.callResources();

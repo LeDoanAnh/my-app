@@ -6,7 +6,6 @@ import 'package:my_app/domain/entities/workflow_list_entity.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_event.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class WorkflowListScreen extends StatefulWidget {
   const WorkflowListScreen({super.key});
@@ -27,7 +26,7 @@ class _WorkflowListScreenState extends State<WorkflowListScreen> {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Cấu hình Luồng duyệt",
           style: TextStyle(
             color: AppColors.textDark,
@@ -57,7 +56,7 @@ class _WorkflowListScreenState extends State<WorkflowListScreen> {
           if (state is WorkflowListLoaded) {
             final workflows = state.workflows;
             if (workflows.isEmpty) {
-              return const Center(child: TrText("Chưa có quy trình nào"));
+              return const Center(child: Text("Chưa có quy trình nào"));
             }
             return Column(
               children: [
@@ -74,7 +73,7 @@ class _WorkflowListScreenState extends State<WorkflowListScreen> {
             );
           }
           if (state is WorkflowListError) {
-            return Center(child: TrText("Lỗi: ${state.message}"));
+            return Center(child: Text("Lỗi: ${state.message}"));
           }
           return const SizedBox.shrink();
         },
@@ -105,7 +104,7 @@ class _SummaryHeader extends StatelessWidget {
             size: 20,
           ),
           const SizedBox(width: 10),
-          TrText(
+          Text(
             "Đang hoạt động: $activeCount quy trình",
             style: const TextStyle(
               fontWeight: FontWeight.w600,
@@ -165,7 +164,7 @@ class _WorkflowCard extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          TrText(
+                          Text(
                             wf.name ?? "Không tên",
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -173,7 +172,7 @@ class _WorkflowCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          TrText(
+                          Text(
                             "Áp dụng: ${wf.applyTo ?? 'N/A'}",
                             style: const TextStyle(
                               color: Colors.grey,
@@ -195,7 +194,7 @@ class _WorkflowCard extends StatelessWidget {
                 color: AppColors.fieldBg.withOpacity(0.5),
                 child: Row(
                   children: [
-                    const TrText(
+                    const Text(
                       "QUY TRÌNH:",
                       style: TextStyle(
                         fontSize: 10,
@@ -236,7 +235,7 @@ class _WorkflowCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(6),
             border: Border.all(color: Colors.grey.shade300),
           ),
-          child: TrText(
+          child: Text(
             steps[i],
             style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
           ),
@@ -272,7 +271,7 @@ class _StatusChip extends StatelessWidget {
         color: (isActive ? Colors.green : Colors.grey).withOpacity(0.1),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: TrText(
+      child: Text(
         isActive ? "ON" : "OFF",
         style: TextStyle(
           fontSize: 10,

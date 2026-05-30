@@ -4,10 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/approver_aubmission_entity.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/in_out/approver_decison/approver_bloc.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class ApproverDecisionScreen extends StatefulWidget {
   final int submissionId;
@@ -50,8 +48,6 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     return BlocConsumer<ApproverBloc, ApproverState>(
       listener: (context, state) {
         if (_handlingDecisionInPasswordDialog &&
@@ -84,7 +80,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     size: 48,
                   ),
                   const SizedBox(height: 12),
-                  TrText(state.message, textAlign: TextAlign.center),
+                  Text(state.message, textAlign: TextAlign.center),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () => context.read<ApproverBloc>().add(
@@ -93,7 +89,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         deptId: widget.deptId,
                       ),
                     ),
-                    child: TrText(l10n.retry),
+                    child: Text('Thử lại'),
                   ),
                 ],
               ),
@@ -137,7 +133,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             }
           },
         ),
-        title: const TrText(
+        title: const Text(
           "Chi tiáº¿t phÃª duyá»‡t",
           style: TextStyle(
             color: Color(0xFF1E293B),
@@ -225,7 +221,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   isApproved
                       ? "Báº¡n Ä‘Ã£ duyá»‡t tá» trÃ¬nh nÃ y"
                       : "Báº¡n Ä‘Ã£ tá»« chá»‘i tá» trÃ¬nh nÃ y",
@@ -238,7 +234,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 if (decision.comment != null &&
                     decision.comment!.isNotEmpty) ...[
                   const SizedBox(height: 4),
-                  TrText(
+                  Text(
                     "\"${decision.comment}\"",
                     style: const TextStyle(
                       fontSize: 12,
@@ -249,7 +245,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 ],
                 if (decision.decidedAt != null) ...[
                   const SizedBox(height: 2),
-                  TrText(
+                  Text(
                     decision.decidedAt!,
                     style: const TextStyle(
                       fontSize: 11,
@@ -289,7 +285,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: TrText(
+                child: Text(
                   submission.title ?? "KhÃ´ng cÃ³ tiÃªu Ä‘á»",
                   style: const TextStyle(
                     fontSize: 17,
@@ -308,7 +304,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             Colors.blueGrey,
           ),
           const SizedBox(height: 12),
-          TrText(
+          Text(
             submission.content ?? "",
             style: const TextStyle(
               fontSize: 14,
@@ -337,7 +333,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: TrText(
+                    child: Text(
                       submission.noteForDept!,
                       style: const TextStyle(
                         fontSize: 13,
@@ -427,7 +423,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                             color: Color(0xFF94A3B8),
                           ),
                           const SizedBox(width: 4),
-                          TrText(
+                          Text(
                             "${loc.startTime} â†’ ${loc.endTime ?? ''}",
                             style: const TextStyle(
                               fontSize: 12,
@@ -481,7 +477,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: TrText(
+                      child: Text(
                         asset.assetName ?? "-",
                         style: const TextStyle(
                           fontSize: 14,
@@ -499,7 +495,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         color: const Color(0xFFEFF6FF),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: TrText(
+                      child: Text(
                         "x${asset.quantity ?? 1}",
                         style: const TextStyle(
                           fontSize: 13,
@@ -532,10 +528,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         controller: _commentController,
         maxLines: 3,
         decoration: InputDecoration(
-          hintText: uiText(
-            context,
-            "ThÃªm ghi chÃº phÃª duyá»‡t (náº¿u cÃ³)...",
-          ),
+          hintText: "ThÃªm ghi chÃº phÃª duyá»‡t (náº¿u cÃ³)...",
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
           contentPadding: const EdgeInsets.all(16),
           border: InputBorder.none,
@@ -578,7 +571,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const TrText(
+                    child: const Text(
                       "Tá»ª CHá»I",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -597,7 +590,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: const TrText(
+                    child: const Text(
                       "DUYá»†T ÄÆ N",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -616,7 +609,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   Widget _buildSectionLabel(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 10),
-      child: TrText(
+      child: Text(
         title,
         style: const TextStyle(
           fontSize: 11,
@@ -638,13 +631,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
       children: [
         Icon(icon, size: 16, color: iconColor),
         const SizedBox(width: 8),
-        TrText(
+        Text(
           label,
           style: const TextStyle(color: Color(0xFF64748B), fontSize: 13),
         ),
         if (value.isNotEmpty) ...[
           const Spacer(),
-          TrText(
+          Text(
             value,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
@@ -669,16 +662,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
       _isShowingResultDialog = false;
       return;
     }
-
-    final l10n = AppLocalizations.of(context)!;
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (_) => AppConfirmationDialog(
-        title: success ? l10n.success : l10n.failure,
+        title: success ? 'Thành công' : 'Thất bại',
         content: message,
-        confirmText: success ? l10n.ok : l10n.retryAction,
-        cancelText: l10n.cancel,
+        confirmText: success ? 'OK' : 'Thực hiện lại',
+        cancelText: 'Hủy',
         confirmColor: success ? AppColors.success : AppColors.error,
         icon: success
             ? Icons.check_circle_rounded
@@ -710,7 +701,6 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   Future<void> _showPasswordDialogWithLoading(bool isApprove) async {
     final passwordController = TextEditingController();
     String? passwordError;
-    final l10n = AppLocalizations.of(context)!;
     bool obscurePassword = true;
     bool isSubmitting = false;
     ApproverState? resultState;
@@ -723,7 +713,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           Future<void> submit() async {
             final password = passwordController.text.trim();
             if (password.isEmpty) {
-              setDialogState(() => passwordError = l10n.enterPassword);
+              setDialogState(() => passwordError = 'Nhập mật khẩu');
               return;
             }
             if (isSubmitting) return;
@@ -763,8 +753,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            title: TrText(
-              l10n.confirmPassword,
+            title: Text(
+              'Xác nhận mật khẩu',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             content: TextField(
@@ -773,8 +763,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               obscureText: obscurePassword,
               textInputAction: TextInputAction.done,
               decoration: InputDecoration(
-                labelText: l10n.password,
-                hintText: l10n.enterPasswordToContinue,
+                labelText: 'Mật khẩu',
+                hintText: 'Nhập mật khẩu để tiếp tục',
                 errorText: passwordError,
                 prefixIcon: const Icon(Icons.lock_outline),
                 suffixIcon: IconButton(
@@ -805,8 +795,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             actions: [
               TextButton(
                 onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
-                child: TrText(
-                  l10n.cancel,
+                child: Text(
+                  'Hủy',
                   style: const TextStyle(color: Color(0xFF94A3B8)),
                 ),
               ),
@@ -829,7 +819,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                           color: Colors.white,
                         ),
                       )
-                    : TrText(l10n.continueAction),
+                    : Text('Tiếp tục'),
               ),
             ],
           );
@@ -856,7 +846,6 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   Future<void> _showPasswordDialog(bool isApprove) async {
     final passwordController = TextEditingController();
     String? passwordError;
-    final l10n = AppLocalizations.of(context)!;
     bool obscurePassword = true;
 
     final password = await showDialog<String>(
@@ -866,8 +855,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: TrText(
-            l10n.confirmPassword,
+          title: Text(
+            'Xác nhận mật khẩu',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           content: TextField(
@@ -875,8 +864,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             obscureText: obscurePassword,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
-              labelText: l10n.password,
-              hintText: l10n.enterPasswordToContinue,
+              labelText: 'Mật khẩu',
+              hintText: 'Nhập mật khẩu để tiếp tục',
               errorText: passwordError,
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
@@ -901,7 +890,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             onSubmitted: (_) {
               final pwd = passwordController.text.trim();
               if (pwd.isEmpty) {
-                setDialogState(() => passwordError = l10n.enterPassword);
+                setDialogState(() => passwordError = 'Nhập mật khẩu');
                 return;
               }
               Navigator.of(ctx).pop(pwd);
@@ -910,8 +899,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: TrText(
-                l10n.cancel,
+              child: Text(
+                'Hủy',
                 style: const TextStyle(color: Color(0xFF94A3B8)),
               ),
             ),
@@ -919,7 +908,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               onPressed: () {
                 final pwd = passwordController.text.trim();
                 if (pwd.isEmpty) {
-                  setDialogState(() => passwordError = l10n.enterPassword);
+                  setDialogState(() => passwordError = 'Nhập mật khẩu');
                   return;
                 }
                 Navigator.of(ctx).pop(pwd);
@@ -932,7 +921,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: TrText(l10n.continueAction),
+              child: Text('Tiếp tục'),
             ),
           ],
         ),
@@ -958,7 +947,6 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   void _showConfirmDialog(bool isApprove, String password) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -970,13 +958,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               color: isApprove ? Colors.green : Colors.redAccent,
             ),
             const SizedBox(width: 8),
-            TrText(
+            Text(
               isApprove ? "XÃ¡c nháº­n duyá»‡t?" : "XÃ¡c nháº­n tá»« chá»‘i?",
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-        content: TrText(
+        content: Text(
           isApprove
               ? "Báº¡n Ä‘á»“ng Ã½ phÃª duyá»‡t tá» trÃ¬nh nÃ y. HÃ nh Ä‘á»™ng nÃ y khÃ´ng thá»ƒ hoÃ n tÃ¡c."
               : "Báº¡n sáº½ tá»« chá»‘i tá» trÃ¬nh nÃ y. ToÃ n bá»™ quy trÃ¬nh sáº½ bá»‹ dá»«ng láº¡i.",
@@ -985,8 +973,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: TrText(
-              l10n.cancel,
+            child: Text(
+              'Hủy',
               style: const TextStyle(color: Color(0xFF94A3B8)),
             ),
           ),
@@ -1014,7 +1002,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: TrText(isApprove ? "Duyá»‡t" : "Tá»« chá»‘i"),
+            child: Text(isApprove ? "Duyá»‡t" : "Tá»« chá»‘i"),
           ),
         ],
       ),

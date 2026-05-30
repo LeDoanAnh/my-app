@@ -13,8 +13,7 @@ class ActorUseCase {
     return await repository.getActorList();
   }
 
-  Future<UserEntity> call( int id) async  {
+  Future<UserEntity> call(int id) async {
     return await userRepository.getUserDetail(id);
   }
-
 }

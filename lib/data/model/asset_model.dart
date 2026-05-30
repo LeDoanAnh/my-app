@@ -28,8 +28,8 @@ class AssetModel {
     this.department,
   });
 
-
-  factory AssetModel.fromJson(Map<String, dynamic> json) => _$AssetModelFromJson(json);
+  factory AssetModel.fromJson(Map<String, dynamic> json) =>
+      _$AssetModelFromJson(json);
   Map<String, dynamic> toJson() => _$AssetModelToJson(this);
 
   AssetEntity toEntity() {
@@ -49,8 +49,9 @@ class AssetModel {
 class AssetResponseModel {
   final List<AssetModel>? data;
 
-  AssetResponseModel({ required this.data});
+  AssetResponseModel({required this.data});
 
-  factory AssetResponseModel.fromJson(Map<String, dynamic> json) => _$AssetResponseModelFromJson(json);
+  factory AssetResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$AssetResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$AssetResponseModelToJson(this);
 }

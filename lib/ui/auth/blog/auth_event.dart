@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 abstract class AuthEvent {}
 
 class LoginSubmitted extends AuthEvent {
@@ -10,12 +8,6 @@ class LoginSubmitted extends AuthEvent {
 }
 
 class LogoutPressed extends AuthEvent {}
-
-class LanguageChanged extends AuthEvent {
-  final Locale locale;
-
-  LanguageChanged(this.locale);
-}
 
 class AppStarted extends AuthEvent {}
 

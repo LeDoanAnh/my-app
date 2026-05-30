@@ -6,7 +6,6 @@ import 'package:my_app/ui/user/user_detail_bloc.dart';
 import 'package:my_app/ui/user/user_detail_event.dart';
 import 'package:my_app/ui/user/user_detail_state.dart';
 import 'package:my_app/ui/user/form_user/create_user_screen.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final int userId;
@@ -53,13 +52,13 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     size: 48,
                   ),
                   const SizedBox(height: 12),
-                  TrText(state.message, textAlign: TextAlign.center),
+                  Text(state.message, textAlign: TextAlign.center),
                   const SizedBox(height: 12),
                   ElevatedButton(
                     onPressed: () => context.read<UserDetailBloc>().add(
                       GetUserDetail(widget.userId),
                     ),
-                    child: const TrText("Thử lại"),
+                    child: const Text("Thử lại"),
                   ),
                 ],
               ),
@@ -89,7 +88,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           return Scaffold(
             backgroundColor: AppColors.fieldBg,
             appBar: AppBar(
-              title: const TrText(
+              title: const Text(
                 "Chi tiết nhân sự",
                 style: TextStyle(
                   color: AppColors.textDark,
@@ -109,7 +108,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                     );
                   },
                   icon: const Icon(Icons.edit, size: 18),
-                  label: const TrText("Chỉnh sửa"),
+                  label: const Text("Chỉnh sửa"),
                 ),
               ],
             ),
@@ -206,7 +205,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   label,
                   style: const TextStyle(color: Colors.grey, fontSize: 13),
                 ),
@@ -227,7 +226,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                           color: AppColors.primary.withOpacity(0.2),
                         ),
                       ),
-                      child: TrText(
+                      child: Text(
                         role['name'],
                         style: const TextStyle(
                           color: AppColors.primary,
@@ -259,7 +258,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           CircleAvatar(
             radius: 40,
             backgroundColor: AppColors.primary.withOpacity(0.1),
-            child: TrText(
+            child: Text(
               userData['full_name'][0],
               style: const TextStyle(
                 fontSize: 32,
@@ -269,11 +268,11 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          TrText(
+          Text(
             userData['full_name'],
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
-          TrText(
+          Text(
             userData['email'],
             style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
@@ -287,7 +286,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       padding: const EdgeInsets.only(left: 4, bottom: 8),
       child: Align(
         alignment: Alignment.centerLeft,
-        child: TrText(
+        child: Text(
           title,
           style: const TextStyle(
             fontSize: 11,
@@ -316,12 +315,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         children: [
           Icon(icon, size: 20, color: AppColors.primary),
           const SizedBox(width: 12),
-          TrText(
-            label,
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
-          ),
+          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
           const Spacer(),
-          TrText(
+          Text(
             value,
             style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
           ),
@@ -338,7 +334,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         children: [
           const Icon(Icons.shield_outlined, size: 20, color: AppColors.primary),
           const SizedBox(width: 12),
-          const TrText(
+          const Text(
             "Trạng thái",
             style: TextStyle(color: Colors.grey, fontSize: 13),
           ),
@@ -351,7 +347,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
                   : Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: TrText(
+            child: Text(
               isActive ? "ĐANG HOẠT ĐỘNG" : "BỊ KHÓA",
               style: TextStyle(
                 color: isActive ? Colors.green : Colors.red,
@@ -376,7 +372,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TrText(
+            Text(
               value,
               style: TextStyle(
                 fontSize: 20,
@@ -385,7 +381,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            TrText(
+            Text(
               label,
               style: const TextStyle(fontSize: 11, color: Colors.grey),
             ),
@@ -401,7 +397,7 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       child: OutlinedButton.icon(
         onPressed: () => _showDeleteConfirmDialog(context),
         icon: const Icon(Icons.delete_forever_rounded, color: Colors.red),
-        label: const TrText(
+        label: const Text(
           "XÓA TÀI KHOẢN NÀY",
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
@@ -421,23 +417,23 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
       context: context,
       builder: (context) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const TrText(
+        title: const Text(
           "Xác nhận xóa?",
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        content: const TrText(
+        content: const Text(
           "Dữ liệu liên quan đến người dùng này (Tờ trình, yêu cầu vật tư) có thể bị ảnh hưởng. Bạn có chắc chắn muốn xóa vĩnh viễn không?",
           style: TextStyle(fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const TrText("HỦY", style: TextStyle(color: Colors.grey)),
+            child: const Text("HỦY", style: TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const TrText(
+            child: const Text(
               "XÓA VĨNH VIỄN",
               style: TextStyle(color: Colors.white),
             ),

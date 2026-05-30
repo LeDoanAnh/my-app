@@ -9,7 +9,17 @@ class AssetDetailEntity {
   final CurrentRequest? currentRequest;
   final List<History>? history;
 
-  AssetDetailEntity({required this.id, this.assetName, this.assetCode, this.unit, this.status, this.deptName, this.isConsumable, this.currentRequest, this.history});
+  AssetDetailEntity({
+    required this.id,
+    this.assetName,
+    this.assetCode,
+    this.unit,
+    this.status,
+    this.deptName,
+    this.isConsumable,
+    this.currentRequest,
+    this.history,
+  });
 }
 
 class CurrentRequest {
@@ -33,9 +43,5 @@ class History {
   final String? action;
   final String? date;
 
-  History({
-    this.user,
-    this.action,
-    this.date,
-  });
+  History({this.user, this.action, this.date});
 }

@@ -18,5 +18,4 @@ class NotificationUseCase {
   Future<dynamic> markAllAsRead(int userId) async {
     return await repository.markAllAsRead(userId);
   }
-
 }

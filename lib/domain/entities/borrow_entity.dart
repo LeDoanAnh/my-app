@@ -30,7 +30,11 @@ class BorrowItemEntity {
   final String? expectedReturn;
 
   BorrowItemEntity({
-    this.assetRequestId, this.name, this.qty,
-    this.isConsumable = false, this.status, this.expectedReturn,
+    this.assetRequestId,
+    this.name,
+    this.qty,
+    this.isConsumable = false,
+    this.status,
+    this.expectedReturn,
   });
 }

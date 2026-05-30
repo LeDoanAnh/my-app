@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/search_entity.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/search/search_bloc.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class SearchScreen extends StatefulWidget {
   final int userId;
@@ -20,12 +18,12 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedFilter = 'all';
 
-  List<Map<String, String>> _filters(AppLocalizations l10n) => [
-    {'label': l10n.all, 'value': 'all'},
-    {'label': l10n.submission, 'value': 'submission'},
-    {'label': l10n.asset, 'value': 'asset'},
-    {'label': l10n.user, 'value': 'user'},
-    {'label': l10n.department, 'value': 'department'},
+  List<Map<String, String>> _filters() => [
+    {'label': 'Tất cả', 'value': 'all'},
+    {'label': 'Tờ trình', 'value': 'submission'},
+    {'label': 'Thiết bị', 'value': 'asset'},
+    {'label': 'Nhân viên', 'value': 'user'},
+    {'label': 'Phòng ban', 'value': 'department'},
   ];
 
   @override
@@ -69,8 +67,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final filters = _filters(l10n);
+    final filters = _filters();
 
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
@@ -98,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
             onSubmitted: _onSubmitted,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
-              hintText: l10n.searchHint,
+              hintText: 'Tìm kiếm tờ trình, thiết bị...',
               hintStyle: const TextStyle(
                 color: AppColors.textGrey,
                 fontSize: 14,
@@ -129,7 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: ChoiceChip(
-                    label: TrText(filter['label']!),
+                    label: Text(filter['label']!),
                     selected: isSelected,
                     onSelected: (_) {
                       setState(() => _selectedFilter = filter['value']!);
@@ -177,7 +174,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildHistory(List<String> history) {
-    final l10n = AppLocalizations.of(context)!;
     if (history.isEmpty) {
       return Center(
         child: Column(
@@ -189,8 +185,8 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.textGrey.withOpacity(0.3),
             ),
             const SizedBox(height: 12),
-            TrText(
-              l10n.searchPrompt,
+            Text(
+              'Nhập từ khóa để tìm kiếm',
               style: const TextStyle(color: AppColors.textGrey),
             ),
           ],
@@ -206,8 +202,8 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrText(
-                l10n.recentSearches,
+              Text(
+                'Tìm kiếm gần đây',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
@@ -217,8 +213,8 @@ class _SearchScreenState extends State<SearchScreen> {
               GestureDetector(
                 onTap: () =>
                     context.read<SearchBloc>().add(SearchHistoryCleared()),
-                child: TrText(
-                  l10n.clearAll,
+                child: Text(
+                  'Xóa tất cả',
                   style: const TextStyle(
                     fontSize: 12,
                     color: AppColors.primary,
@@ -240,7 +236,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   size: 18,
                   color: AppColors.textGrey,
                 ),
-                title: TrText(
+                title: Text(
                   query,
                   style: const TextStyle(
                     fontSize: 13,
@@ -269,7 +265,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildResults(List<SearchResultEntity> results) {
-    final l10n = AppLocalizations.of(context)!;
     if (results.isEmpty) {
       return Center(
         child: Column(
@@ -281,8 +276,8 @@ class _SearchScreenState extends State<SearchScreen> {
               color: AppColors.textGrey.withOpacity(0.3),
             ),
             const SizedBox(height: 12),
-            TrText(
-              l10n.noSearchResults,
+            Text(
+              'Không tìm thấy kết quả phù hợp',
               style: const TextStyle(color: AppColors.textGrey),
             ),
           ],
@@ -325,7 +320,7 @@ class _SearchScreenState extends State<SearchScreen> {
             size: 20,
           ),
         ),
-        title: TrText(
+        title: Text(
           item.title?.toUpperCase() ?? '',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
@@ -333,7 +328,7 @@ class _SearchScreenState extends State<SearchScreen> {
             color: AppColors.textDark,
           ),
         ),
-        subtitle: TrText(
+        subtitle: Text(
           "${meta['label']} - ${item.status}",
           style: const TextStyle(fontSize: 12, color: AppColors.textGrey),
         ),
@@ -366,19 +361,18 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Widget _buildError(String message) {
-    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
           const SizedBox(height: 12),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () =>
                 context.read<SearchBloc>().add(SearchHistoryLoaded()),
-            child: TrText(l10n.retry),
+            child: Text('Thử lại'),
           ),
         ],
       ),
@@ -386,38 +380,33 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   Map<String, dynamic> _categoryMeta(String category) {
-    final l10n = AppLocalizations.of(context)!;
     switch (category) {
       case 'submission':
         return {
           'icon': Icons.description_outlined,
           'color': Colors.indigo,
-          'label': l10n.submission,
+          'label': 'Tờ trình',
         };
       case 'asset':
         return {
           'icon': Icons.devices_outlined,
           'color': Colors.teal,
-          'label': l10n.asset,
+          'label': 'Thiết bị',
         };
       case 'user':
         return {
           'icon': Icons.person_outline,
           'color': Colors.orange,
-          'label': l10n.user,
+          'label': 'Nhân viên',
         };
       case 'department':
         return {
           'icon': Icons.business_outlined,
           'color': Colors.purple,
-          'label': l10n.department,
+          'label': 'Phòng ban',
         };
       default:
-        return {
-          'icon': Icons.search,
-          'color': Colors.grey,
-          'label': l10n.other,
-        };
+        return {'icon': Icons.search, 'color': Colors.grey, 'label': 'Khác'};
     }
   }
 }

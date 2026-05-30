@@ -8,6 +8,13 @@ abstract class AssetTaskRepository {
     String? search,
     String? status,
   });
-  Future<AssetTaskDetailEntity> getAssetTaskDetail(int submissionId, int deptId);
-  Future<HandoverResponse> handoverAssets(int submissionId, int handlerId, List<int> assetRequestIds);
+  Future<AssetTaskDetailEntity> getAssetTaskDetail(
+    int submissionId,
+    int deptId,
+  );
+  Future<HandoverResponse> handoverAssets(
+    int submissionId,
+    int handlerId,
+    List<int> assetRequestIds,
+  );
 }

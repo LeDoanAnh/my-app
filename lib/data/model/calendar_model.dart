@@ -13,10 +13,11 @@ class CalendarModel {
 
   CalendarModel({this.title, this.type, this.status, this.time, this.color});
 
-  factory CalendarModel.fromJson(Map<String, dynamic> json) => _$CalendarModelFromJson(json);
+  factory CalendarModel.fromJson(Map<String, dynamic> json) =>
+      _$CalendarModelFromJson(json);
   Map<String, dynamic> toJson() => _$CalendarModelToJson(this);
 
-  CalendarEntity toEntity(DateTime eventDate){
+  CalendarEntity toEntity(DateTime eventDate) {
     return CalendarEntity(
       title: title ?? '',
       type: type ?? '',
@@ -32,9 +33,9 @@ class CalendarModel {
 class CalendarResponseModel {
   final Map<String, List<CalendarModel>>? data;
 
-  CalendarResponseModel({ required this.data});
+  CalendarResponseModel({required this.data});
 
-  factory CalendarResponseModel.fromJson(Map<String, dynamic> json) => _$CalendarResponseModelFromJson(json);
+  factory CalendarResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$CalendarResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$CalendarResponseModelToJson(this);
-
 }

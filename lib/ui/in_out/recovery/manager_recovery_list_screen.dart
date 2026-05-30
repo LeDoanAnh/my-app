@@ -6,7 +6,6 @@ import 'package:my_app/ui/in_out/recovery/recovery_bloc.dart';
 import 'package:my_app/ui/in_out/recovery/recovery_event.dart';
 import 'package:my_app/ui/in_out/recovery/recovery_state.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class ManagerRecoveryListScreen extends StatefulWidget {
   final int handlerId;
@@ -87,7 +86,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "QUẢN LÝ THU HỒI",
           style: TextStyle(
             color: AppColors.textDark,
@@ -104,14 +103,14 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           if (state is RecoveryActionSuccess) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: TrText(state.message),
+                content: Text(state.message),
                 backgroundColor: Colors.green,
               ),
             );
           } else if (state is RecoveryError) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: TrText(state.message),
+                content: Text(state.message),
                 backgroundColor: Colors.redAccent,
               ),
             );
@@ -154,7 +153,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
         controller: _searchController,
         onChanged: _onSearch,
         decoration: InputDecoration(
-          hintText: uiText(context, "Tìm tên người mượn hoặc tờ trình..."),
+          hintText: "Tìm tên người mượn hoặc tờ trình...",
           prefixIcon: const Icon(Icons.search),
           filled: true,
           fillColor: const Color(0xFFF1F3F6),
@@ -190,7 +189,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrText(
+              Text(
                 sub.submissionCode ?? "#${sub.submissionId}",
                 style: const TextStyle(
                   color: Colors.blueGrey,
@@ -208,7 +207,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           const SizedBox(height: 8),
 
           // Title
-          TrText(
+          Text(
             sub.title ?? "Không có tiêu đề",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -227,11 +226,11 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
                 color: Colors.blueGrey,
               ),
               const SizedBox(width: 6),
-              TrText(
+              Text(
                 "Người mượn: ",
                 style: TextStyle(color: Colors.grey[600], fontSize: 12),
               ),
-              TrText(
+              Text(
                 sub.borrowerName ?? '-',
                 style: const TextStyle(
                   color: AppColors.textDark,
@@ -283,7 +282,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
                 children: [
                   const Icon(Icons.arrow_right, size: 16, color: Colors.grey),
                   Expanded(
-                    child: TrText(
+                    child: Text(
                       i.name ?? "-",
                       style: const TextStyle(
                         fontSize: 13,
@@ -291,7 +290,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
                       ),
                     ),
                   ),
-                  TrText(
+                  Text(
                     "x${i.qty ?? 1}",
                     style: const TextStyle(
                       fontSize: 13,
@@ -312,7 +311,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
       child: ElevatedButton.icon(
         onPressed: () => _onConfirmRecovery(sub),
         icon: const Icon(Icons.check_circle_outline, size: 18),
-        label: const TrText(
+        label: const Text(
           "XÁC NHẬN ĐÃ THU HỒI",
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
@@ -344,11 +343,11 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TrText(
+            const Text(
               "Hạn trả:",
               style: TextStyle(color: Colors.grey, fontSize: 11),
             ),
-            TrText(
+            Text(
               returnDate ?? "-",
               style: TextStyle(
                 color: isUrgent ? Colors.red : AppColors.textDark,
@@ -362,7 +361,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           ElevatedButton.icon(
             onPressed: onPressed,
             icon: Icon(icon, size: 16),
-            label: TrText(
+            label: Text(
               label,
               style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
             ),
@@ -374,7 +373,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
             ),
           )
         else
-          const TrText(
+          const Text(
             "Đang sử dụng",
             style: TextStyle(
               color: Colors.blueGrey,
@@ -404,7 +403,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 8),
           Expanded(
-            child: TrText(
+            child: Text(
               text,
               style: TextStyle(
                 color: color,
@@ -441,7 +440,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
         color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: TrText(
+      child: Text(
         text,
         style: TextStyle(
           color: color,
@@ -459,7 +458,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
         children: [
           Icon(Icons.inventory_2_outlined, size: 64, color: Colors.grey[300]),
           const SizedBox(height: 16),
-          TrText(
+          Text(
             "Không có đồ cần thu hồi",
             style: TextStyle(color: Colors.grey[500]),
           ),
@@ -475,13 +474,13 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
         children: [
           const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
           const SizedBox(height: 12),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () => context.read<RecoveryBloc>().add(
               LoadRecoveryList(handlerId: widget.handlerId),
             ),
-            child: const TrText("Thử lại"),
+            child: const Text("Thử lại"),
           ),
         ],
       ),

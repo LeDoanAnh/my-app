@@ -9,7 +9,8 @@ class RecoveryListResponse {
 
   RecoveryListResponse({required this.success, this.total, this.data});
 
-  factory RecoveryListResponse.fromJson(Map<String, dynamic> json) => _$RecoveryListResponseFromJson(json);
+  factory RecoveryListResponse.fromJson(Map<String, dynamic> json) =>
+      _$RecoveryListResponseFromJson(json);
   Map<String, dynamic> toJson() => _$RecoveryListResponseToJson(this);
 }
 
@@ -46,7 +47,8 @@ class RecoveryModel {
     this.returnDate,
     this.items,
   });
-  factory RecoveryModel.fromJson(Map<String, dynamic> json) => _$RecoveryModelFromJson(json);
+  factory RecoveryModel.fromJson(Map<String, dynamic> json) =>
+      _$RecoveryModelFromJson(json);
   Map<String, dynamic> toJson() => _$RecoveryModelToJson(this);
 }
 
@@ -67,7 +69,8 @@ class RecoveryItemModel {
     this.status,
     this.expectedReturn,
   });
-  factory RecoveryItemModel.fromJson(Map<String, dynamic> json) => _$RecoveryItemModelFromJson(json);
+  factory RecoveryItemModel.fromJson(Map<String, dynamic> json) =>
+      _$RecoveryItemModelFromJson(json);
   Map<String, dynamic> toJson() => _$RecoveryItemModelToJson(this);
 }
 
@@ -77,6 +80,7 @@ class RecoveryActionResponseModel {
   final String message;
 
   RecoveryActionResponseModel({required this.success, required this.message});
-  factory RecoveryActionResponseModel.fromJson(Map<String, dynamic> json) => _$RecoveryActionResponseModelFromJson(json);
+  factory RecoveryActionResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$RecoveryActionResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$RecoveryActionResponseModelToJson(this);
 }

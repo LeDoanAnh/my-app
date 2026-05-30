@@ -12,14 +12,25 @@ class AssetTaskUseCase {
     String? search,
     String? status,
   }) {
-    return repository.getAssetTasks(deptId: deptId, search: search, status: status);
+    return repository.getAssetTasks(
+      deptId: deptId,
+      search: search,
+      status: status,
+    );
   }
 
-  Future<AssetTaskDetailEntity> getAssetTaskDetail(int submissionId, int deptId) {
+  Future<AssetTaskDetailEntity> getAssetTaskDetail(
+    int submissionId,
+    int deptId,
+  ) {
     return repository.getAssetTaskDetail(submissionId, deptId);
   }
 
-  Future<HandoverResponse> handoverAssets(int submissionId, int handlerId, List<int> assetRequestIds) {
+  Future<HandoverResponse> handoverAssets(
+    int submissionId,
+    int handlerId,
+    List<int> assetRequestIds,
+  ) {
     return repository.handoverAssets(submissionId, handlerId, assetRequestIds);
   }
 }

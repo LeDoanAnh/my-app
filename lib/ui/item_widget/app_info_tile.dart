@@ -1,7 +1,6 @@
 //màn thông tin trong cart nhìn nội dung của màn profile
 
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
 import '../../../../core/theme/app_colors.dart';
 
 class AppInfoTile extends StatelessWidget {
@@ -39,7 +38,7 @@ class AppInfoTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   label,
                   style: const TextStyle(
                     color: AppColors.textGrey,
@@ -47,7 +46,7 @@ class AppInfoTile extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 2),
-                TrText(
+                Text(
                   value,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,

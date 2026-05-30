@@ -28,12 +28,7 @@ class BookingEntity {
   final String? date;
   final String? organizer;
 
-  BookingEntity({
-    this.title,
-    this.time,
-    this.date,
-    this.organizer,
-  });
+  BookingEntity({this.title, this.time, this.date, this.organizer});
 }
 
 class UpcomingEventEntity {

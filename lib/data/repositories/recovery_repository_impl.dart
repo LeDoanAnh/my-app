@@ -8,7 +8,10 @@ class RecoveryRepositoryImpl extends RecoveryRepository {
   RecoveryRepositoryImpl(this.api);
 
   @override
-  Future<List<RecoveryEntity>> getRecoveryList(int handlerId, {String? search}) async {
+  Future<List<RecoveryEntity>> getRecoveryList(
+    int handlerId, {
+    String? search,
+  }) async {
     try {
       final response = await api.getRecoveryList(handlerId, search: search);
       return response.data?.map(_toEntity).toList() ?? [];
@@ -18,9 +21,14 @@ class RecoveryRepositoryImpl extends RecoveryRepository {
   }
 
   @override
-  Future<RecoveryActionResponse> confirmRecovery(int submissionId, int handlerId) async {
+  Future<RecoveryActionResponse> confirmRecovery(
+    int submissionId,
+    int handlerId,
+  ) async {
     try {
-      final res = await api.confirmRecovery(submissionId, {'handler_id': handlerId});
+      final res = await api.confirmRecovery(submissionId, {
+        'handler_id': handlerId,
+      });
       return RecoveryActionResponse(success: res.success, message: res.message);
     } catch (e) {
       throw Exception("Xác nhận thu hồi thất bại: ${e.toString()}");
@@ -28,9 +36,14 @@ class RecoveryRepositoryImpl extends RecoveryRepository {
   }
 
   @override
-  Future<RecoveryActionResponse> remindReturn(int submissionId, int handlerId) async {
+  Future<RecoveryActionResponse> remindReturn(
+    int submissionId,
+    int handlerId,
+  ) async {
     try {
-      final res = await api.remindReturn(submissionId, {'handler_id': handlerId});
+      final res = await api.remindReturn(submissionId, {
+        'handler_id': handlerId,
+      });
       return RecoveryActionResponse(success: res.success, message: res.message);
     } catch (e) {
       throw Exception("Gửi nhắc nhở thất bại: ${e.toString()}");
@@ -47,15 +60,18 @@ class RecoveryRepositoryImpl extends RecoveryRepository {
     userConfirmed: m.userConfirmed ?? true,
     isUrgent: m.isUrgent ?? false,
     returnDate: m.returnDate,
-    items: m.items
-        ?.map((i) => RecoveryItemEntity(
-      assetRequestId: i.assetRequestId,
-      name: i.name,
-      qty: i.qty,
-      status: i.status,
-      expectedReturn: i.expectedReturn,
-    ))
-        .toList() ??
+    items:
+        m.items
+            ?.map(
+              (i) => RecoveryItemEntity(
+                assetRequestId: i.assetRequestId,
+                name: i.name,
+                qty: i.qty,
+                status: i.status,
+                expectedReturn: i.expectedReturn,
+              ),
+            )
+            .toList() ??
         [],
   );
 }

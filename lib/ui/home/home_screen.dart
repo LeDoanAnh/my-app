@@ -4,11 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/submission_entity.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/ui/home/home_bloc.dart';
 import 'package:my_app/ui/home/home_event.dart';
 import 'package:my_app/ui/home/home_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserEntity user;
@@ -30,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final isAdmin = _hasRole(1);
     final canApprove = _hasRole(3) || isAdmin;
     final canManageAssets = _hasRole(4) || isAdmin || canApprove;
@@ -78,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 24),
                           if (canCreate || canApprove) ...[
                             _buildSectionHeader(
-                              l10n.manageSubmissions,
+                              'Quản lý tờ trình',
                               Icons.description_rounded,
                             ),
                             const SizedBox(height: 12),
@@ -91,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ],
                           if (canManageAssets || isAdmin) ...[
                             _buildSectionHeader(
-                              l10n.manageAssets,
+                              'Quản lý vật tư',
                               Icons.inventory_2_rounded,
                             ),
                             const SizedBox(height: 12),
@@ -99,7 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             const SizedBox(height: 24),
                           ],
                           _buildSectionHeader(
-                            l10n.recentActivities,
+                            'Hoạt động gần đây',
                             Icons.history_rounded,
                           ),
                           const SizedBox(height: 12),
@@ -124,15 +121,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMobileAppBar(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return SliverAppBar(
       backgroundColor: AppColors.background,
       pinned: true,
       floating: true,
       elevation: 0,
       centerTitle: false,
-      title: TrText(
-        l10n.appShortTitle,
+      title: Text(
+        'E-Submission',
         style: const TextStyle(
           color: AppColors.primary,
           fontSize: 24,
@@ -162,7 +158,6 @@ class _HomeScreenState extends State<HomeScreen> {
     required String pending,
     required String rejected,
   }) {
-    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -176,9 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _statColumn(total, l10n.totalSubmissions),
-          _statColumn(pending, l10n.pending),
-          _statColumn(rejected, l10n.rejected),
+          _statColumn(total, 'Tổng đơn'),
+          _statColumn(pending, 'Đang chờ'),
+          _statColumn(rejected, 'Từ chối'),
         ],
       ),
     );
@@ -187,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _statColumn(String value, String label) {
     return Column(
       children: [
-        TrText(
+        Text(
           value,
           style: const TextStyle(
             color: Colors.white,
@@ -196,7 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 4),
-        TrText(
+        Text(
           label,
           style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 12),
         ),
@@ -209,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Icon(icon, size: 18, color: AppColors.primary),
         const SizedBox(width: 10),
-        TrText(
+        Text(
           title,
           style: const TextStyle(
             fontSize: 16,
@@ -226,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
     bool canCreate,
     bool canApprove,
   ) {
-    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         if (canCreate)
@@ -235,7 +229,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () =>
                   context.push('/create-submission', extra: widget.user.id),
               child: _actionCard(
-                l10n.createRequest,
+                'Tạo đơn',
                 Icons.add_circle_outline,
                 AppColors.primary,
               ),
@@ -247,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: GestureDetector(
               onTap: () => context.push('/submission-list', extra: widget.user),
               child: _actionCard(
-                l10n.requestInbox,
+                'Đơn từ',
                 Icons.fact_check_outlined,
                 AppColors.success,
               ),
@@ -271,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Icon(icon, color: color, size: 28),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             label,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
           ),
@@ -281,7 +275,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildAssetGrid(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Row(
       children: [
         Expanded(
@@ -294,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
             child: _assetMiniCard(
-              l10n.handover,
+              'Bàn giao',
               Icons.outbox_rounded,
               Colors.teal,
             ),
@@ -306,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
             onTap: () =>
                 context.push('/manager-recovery-list/${widget.user.id}'),
             child: _assetMiniCard(
-              l10n.recovery,
+              'Thu hồi',
               Icons.move_to_inbox_rounded,
               AppColors.error,
             ),
@@ -327,7 +320,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Icon(icon, color: color, size: 20),
           const SizedBox(width: 12),
-          TrText(
+          Text(
             title,
             style: TextStyle(color: color, fontWeight: FontWeight.bold),
           ),
@@ -340,7 +333,6 @@ class _HomeScreenState extends State<HomeScreen> {
     BuildContext context,
     List<SubmissionEntity> submissions,
   ) {
-    final l10n = AppLocalizations.of(context)!;
     if (submissions.isEmpty) {
       return Container(
         width: double.infinity,
@@ -349,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: AppColors.background,
           borderRadius: BorderRadius.circular(24),
         ),
-        child: Center(child: TrText(l10n.noRecentActivities)),
+        child: Center(child: Text('Không có hoạt động gần đây')),
       );
     }
 
@@ -376,16 +368,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 size: 20,
               ),
             ),
-            title: TrText(
-              item.title ?? l10n.untitled,
+            title: Text(
+              item.title ?? 'Không có tiêu đề',
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
-            subtitle: TrText(
-              item.statusLabel ?? l10n.noStatus,
+            subtitle: Text(
+              item.statusLabel ?? 'Không có trạng thái',
               style: const TextStyle(fontSize: 12),
             ),
-            trailing: TrText(
-              item.time ?? l10n.noTime,
+            trailing: Text(
+              item.time ?? 'Không có thời gian',
               style: const TextStyle(color: AppColors.textGrey, fontSize: 11),
             ),
           );
@@ -395,20 +387,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildErrorState(BuildContext context, String message) {
-    final l10n = AppLocalizations.of(context)!;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(Icons.cloud_off_rounded, size: 64, color: AppColors.error),
           const SizedBox(height: 16),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => context.read<HomeBloc>().add(
               GetHomeDataEvent(userId: widget.user.id),
             ),
-            child: TrText(l10n.retry),
+            child: Text('Thử lại'),
           ),
         ],
       ),

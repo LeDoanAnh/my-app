@@ -16,5 +16,4 @@ class LocationEntity {
     this.capacity,
     this.department,
   });
-
 }

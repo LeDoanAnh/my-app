@@ -2,10 +2,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:my_app/core/router/app_router.dart';
-import 'package:my_app/l10n/app_localizations.dart';
 import 'package:my_app/notification_service.dart';
 import 'package:my_app/ui/auth/blog/auth_bloc.dart';
 import 'package:my_app/ui/auth/blog/auth_event.dart';
@@ -83,9 +81,6 @@ Future<void> main() async {
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  static _MyAppState of(BuildContext context) =>
-      context.findAncestorStateOfType<_MyAppState>()!;
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -94,15 +89,12 @@ class _MyAppState extends State<MyApp> {
   // Khá»Ÿi táº¡o AuthBloc sá»›m Ä‘á»ƒ AppRouter cÃ³ thá»ƒ dÃ¹ng ngay
   late final AuthBloc _authBloc = di.sl<AuthBloc>()..add(AppStarted());
   late final AppRouter _appRouter = AppRouter(authBloc: _authBloc);
-  Locale _locale = const Locale('vi', 'VN');
   @override
   void dispose() {
     _authBloc.close();
     super.dispose();
   }
-  void setLocale(Locale locale) {
-    setState(() => _locale = locale);
-  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -137,21 +129,8 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.router,
-        onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+        title: 'Hệ thống phê duyệt tờ trình',
         debugShowCheckedModeBanner: false,
-        localizationsDelegates: const [
-          AppLocalizations.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-
-        supportedLocales: const [
-          Locale('vi', 'VN'),
-          Locale('en', 'US'),
-        ],
-        locale: _locale,
-
       ),
     );
   }

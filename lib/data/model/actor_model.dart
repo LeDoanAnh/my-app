@@ -15,11 +15,12 @@ class ActorModel {
 
   ActorModel({required this.id, this.fullName, this.department, this.actorId});
 
-  factory ActorModel.fromJson(Map<String, dynamic> json) => _$ActorModelFromJson(json);
+  factory ActorModel.fromJson(Map<String, dynamic> json) =>
+      _$ActorModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ActorModelToJson(this);
 
-  ActorEntity toEntity(){
+  ActorEntity toEntity() {
     return ActorEntity(
       id: id,
       fullName: fullName,
@@ -34,6 +35,7 @@ class ActorResponseModel {
 
   ActorResponseModel({this.data});
 
-  factory ActorResponseModel.fromJson(Map<String, dynamic> json) => _$ActorResponseModelFromJson(json);
+  factory ActorResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$ActorResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$ActorResponseModelToJson(this);
 }

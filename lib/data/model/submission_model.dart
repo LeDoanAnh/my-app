@@ -34,9 +34,11 @@ class SubmissionModel {
     this.approverName,
     this.date,
     this.categoryName,
-    this.submissionCode});
+    this.submissionCode,
+  });
 
-  factory SubmissionModel.fromJson(Map<String, dynamic> json) => _$SubmissionModelFromJson(json);
+  factory SubmissionModel.fromJson(Map<String, dynamic> json) =>
+      _$SubmissionModelFromJson(json);
   Map<String, dynamic> toJson() => _$SubmissionModelToJson(this);
 
   SubmissionEntity toEntity() => SubmissionEntity(
@@ -60,8 +62,7 @@ class SubmissionResponseModel {
 
   SubmissionResponseModel({this.data});
 
-  factory SubmissionResponseModel.fromJson(Map<String, dynamic> json) => _$SubmissionResponseModelFromJson(json);
+  factory SubmissionResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$SubmissionResponseModelFromJson(json);
   Map<String, dynamic> toJson() => _$SubmissionResponseModelToJson(this);
-
-
 }

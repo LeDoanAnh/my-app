@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class AppLogoWidget extends StatelessWidget {
   final double sizeMultiplier;
@@ -72,7 +71,7 @@ class AppLogoWidget extends StatelessWidget {
 
         if (showSlogan) ...[
           SizedBox(height: 4 * sizeMultiplier),
-          TrText(
+          Text(
             "E-SUBMISSION SYSTEM",
             style: TextStyle(
               fontSize: sloganFontSize,

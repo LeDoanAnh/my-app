@@ -5,7 +5,6 @@ import 'package:my_app/domain/entities/approval_step_entity.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_event.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class WorkflowDetailScreen extends StatefulWidget {
   final int workflowId;
@@ -30,7 +29,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
       appBar: AppBar(
-        title: TrText(
+        title: Text(
           "Cấu hình luồng phê duyệt",
           style: TextStyle(
             color: AppColors.textDark,
@@ -63,12 +62,12 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                 children: [
                   const Icon(Icons.error_outline, color: Colors.red, size: 48),
                   const SizedBox(height: 16),
-                  TrText(state.message, textAlign: TextAlign.center),
+                  Text(state.message, textAlign: TextAlign.center),
                   TextButton(
                     onPressed: () => context.read<WorkflowDetailBloc>().add(
                       GetWorkflowDetailEvent(widget.workflowId),
                     ),
-                    child: const TrText("Thử lại"),
+                    child: const Text("Thử lại"),
                   ),
                 ],
               ),
@@ -141,7 +140,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TrText(
+                    Text(
                       "Mã loại: #CAT-${widget.workflowId.toString().padLeft(3, '0')}",
                       style: const TextStyle(
                         color: Colors.grey,
@@ -149,7 +148,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                         fontSize: 12,
                       ),
                     ),
-                    TrText(
+                    Text(
                       entity.categoryName ?? "N/A",
                       style: const TextStyle(
                         fontSize: 18,
@@ -189,7 +188,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
         children: [
           Icon(icon, size: 16, color: Colors.blue),
           const SizedBox(width: 6),
-          TrText(
+          Text(
             "Áp dụng: $label",
             style: const TextStyle(
               color: Colors.blue,
@@ -207,7 +206,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
       return const Center(
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
-          child: TrText(
+          child: Text(
             "Chưa có cấu hình bước duyệt",
             style: TextStyle(color: Colors.grey),
           ),
@@ -243,7 +242,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                         shape: BoxShape.circle,
                       ),
                       child: Center(
-                        child: TrText(
+                        child: Text(
                           "${step.stepOrder ?? index + 1}",
                           style: const TextStyle(
                             color: Colors.white,
@@ -283,7 +282,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TrText(
+                      Text(
                         "THỨ TỰ: BƯỚC ${step.stepOrder ?? index + 1}",
                         style: TextStyle(
                           color: AppColors.primary.withValues(alpha: 0.6),
@@ -292,7 +291,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 6),
-                      TrText(
+                      Text(
                         step.desc ?? "N/A",
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
@@ -301,7 +300,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      TrText(
+                      Text(
                         step.role ?? "",
                         style: const TextStyle(
                           fontSize: 12,
@@ -321,7 +320,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    return TrText(
+    return Text(
       title,
       style: const TextStyle(
         fontSize: 11,
@@ -356,7 +355,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const TrText(
+          const Text(
             "Gỡ bỏ cấu hình phê duyệt?",
             style: TextStyle(
               color: Color(0xFF1E293B),
@@ -378,7 +377,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              child: const TrText(
+              child: const Text(
                 "XÓA CẤU HÌNH NGAY",
                 style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
               ),

@@ -22,6 +22,7 @@ class SearchResultModel {
       _$SearchResultModelFromJson(json);
   Map<String, dynamic> toJson() => _$SearchResultModelToJson(this);
 }
+
 @JsonSerializable()
 class SearchListResponse {
   final bool? success;

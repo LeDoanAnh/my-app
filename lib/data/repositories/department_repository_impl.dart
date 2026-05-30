@@ -10,23 +10,23 @@ class DepartmentRepositoryImpl extends DepartmentRepository {
   DepartmentRepositoryImpl(this.api);
 
   @override
-  Future<List<DepartmentEntity>> getDepartmentResources() async{
-    try{
+  Future<List<DepartmentEntity>> getDepartmentResources() async {
+    try {
       final response = await api.getDepartmentResources();
       print("response: $response");
       return response.data!.map((model) => model.toEntity()).toList();
-    }catch(e){
+    } catch (e) {
       throw Exception("Lấy danh sách đơn thất bại: ${e.toString()}");
     }
   }
 
   @override
-  Future<DepartmentEntity> getDepartmentDetail(int id) async{
-    try{
+  Future<DepartmentEntity> getDepartmentDetail(int id) async {
+    try {
       final response = await api.getDepartmentDetail(id);
       print("response: $response");
       return response.data!.toEntity();
-    }catch(e, stack){
+    } catch (e, stack) {
       print('❌ Error: $e');
       print('📍 Stack: $stack');
       print("lỗi nè");
@@ -38,9 +38,13 @@ class DepartmentRepositoryImpl extends DepartmentRepository {
   Future<CreateResponse> createDepartment({
     required String deptName,
     required String locationDesc,
-    required int? parentDeptId
-  }) async{
-    final response = await api.createDepartment(deptName, locationDesc, parentDeptId);
+    required int? parentDeptId,
+  }) async {
+    final response = await api.createDepartment(
+      deptName,
+      locationDesc,
+      parentDeptId,
+    );
     return response;
   }
 }

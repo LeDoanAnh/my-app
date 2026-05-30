@@ -5,12 +5,18 @@ class RecoveryUseCase {
   final RecoveryRepository repository;
   RecoveryUseCase({required this.repository});
 
-  Future<List<RecoveryEntity>> getRecoveryList(int handlerId, {String? search}) =>
-      repository.getRecoveryList(handlerId, search: search);
+  Future<List<RecoveryEntity>> getRecoveryList(
+    int handlerId, {
+    String? search,
+  }) => repository.getRecoveryList(handlerId, search: search);
 
-  Future<RecoveryActionResponse> confirmRecovery(int submissionId, int handlerId) =>
-      repository.confirmRecovery(submissionId, handlerId);
+  Future<RecoveryActionResponse> confirmRecovery(
+    int submissionId,
+    int handlerId,
+  ) => repository.confirmRecovery(submissionId, handlerId);
 
-  Future<RecoveryActionResponse> remindReturn(int submissionId, int handlerId) =>
-      repository.remindReturn(submissionId, handlerId);
+  Future<RecoveryActionResponse> remindReturn(
+    int submissionId,
+    int handlerId,
+  ) => repository.remindReturn(submissionId, handlerId);
 }

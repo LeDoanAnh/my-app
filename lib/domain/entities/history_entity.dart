@@ -45,9 +45,5 @@ class HistoryItemEntity {
   final int? qty;
   final bool isConsumable;
 
-  HistoryItemEntity({
-    this.name,
-    this.qty,
-    this.isConsumable = false,
-  });
+  HistoryItemEntity({this.name, this.qty, this.isConsumable = false});
 }

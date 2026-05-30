@@ -4,19 +4,27 @@ import 'package:my_app/domain/entities/department_entity.dart';
 import 'package:my_app/domain/repositories/department_repository.dart';
 
 class DepartmentListUseCase {
-   final DepartmentRepository repository;
+  final DepartmentRepository repository;
 
-   DepartmentListUseCase({required this.repository});
+  DepartmentListUseCase({required this.repository});
 
-   Future<List<DepartmentEntity>> callResources() async {
-      return await repository.getDepartmentResources();
-   }
+  Future<List<DepartmentEntity>> callResources() async {
+    return await repository.getDepartmentResources();
+  }
 
-   Future<DepartmentEntity> callDetail(int id) async {
-      return await repository.getDepartmentDetail(id);
-   }
+  Future<DepartmentEntity> callDetail(int id) async {
+    return await repository.getDepartmentDetail(id);
+  }
 
-   Future<CreateResponse> createDepartment(String deptName, String locationDesc, int? parentDeptId) async {
-      return await repository.createDepartment(deptName: deptName, locationDesc: locationDesc, parentDeptId: parentDeptId);
-   }
+  Future<CreateResponse> createDepartment(
+    String deptName,
+    String locationDesc,
+    int? parentDeptId,
+  ) async {
+    return await repository.createDepartment(
+      deptName: deptName,
+      locationDesc: locationDesc,
+      parentDeptId: parentDeptId,
+    );
+  }
 }

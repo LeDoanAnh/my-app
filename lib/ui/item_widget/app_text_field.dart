@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/l10n/ui_text.dart';
 import '../../core/theme/app_colors.dart';
 
 class AppTextField extends StatelessWidget {
@@ -29,7 +28,7 @@ class AppTextField extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 6.0, left: 4),
-          child: TrText(
+          child: Text(
             label,
             style: const TextStyle(
               fontWeight: FontWeight.w600,

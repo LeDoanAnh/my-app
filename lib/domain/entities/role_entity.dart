@@ -3,6 +3,5 @@ class RoleEntity {
   final String? roleName;
   final String? description;
 
-
-  RoleEntity({ this.id, this.roleName,  this.description});
+  RoleEntity({this.id, this.roleName, this.description});
 }

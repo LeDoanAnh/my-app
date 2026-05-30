@@ -9,7 +9,6 @@ import 'package:my_app/domain/entities/department_entity.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_bloc.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_event.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class DepartmentDetailScreen extends StatefulWidget {
   final int departmentId;
@@ -44,7 +43,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
           ),
           onPressed: () => context.pop(),
         ),
-        title: const TrText(
+        title: const Text(
           "Chi tiết Đơn vị",
           style: TextStyle(
             color: AppColors.textDark,
@@ -69,7 +68,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
                     color: Colors.red.withOpacity(0.5),
                   ),
                   const SizedBox(height: 16),
-                  TrText(
+                  Text(
                     state.message,
                     textAlign: TextAlign.center,
                     style: const TextStyle(color: Colors.grey),
@@ -79,7 +78,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
                     onPressed: () => context.read<DepartmentDetailBloc>().add(
                       GetDepartmentDetail(widget.departmentId),
                     ),
-                    child: const TrText('Thử lại'),
+                    child: const Text('Thử lại'),
                   ),
                 ],
               ),
@@ -163,7 +162,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
               GestureDetector(
                 onTap: () {},
                 child: Center(
-                  child: TrText(
+                  child: Text(
                     "Xem tất cả ${dept.assetsCount ?? 0} tài sản",
                     style: const TextStyle(
                       color: AppColors.primary,
@@ -186,7 +185,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
                     ? const Padding(
                         padding: EdgeInsets.only(top: 8),
                         child: Center(
-                          child: TrText(
+                          child: Text(
                             "Xem thêm...",
                             style: TextStyle(
                               color: AppColors.primary,
@@ -225,7 +224,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
           CircleAvatar(
             radius: 16,
             backgroundColor: AppColors.primary.withOpacity(0.1),
-            child: TrText(
+            child: Text(
               (u.fullName ?? '?')[0].toUpperCase(),
               style: const TextStyle(
                 color: AppColors.primary,
@@ -238,14 +237,14 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   u.fullName ?? '-',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                TrText(
+                Text(
                   u.email ?? '-',
                   style: const TextStyle(fontSize: 11, color: Colors.grey),
                 ),
@@ -260,7 +259,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
                   : Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(999),
             ),
-            child: TrText(
+            child: Text(
               u.status == 'active' ? 'Hoạt động' : 'Khóa',
               style: TextStyle(
                 fontSize: 10,
@@ -276,7 +275,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
 
   Widget _buildSectionTitle(String title) => Padding(
     padding: const EdgeInsets.only(left: 4, bottom: 8),
-    child: TrText(
+    child: Text(
       title,
       style: const TextStyle(
         fontSize: 11,
@@ -307,11 +306,11 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              TrText(
+              Text(
                 label,
                 style: const TextStyle(color: Colors.grey, fontSize: 10),
               ),
-              TrText(
+              Text(
                 value,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
@@ -335,11 +334,11 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TrText(
+        Text(
           label,
           style: const TextStyle(color: Colors.blueGrey, fontSize: 13),
         ),
-        TrText(
+        Text(
           value,
           style: TextStyle(
             fontWeight: FontWeight.bold,
@@ -355,7 +354,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
     padding: const EdgeInsets.symmetric(vertical: 4),
     child: Row(
       children: [
-        TrText(
+        Text(
           code,
           style: const TextStyle(
             color: Colors.grey,
@@ -365,12 +364,12 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
         ),
         const SizedBox(width: 10),
         Expanded(
-          child: TrText(
+          child: Text(
             name,
             style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
           ),
         ),
-        TrText(
+        Text(
           unit,
           style: const TextStyle(
             fontSize: 13,
@@ -392,7 +391,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
       ),
       child: Column(
         children: [
-          TrText(
+          Text(
             value,
             style: TextStyle(
               fontWeight: FontWeight.bold,
@@ -400,7 +399,7 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
               color: color,
             ),
           ),
-          TrText(
+          Text(
             label,
             style: TextStyle(
               color: color,

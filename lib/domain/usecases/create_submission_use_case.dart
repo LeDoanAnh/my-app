@@ -9,8 +9,6 @@ class CreateSubmissionUseCase {
   CreateSubmissionUseCase(this._repository);
 
   Future<Map<String, dynamic>> call(CreateSubmissionParams params) async {
-
-
     if (params.departments.isEmpty) {
       throw Exception('Vui lòng thêm ít nhất một phòng ban vào luồng duyệt.');
     }

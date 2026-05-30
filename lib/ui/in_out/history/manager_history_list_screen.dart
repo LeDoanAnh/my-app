@@ -4,7 +4,6 @@ import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/history_entity.dart';
 import 'package:my_app/ui/in_out/history/borrow_history_bloc.dart';
 import 'package:my_app/ui/in_out/history/handover_history_bloc.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class HistoryScreen extends StatefulWidget {
   final int userId;
@@ -88,7 +87,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "LỊCH SỬ",
           style: TextStyle(
             color: AppColors.textDark,
@@ -119,7 +118,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   controller: _searchController,
                   onChanged: _onSearch,
                   decoration: InputDecoration(
-                    hintText: uiText(context, "Tìm kiếm..."),
+                    hintText: "Tìm kiếm...",
                     prefixIcon: const Icon(Icons.search),
                     filled: true,
                     fillColor: const Color(0xFFF1F3F6),
@@ -230,7 +229,7 @@ class _HistoryScreenState extends State<HistoryScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrText(
+              Text(
                 item.submissionCode ?? "#${item.submissionId}",
                 style: const TextStyle(
                   color: Colors.blueGrey,
@@ -242,7 +241,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             ],
           ),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             item.title ?? "Không có tiêu đề",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -296,7 +295,7 @@ class _HistoryScreenState extends State<HistoryScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TrText(
+              Text(
                 item.code ?? "#${item.id}",
                 style: const TextStyle(
                   color: Colors.blueGrey,
@@ -308,7 +307,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             ],
           ),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             item.title ?? "Không có tiêu đề",
             style: const TextStyle(
               fontWeight: FontWeight.bold,
@@ -328,7 +327,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             child: Row(
               children: [
                 Expanded(
-                  child: TrText(
+                  child: Text(
                     item.fromDept ?? '-',
                     style: const TextStyle(
                       fontSize: 12,
@@ -344,7 +343,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   size: 18,
                 ),
                 Expanded(
-                  child: TrText(
+                  child: Text(
                     item.toDept ?? '-',
                     style: const TextStyle(
                       fontSize: 12,
@@ -385,12 +384,12 @@ class _HistoryScreenState extends State<HistoryScreen>
       children: [
         Icon(icon, size: 14, color: Colors.blueGrey),
         const SizedBox(width: 6),
-        TrText(
+        Text(
           "$label ",
           style: TextStyle(color: Colors.grey[600], fontSize: 12),
         ),
         Expanded(
-          child: TrText(
+          child: Text(
             value,
             style: const TextStyle(
               color: AppColors.textDark,
@@ -415,7 +414,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                   const Icon(Icons.done_all, size: 14, color: Colors.green),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: TrText(
+                    child: Text(
                       i.name ?? '-',
                       style: const TextStyle(
                         fontSize: 13,
@@ -424,11 +423,11 @@ class _HistoryScreenState extends State<HistoryScreen>
                     ),
                   ),
                   if (i.isConsumable)
-                    const TrText(
+                    const Text(
                       "(Tiêu hao) ",
                       style: TextStyle(fontSize: 10, color: Colors.grey),
                     ),
-                  TrText(
+                  Text(
                     "x${i.qty ?? 1}",
                     style: const TextStyle(
                       fontSize: 13,
@@ -461,7 +460,7 @@ class _HistoryScreenState extends State<HistoryScreen>
           Icon(icon, size: 16, color: color),
           const SizedBox(width: 8),
           Expanded(
-            child: TrText(
+            child: Text(
               text,
               style: TextStyle(
                 color: color,
@@ -482,7 +481,7 @@ class _HistoryScreenState extends State<HistoryScreen>
         color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: TrText(
+      child: Text(
         text,
         style: TextStyle(
           color: color,
@@ -504,7 +503,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             color: Colors.grey[300],
           ),
           const SizedBox(height: 16),
-          TrText(message, style: TextStyle(color: Colors.grey[500])),
+          Text(message, style: TextStyle(color: Colors.grey[500])),
         ],
       ),
     );
@@ -517,9 +516,9 @@ class _HistoryScreenState extends State<HistoryScreen>
         children: [
           const Icon(Icons.error_outline, color: Colors.redAccent, size: 48),
           const SizedBox(height: 12),
-          TrText(message, textAlign: TextAlign.center),
+          Text(message, textAlign: TextAlign.center),
           const SizedBox(height: 12),
-          ElevatedButton(onPressed: onRetry, child: const TrText("Thử lại")),
+          ElevatedButton(onPressed: onRetry, child: const Text("Thử lại")),
         ],
       ),
     );
@@ -537,13 +536,13 @@ class _HistoryScreenState extends State<HistoryScreen>
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TrText(
+            const Text(
               "Lọc theo ngày",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             // TODO: tích hợp DateRangePicker
-            const TrText(
+            const Text(
               "(DateRangePicker sẽ tích hợp ở đây)",
               style: TextStyle(color: Colors.grey),
             ),

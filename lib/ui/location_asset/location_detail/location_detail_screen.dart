@@ -6,7 +6,6 @@ import 'package:my_app/domain/entities/location_detail_entity.dart';
 import 'package:my_app/ui/location_asset/location_detail/location_detail_bloc.dart';
 import 'package:my_app/ui/location_asset/location_detail/location_detail_event.dart';
 import 'package:my_app/ui/location_asset/location_detail/location_detail_state.dart';
-import 'package:my_app/l10n/ui_text.dart';
 
 class LocationDetailScreen extends StatefulWidget {
   final int locationId;
@@ -32,7 +31,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
     return Scaffold(
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
-        title: const TrText(
+        title: const Text(
           "Chi tiết Địa điểm",
           style: TextStyle(
             color: AppColors.textDark,
@@ -58,7 +57,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             return _buildMainContent(state.locationDetail);
           } else if (state is LocationDetailError) {
             return Center(
-              child: TrText(
+              child: Text(
                 state.errorMessage,
                 style: const TextStyle(color: Colors.red),
               ),
@@ -143,7 +142,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             ),
           ),
           const SizedBox(height: 15),
-          TrText(
+          Text(
             data.locationName ?? "N/A",
             style: const TextStyle(
               fontSize: 22,
@@ -158,7 +157,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
               color: (isBusy ? Colors.red : Colors.green).withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: TrText(
+            child: Text(
               (data.status ?? "Trống").toUpperCase(),
               style: TextStyle(
                 color: isBusy ? Colors.red : Colors.green,
@@ -185,7 +184,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const TrText(
+          const Text(
             "ĐANG DIỄN RA",
             style: TextStyle(
               color: Colors.white70,
@@ -194,7 +193,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          TrText(
+          Text(
             booking.title ?? "Không có tiêu đề",
             style: const TextStyle(
               color: Colors.white,
@@ -207,7 +206,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             children: [
               const Icon(Icons.access_time, color: Colors.white, size: 16),
               const SizedBox(width: 8),
-              TrText(
+              Text(
                 "${booking.time} | ${booking.date}",
                 style: const TextStyle(color: Colors.white),
               ),
@@ -222,7 +221,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
                 size: 16,
               ),
               const SizedBox(width: 8),
-              TrText(
+              Text(
                 "Đơn vị: ${booking.organizer ?? "N/A"}",
                 style: const TextStyle(color: Colors.white),
               ),
@@ -237,7 +236,7 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(left: 4, bottom: 12),
-      child: TrText(
+      child: Text(
         title,
         style: const TextStyle(
           fontSize: 13,
@@ -271,12 +270,12 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   label,
                   style: const TextStyle(color: Colors.grey, fontSize: 12),
                 ),
                 const SizedBox(height: 4),
-                TrText(
+                Text(
                   value,
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
@@ -318,14 +317,14 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TrText(
+                Text(
                   title,
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14,
                   ),
                 ),
-                TrText(
+                Text(
                   date,
                   style: const TextStyle(color: Colors.grey, fontSize: 11),
                 ),

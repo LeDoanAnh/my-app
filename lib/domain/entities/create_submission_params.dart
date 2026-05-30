@@ -3,11 +3,7 @@ class FileAttachment {
   final String? path;
   final List<int>? bytes;
 
-  FileAttachment({
-    required this.name,
-    this.path,
-    this.bytes,
-  });
+  FileAttachment({required this.name, this.path, this.bytes});
 }
 
 class CreateSubmissionParams {

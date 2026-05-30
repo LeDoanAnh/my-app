@@ -3,5 +3,9 @@ class SubmissionStatsEntity {
   final int pending;
   final int rejected;
 
-  SubmissionStatsEntity({required this.total, required this.pending, required this.rejected});
+  SubmissionStatsEntity({
+    required this.total,
+    required this.pending,
+    required this.rejected,
+  });
 }

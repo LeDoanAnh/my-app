@@ -15,7 +15,11 @@ class AssetTaskRepositoryImpl extends AssetTaskRepository {
     String? status,
   }) async {
     try {
-      final response = await api.getAssetTasks(deptId, search: search, status: status);
+      final response = await api.getAssetTasks(
+        deptId,
+        search: search,
+        status: status,
+      );
       return response.data?.map(_toEntity).toList() ?? [];
     } catch (e) {
       throw Exception("Lấy danh sách đơn thất bại: ${e.toString()}");
@@ -29,34 +33,45 @@ class AssetTaskRepositoryImpl extends AssetTaskRepository {
     date: m.date,
     sender: m.sender,
     itemCount: m.itemCount,
-    approvedBy: m.approvedBy == null ? null : ApprovedByEntity(
-      id: m.approvedBy!.id,
-      name: m.approvedBy!.name,
-      dept: m.approvedBy!.dept,
-      action: m.approvedBy!.action,
-      comment: m.approvedBy!.comment,
-      approvedAt: m.approvedBy!.approvedAt,
-    ),
-    assets: m.assets?.map((a) => AssetTaskItemEntity(
-      assetId: a.assetId,
-      assetName: a.assetName,
-      assetCode: a.assetCode,
-      unit: a.unit,
-      type: a.type,
-      status: a.status,
-      borrowDate: a.borrowDate,
-      expectedReturn: a.expectedReturn,
-      borrower: a.borrower == null ? null : AssetTaskBorrowerEntity(
-        id: a.borrower!.id,
-        name: a.borrower!.name,
-        dept: a.borrower!.dept,
-      ),
-    )).toList(),
+    approvedBy: m.approvedBy == null
+        ? null
+        : ApprovedByEntity(
+            id: m.approvedBy!.id,
+            name: m.approvedBy!.name,
+            dept: m.approvedBy!.dept,
+            action: m.approvedBy!.action,
+            comment: m.approvedBy!.comment,
+            approvedAt: m.approvedBy!.approvedAt,
+          ),
+    assets: m.assets
+        ?.map(
+          (a) => AssetTaskItemEntity(
+            assetId: a.assetId,
+            assetName: a.assetName,
+            assetCode: a.assetCode,
+            unit: a.unit,
+            type: a.type,
+            status: a.status,
+            borrowDate: a.borrowDate,
+            expectedReturn: a.expectedReturn,
+            borrower: a.borrower == null
+                ? null
+                : AssetTaskBorrowerEntity(
+                    id: a.borrower!.id,
+                    name: a.borrower!.name,
+                    dept: a.borrower!.dept,
+                  ),
+          ),
+        )
+        .toList(),
   );
   // data/repositories/asset_task_repository_impl.dart — thêm 2 method
 
   @override
-  Future<AssetTaskDetailEntity> getAssetTaskDetail(int submissionId, int deptId) async {
+  Future<AssetTaskDetailEntity> getAssetTaskDetail(
+    int submissionId,
+    int deptId,
+  ) async {
     try {
       final response = await api.getAssetTaskDetail(submissionId, deptId);
       final d = response.data!;
@@ -66,28 +81,36 @@ class AssetTaskRepositoryImpl extends AssetTaskRepository {
         status: d.status,
         date: d.date,
         sender: d.sender,
-        approvedBy: d.approvedBy == null ? null : ApprovedByEntity(
-          id: d.approvedBy!.id,
-          name: d.approvedBy!.name,
-          dept: d.approvedBy!.dept,
-          comment: d.approvedBy!.comment,
-          approvedAt: d.approvedBy!.approvedAt,
-        ),
-        assets: d.assets?.map((a) => AssetTaskItemEntity(
-          assetId: a.assetId,
-          assetName: a.assetName,
-          assetCode: a.assetCode,
-          unit: a.unit,
-          type: a.type,
-          status: a.status,
-          borrowDate: a.borrowDate,
-          expectedReturn: a.expectedReturn,
-          borrower: a.borrower == null ? null : AssetTaskBorrowerEntity(
-            id: a.borrower!.id,
-            name: a.borrower!.name,
-            dept: a.borrower!.dept,
-          ),
-        )).toList(),
+        approvedBy: d.approvedBy == null
+            ? null
+            : ApprovedByEntity(
+                id: d.approvedBy!.id,
+                name: d.approvedBy!.name,
+                dept: d.approvedBy!.dept,
+                comment: d.approvedBy!.comment,
+                approvedAt: d.approvedBy!.approvedAt,
+              ),
+        assets: d.assets
+            ?.map(
+              (a) => AssetTaskItemEntity(
+                assetId: a.assetId,
+                assetName: a.assetName,
+                assetCode: a.assetCode,
+                unit: a.unit,
+                type: a.type,
+                status: a.status,
+                borrowDate: a.borrowDate,
+                expectedReturn: a.expectedReturn,
+                borrower: a.borrower == null
+                    ? null
+                    : AssetTaskBorrowerEntity(
+                        id: a.borrower!.id,
+                        name: a.borrower!.name,
+                        dept: a.borrower!.dept,
+                      ),
+              ),
+            )
+            .toList(),
       );
     } catch (e) {
       throw Exception("Lấy chi tiết đơn thất bại: ${e.toString()}");
@@ -95,7 +118,11 @@ class AssetTaskRepositoryImpl extends AssetTaskRepository {
   }
 
   @override
-  Future<HandoverResponse> handoverAssets(int submissionId, int handlerId, List<int> assetRequestIds) async {
+  Future<HandoverResponse> handoverAssets(
+    int submissionId,
+    int handlerId,
+    List<int> assetRequestIds,
+  ) async {
     return await api.handoverAssets(submissionId, {
       'handler_id': handlerId,
       'asset_request_ids': assetRequestIds,
