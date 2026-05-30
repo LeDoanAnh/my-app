@@ -89,7 +89,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         deptId: widget.deptId,
                       ),
                     ),
-                    child: Text('Thử lại'),
+                    child: const Text('Thử lại'),
                   ),
                 ],
               ),
@@ -134,7 +134,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           },
         ),
         title: const Text(
-          "Chi tiáº¿t phÃª duyá»‡t",
+          'Chi tiết phê duyệt',
           style: TextStyle(
             color: Color(0xFF1E293B),
             fontWeight: FontWeight.bold,
@@ -159,27 +159,27 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
 
                 if (submission.startTime != null ||
                     submission.endTime != null) ...[
-                  _buildSectionLabel("THá»œI GIAN"),
+                  _buildSectionLabel('THỜI GIAN'),
                   _buildTimeCard(submission),
                   const SizedBox(height: 20),
                 ],
 
                 if (submission.locations != null &&
                     submission.locations!.isNotEmpty) ...[
-                  _buildSectionLabel("Äá»ŠA ÄIá»‚M (PHÃ’NG BAN Báº N)"),
+                  _buildSectionLabel('ĐỊA ĐIỂM (PHÒNG BAN BẠN)'),
                   _buildLocationsCard(submission.locations!),
                   const SizedBox(height: 20),
                 ],
 
                 if (submission.assets != null &&
                     submission.assets!.isNotEmpty) ...[
-                  _buildSectionLabel("Váº¬T TÆ¯ (PHÃ’NG BAN Báº N)"),
+                  _buildSectionLabel('VẬT TƯ (PHÒNG BAN BẠN)'),
                   _buildAssetsCard(submission.assets!),
                   const SizedBox(height: 20),
                 ],
 
                 if (!alreadyDecided) ...[
-                  _buildSectionLabel("GHI CHÃš PHÃŠ DUYá»†T"),
+                  _buildSectionLabel('GHI CHÚ PHÊ DUYỆT'),
                   _buildCommentInput(),
                 ],
               ],
@@ -192,7 +192,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Banner Ä‘Ã£ xá»­ lÃ½ â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Banner đã xử lý ────────────────────────────────────────────────────────
 
   Widget _buildDecisionBanner(MyDecisionEntity decision) {
     final isApproved = decision.action == 'approved';
@@ -223,8 +223,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               children: [
                 Text(
                   isApproved
-                      ? "Báº¡n Ä‘Ã£ duyá»‡t tá» trÃ¬nh nÃ y"
-                      : "Báº¡n Ä‘Ã£ tá»« chá»‘i tá» trÃ¬nh nÃ y",
+                      ? 'Bạn đã duyệt tờ trình này'
+                      : 'Bạn đã từ chối tờ trình này',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: isApproved ? Colors.green : Colors.red,
@@ -235,7 +235,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     decision.comment!.isNotEmpty) ...[
                   const SizedBox(height: 4),
                   Text(
-                    "\"${decision.comment}\"",
+                    '"${decision.comment}"',
                     style: const TextStyle(
                       fontSize: 12,
                       color: Color(0xFF64748B),
@@ -261,7 +261,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Card ná»™i dung chÃ­nh â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Card nội dung chính ────────────────────────────────────────────────────
 
   Widget _buildMainContentCard(ApproverSubmissionEntity submission) {
     return Container(
@@ -286,7 +286,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  submission.title ?? "KhÃ´ng cÃ³ tiÃªu Ä‘á»",
+                  submission.title ?? 'Không có tiêu đề',
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w900,
@@ -299,13 +299,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           const SizedBox(height: 12),
           _buildInfoRow(
             Icons.person_outline,
-            "NgÆ°á»i gá»­i",
-            submission.sender ?? "-",
+            'Người gửi',
+            submission.sender ?? '-',
             Colors.blueGrey,
           ),
           const SizedBox(height: 12),
           Text(
-            submission.content ?? "",
+            submission.content ?? '',
             style: const TextStyle(
               fontSize: 14,
               color: Color(0xFF475569),
@@ -352,7 +352,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Card thá»i gian â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Card thời gian ─────────────────────────────────────────────────────────
 
   Widget _buildTimeCard(ApproverSubmissionEntity submission) {
     return Container(
@@ -366,7 +366,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           if (submission.startTime != null)
             _buildInfoRow(
               Icons.play_circle_outline,
-              "Báº¯t Ä‘áº§u",
+              'Bắt đầu',
               submission.startTime!,
               Colors.green,
             ),
@@ -378,7 +378,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           if (submission.endTime != null)
             _buildInfoRow(
               Icons.stop_circle_outlined,
-              "Káº¿t thÃºc",
+              'Kết thúc',
               submission.endTime!,
               Colors.red,
             ),
@@ -387,7 +387,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Card Ä‘á»‹a Ä‘iá»ƒm â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Card địa điểm ──────────────────────────────────────────────────────────
 
   Widget _buildLocationsCard(List<ApproverLocationEntity> locations) {
     return Container(
@@ -408,8 +408,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   children: [
                     _buildInfoRow(
                       Icons.location_on,
-                      loc.locationName ?? "-",
-                      "",
+                      loc.locationName ?? '-',
+                      '',
                       Colors.redAccent,
                     ),
                     if (loc.startTime != null) ...[
@@ -424,7 +424,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            "${loc.startTime} â†’ ${loc.endTime ?? ''}",
+                            '${loc.startTime} → ${loc.endTime ?? ''}',
                             style: const TextStyle(
                               fontSize: 12,
                               color: Color(0xFF64748B),
@@ -445,7 +445,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Card váº­t tÆ° â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Card vật tư ────────────────────────────────────────────────────────────
 
   Widget _buildAssetsCard(List<ApproverAssetEntity> assets) {
     return Container(
@@ -478,7 +478,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        asset.assetName ?? "-",
+                        asset.assetName ?? '-',
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
@@ -496,7 +496,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        "x${asset.quantity ?? 1}",
+                        'x${asset.quantity ?? 1}',
                         style: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -516,7 +516,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Input ghi chÃº â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Input ghi chú ──────────────────────────────────────────────────────────
 
   Widget _buildCommentInput() {
     return Container(
@@ -528,7 +528,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         controller: _commentController,
         maxLines: 3,
         decoration: InputDecoration(
-          hintText: "ThÃªm ghi chÃº phÃª duyá»‡t (náº¿u cÃ³)...",
+          hintText: 'Thêm ghi chú phê duyệt (nếu có)...',
           hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
           contentPadding: const EdgeInsets.all(16),
           border: InputBorder.none,
@@ -537,7 +537,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Bottom action bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Bottom action bar ──────────────────────────────────────────────────────
 
   Widget _buildBottomActionBar(ApproverSubmissionEntity submission) {
     return Positioned(
@@ -572,7 +572,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                       ),
                     ),
                     child: const Text(
-                      "Tá»ª CHá»I",
+                      'TỪ CHỐI',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -591,7 +591,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                       ),
                     ),
                     child: const Text(
-                      "DUYá»†T ÄÆ N",
+                      'DUYỆT ĐƠN',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -604,7 +604,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
-  // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Helpers ────────────────────────────────────────────────────────────────
 
   Widget _buildSectionLabel(String title) {
     return Padding(
@@ -622,11 +622,11 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   Widget _buildInfoRow(
-    IconData icon,
-    String label,
-    String value,
-    Color iconColor,
-  ) {
+      IconData icon,
+      String label,
+      String value,
+      Color iconColor,
+      ) {
     return Row(
       children: [
         Icon(icon, size: 16, color: iconColor),
@@ -727,8 +727,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             _handlingDecisionInPasswordDialog = true;
             final bloc = context.read<ApproverBloc>();
             final resultFuture = bloc.stream.firstWhere(
-              (state) =>
-                  state is ApproverDecideSuccess ||
+                  (state) =>
+              state is ApproverDecideSuccess ||
                   state is ApproverActionError,
             );
             bloc.add(
@@ -753,9 +753,9 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            title: Text(
+            title: const Text(
               'Xác nhận mật khẩu',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             content: TextField(
               controller: passwordController,
@@ -776,8 +776,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   onPressed: isSubmitting
                       ? null
                       : () => setDialogState(() {
-                          obscurePassword = !obscurePassword;
-                        }),
+                    obscurePassword = !obscurePassword;
+                  }),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -795,9 +795,9 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             actions: [
               TextButton(
                 onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
-                child: Text(
+                child: const Text(
                   'Hủy',
-                  style: const TextStyle(color: Color(0xFF94A3B8)),
+                  style: TextStyle(color: Color(0xFF94A3B8)),
                 ),
               ),
               ElevatedButton(
@@ -812,14 +812,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 ),
                 child: isSubmitting
                     ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : Text('Tiếp tục'),
+                  width: 18,
+                  height: 18,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.white,
+                  ),
+                )
+                    : const Text('Tiếp tục'),
               ),
             ],
           );
@@ -842,7 +842,6 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     }
   }
 
-  // âœ… FIX: Bá» await Future.delayed(Duration.zero) - nguyÃªn nhÃ¢n gÃ¢y lá»—i _dependents.isEmpty
   Future<void> _showPasswordDialog(bool isApprove) async {
     final passwordController = TextEditingController();
     String? passwordError;
@@ -855,9 +854,9 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Text(
+          title: const Text(
             'Xác nhận mật khẩu',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           content: TextField(
             controller: passwordController,
@@ -899,9 +898,9 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.of(ctx).pop(),
-              child: Text(
+              child: const Text(
                 'Hủy',
-                style: const TextStyle(color: Color(0xFF94A3B8)),
+                style: TextStyle(color: Color(0xFF94A3B8)),
               ),
             ),
             ElevatedButton(
@@ -921,17 +920,15 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text('Tiếp tục'),
+              child: const Text('Tiếp tục'),
             ),
           ],
         ),
       ),
     );
 
-    // âœ… Dispose controller ngay sau khi dialog Ä‘Ã³ng
     passwordController.dispose();
 
-    // âœ… Check mounted NGAY - khÃ´ng cáº§n await Future.delayed ná»¯a
     if (!mounted || password == null || password.isEmpty) return;
 
     _lastDecisionIsApprove = isApprove;
@@ -959,23 +956,23 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              isApprove ? "XÃ¡c nháº­n duyá»‡t?" : "XÃ¡c nháº­n tá»« chá»‘i?",
+              isApprove ? 'Xác nhận duyệt?' : 'Xác nhận từ chối?',
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
         ),
         content: Text(
           isApprove
-              ? "Báº¡n Ä‘á»“ng Ã½ phÃª duyá»‡t tá» trÃ¬nh nÃ y. HÃ nh Ä‘á»™ng nÃ y khÃ´ng thá»ƒ hoÃ n tÃ¡c."
-              : "Báº¡n sáº½ tá»« chá»‘i tá» trÃ¬nh nÃ y. ToÃ n bá»™ quy trÃ¬nh sáº½ bá»‹ dá»«ng láº¡i.",
+              ? 'Bạn đồng ý phê duyệt tờ trình này. Hành động này không thể hoàn tác.'
+              : 'Bạn sẽ từ chối tờ trình này. Toàn bộ quy trình sẽ bị dừng lại.',
           style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
+            child: const Text(
               'Hủy',
-              style: const TextStyle(color: Color(0xFF94A3B8)),
+              style: TextStyle(color: Color(0xFF94A3B8)),
             ),
           ),
           ElevatedButton(
@@ -1002,7 +999,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: Text(isApprove ? "Duyá»‡t" : "Tá»« chá»‘i"),
+            child: Text(isApprove ? 'Duyệt' : 'Từ chối'),
           ),
         ],
       ),
