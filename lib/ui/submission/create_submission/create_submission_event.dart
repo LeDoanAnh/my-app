@@ -1,5 +1,4 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
 
 abstract class SubmissionEvent {}
 
@@ -10,8 +9,7 @@ class SubmitCreateSubmission extends SubmissionEvent {
   final int creatorId;
   final String startDate;
   final String endDate;
-  final List<Map<String, dynamic>> selectedItems;
-  final Map<String, TextEditingController> contentControllers;
+  final List<Map<String, dynamic>> departments;
   final List<PlatformFile> attachments;
 
   SubmitCreateSubmission({
@@ -21,8 +19,7 @@ class SubmitCreateSubmission extends SubmissionEvent {
     required this.creatorId,
     required this.startDate,
     required this.endDate,
-    required this.selectedItems,
-    required this.contentControllers,
+    required this.departments,
     required this.attachments,
   });
 }

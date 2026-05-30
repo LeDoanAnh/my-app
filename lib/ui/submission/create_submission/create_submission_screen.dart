@@ -44,13 +44,11 @@ class _PickedLocation {
 
 class _DeptUIState {
   bool isExpanded;
-  int activeTab; // 0 = vật tư, 1 = địa điểm
+  int activeTab;
   bool includedInFlow;
   int stepOrder;
   final TextEditingController noteCtrl;
-  // assetId → picked
   final Map<int, _PickedAsset> pickedAssets;
-  // locationId → picked
   final Map<int, _PickedLocation> pickedLocations;
 
   _DeptUIState({
@@ -90,15 +88,12 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   final Map<String, String> _deptNames = {};
   int _stepCounter = 0;
 
-  // Cache danh sách departments từ SubmissionBloc để dùng khi build groups
   List<DepartmentEntity> _allDepts = [];
 
   @override
   void initState() {
     super.initState();
-    // Lấy assets + locations
     context.read<AssetLocationListBloc>().add(GetAssetLocationList());
-    // Lấy tất cả phòng ban
     context.read<SubmissionBloc>().add(GetDepartmentList());
   }
 
@@ -111,14 +106,13 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     super.dispose();
   }
 
-  // ── Build groups: ALL departments luôn hiển thị ───────────────────────────
+  // ── Build groups ──────────────────────────────────────────────────────────
   List<_DeptGroup> _buildGroups(
       List<AssetEntity> assets,
       List<LocationEntity> locations,
       ) {
     final Map<String, _DeptGroup> map = {};
 
-    // 1. Khởi tạo TẤT CẢ phòng ban trước (kể cả không có asset/location)
     for (final dept in _allDepts) {
       final key = 'dept_${dept.id}';
       map[key] = _DeptGroup(
@@ -130,7 +124,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       );
     }
 
-    // 2. Gắn assets vào đúng phòng
     for (final a in assets) {
       final key = 'dept_${a.department?.id ?? 0}';
       map.putIfAbsent(
@@ -146,7 +139,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       map[key]!.assets.add(a);
     }
 
-    // 3. Gắn locations vào đúng phòng
     for (final l in locations) {
       final deptId = l.departmentId;
       final key = deptId != null ? 'dept_$deptId' : 'locations_only';
@@ -163,7 +155,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       map[key]!.locations.add(l);
     }
 
-    // 4. Đảm bảo mỗi group có _DeptUIState
     for (final g in map.values) {
       _deptStates.putIfAbsent(
         g.key,
@@ -176,7 +167,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       ..sort((a, b) => (a.deptId ?? 9999).compareTo(b.deptId ?? 9999));
   }
 
-  // ── Toggle flow ──────────────────────────────────────────────────────────
+  // ── Toggle flow ───────────────────────────────────────────────────────────
   void _toggleFlow(String key) {
     final s = _deptStates[key]!;
     setState(() {
@@ -202,7 +193,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     if (!_deptStates[key]!.includedInFlow) _toggleFlow(key);
   }
 
-  // ── Toggle asset: bỏ chọn nếu đã có, mở dialog nếu chưa ─────────────────
   void _toggleAsset(AssetEntity asset, String deptKey) {
     final s = _deptStates[deptKey]!;
     if (s.pickedAssets.containsKey(asset.id)) {
@@ -212,7 +202,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     }
   }
 
-  // ── Toggle location ──────────────────────────────────────────────────────
   void _toggleLocation(LocationEntity loc, String deptKey) {
     final s = _deptStates[deptKey]!;
     if (s.pickedLocations.containsKey(loc.id)) {
@@ -222,7 +211,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     }
   }
 
-  // ── Dialog chi tiết asset ────────────────────────────────────────────────
+  // ── Dialog chi tiết asset ─────────────────────────────────────────────────
   void _showAssetDialog(AssetEntity asset, String deptKey) {
     final s = _deptStates[deptKey]!;
     final existing = s.pickedAssets[asset.id];
@@ -324,7 +313,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── Dialog chi tiết location ─────────────────────────────────────────────
+  // ── Dialog chi tiết location ──────────────────────────────────────────────
   void _showLocationDialog(LocationEntity loc, String deptKey) {
     final s = _deptStates[deptKey]!;
     final existing = s.pickedLocations[loc.id];
@@ -381,7 +370,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                                         .subtract(const Duration(days: 1)),
                                     lastDate: DateTime(2030),
                                   );
-                                  if (d != null) setSt(() => slot['date'] = d);
+                                  if (d != null)
+                                    setSt(() => slot['date'] = d);
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
@@ -399,8 +389,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                                     Text(
                                         DateFormat('dd/MM/yyyy')
                                             .format(slot['date']),
-                                        style:
-                                        const TextStyle(fontSize: 13)),
+                                        style: const TextStyle(fontSize: 13)),
                                   ]),
                                 ),
                               ),
@@ -448,10 +437,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                                         size: 14, color: Colors.blueGrey),
                                     const SizedBox(width: 6),
                                     Text(
-                                        fmtTime(slot['startTime']
-                                        as TimeOfDay),
-                                        style:
-                                        const TextStyle(fontSize: 13)),
+                                        fmtTime(
+                                            slot['startTime'] as TimeOfDay),
+                                        style: const TextStyle(fontSize: 13)),
                                   ]),
                                 ),
                               ),
@@ -460,16 +448,14 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                               padding: EdgeInsets.symmetric(horizontal: 6),
                               child: Text('–',
                                   style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.blueGrey)),
+                                      fontSize: 16, color: Colors.blueGrey)),
                             ),
                             Expanded(
                               child: InkWell(
                                 onTap: () async {
                                   final t = await showTimePicker(
                                     context: ctx,
-                                    initialTime:
-                                    slot['endTime'] as TimeOfDay,
+                                    initialTime: slot['endTime'] as TimeOfDay,
                                     builder: (context, child) => MediaQuery(
                                       data: MediaQuery.of(context).copyWith(
                                           alwaysUse24HourFormat: true),
@@ -493,10 +479,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                                         size: 14, color: Colors.blueGrey),
                                     const SizedBox(width: 6),
                                     Text(
-                                        fmtTime(
-                                            slot['endTime'] as TimeOfDay),
-                                        style:
-                                        const TextStyle(fontSize: 13)),
+                                        fmtTime(slot['endTime'] as TimeOfDay),
+                                        style: const TextStyle(fontSize: 13)),
                                   ]),
                                 ),
                               ),
@@ -508,8 +492,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   }),
                   TextButton.icon(
                     onPressed: () => setSt(() => slots.add({
-                      'date':
-                      _programDateRange?.start ?? DateTime.now(),
+                      'date': _programDateRange?.start ?? DateTime.now(),
                       'startTime': const TimeOfDay(hour: 17, minute: 0),
                       'endTime': const TimeOfDay(hour: 21, minute: 0),
                     })),
@@ -555,7 +538,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── File picker ──────────────────────────────────────────────────────────
+  // ── File picker ───────────────────────────────────────────────────────────
   Future<void> _pickFiles() async {
     final result = await FilePicker.pickFiles(
       allowMultiple: true,
@@ -565,7 +548,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     if (result != null) setState(() => _attachments.addAll(result.files));
   }
 
-  // ── Submit ───────────────────────────────────────────────────────────────
+  // ── Submit ────────────────────────────────────────────────────────────────
   void _submit() {
     if (_titleCtrl.text.trim().isEmpty) {
       _snack('Vui lòng nhập tên tờ trình!');
@@ -581,81 +564,116 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       return;
     }
 
-    final List<Map<String, dynamic>> selectedItems = [];
-    final Map<String, TextEditingController> contentControllers = {};
+    // ── Sắp xếp đúng thứ tự stepOrder 1→2→3→... ─────────────────────────────
+    final sortedEntries = _deptStates.entries
+        .where((e) => e.value.includedInFlow)
+        .toList()
+      ..sort((a, b) => a.value.stepOrder.compareTo(b.value.stepOrder));
 
-    for (final entry in _deptStates.entries) {
-      final s = entry.value;
-      if (!s.includedInFlow) continue;
+    // ── Build departments payload đúng cấu trúc backend ──────────────────────
+    // Backend nhận: [{ dept_name, dept_id, note, priority, opinion_only, items[] }]
+    // items[]:      [{ entity_id, name, type, quantity, time_info, start_time?, end_time? }]
+    final List<Map<String, dynamic>> departmentsPayload = [];
+
+    for (final entry in sortedEntries) {
       final key = entry.key;
-      contentControllers[key] = s.noteCtrl;
+      final s = entry.value;
 
+      // Lấy dept_id từ key 'dept_12' → 12
+      final int? deptId = int.tryParse(key.split('_').last);
+
+      final bool opinionOnly =
+          s.pickedAssets.isEmpty && s.pickedLocations.isEmpty;
+
+      final List<Map<String, dynamic>> items = [];
+
+      // Assets
       for (final picked in s.pickedAssets.values) {
         final asset = picked.entity;
-        selectedItems.add({
-          'dept': asset.department?.deptName ?? key,
-          'dept_id': asset.department?.id,
-          'item': asset.assetName,
-          'qty': picked.qty,
-          'time': picked.type == 'consumable'
-              ? 'Lấy: ${DateFormat('dd/MM').format(picked.dateGet)}'
-              : 'Lấy: ${DateFormat('dd/MM').format(picked.dateGet)} - Trả: ${DateFormat('dd/MM').format(picked.dateReturn!)}',
-          'priority': s.stepOrder,
-          'entity': asset,
-          'type': picked.type,
+        final timeInfo = picked.type == 'consumable'
+            ? 'Lấy: ${DateFormat('dd/MM/yyyy').format(picked.dateGet)}'
+            : 'Lấy: ${DateFormat('dd/MM/yyyy').format(picked.dateGet)}'
+            ' - Trả: ${DateFormat('dd/MM/yyyy').format(picked.dateReturn!)}';
+
+        items.add({
+          'entity_id': asset.id,
+          'name': asset.assetName ?? '',
+          'type': picked.type, // 'fixed_asset' | 'consumable'
+          'quantity': int.tryParse(picked.qty) ?? 1,
+          'time_info': timeInfo,
         });
       }
 
+      // Locations — mỗi slot là 1 item riêng để backend lưu đúng start/end time
       for (final picked in s.pickedLocations.values) {
         final loc = picked.entity;
-        final timeStr =
-        picked.slots.map((e) => e['display'] as String).join(', ');
-        selectedItems.add({
-          'dept': loc.locationName ?? key,
-          'dept_id': null,
-          'item': loc.locationName,
-          'qty': '1',
-          'time': timeStr,
-          'priority': s.stepOrder,
-          'entity': loc,
-          'type': 'location',
-        });
+        for (final slot in picked.slots) {
+          final date = slot['date'] as DateTime;
+          final st = slot['startTime'] as TimeOfDay;
+          final et = slot['endTime'] as TimeOfDay;
+
+          final startDt =
+          DateTime(date.year, date.month, date.day, st.hour, st.minute);
+          final endDt =
+          DateTime(date.year, date.month, date.day, et.hour, et.minute);
+
+          items.add({
+            'entity_id': loc.id,
+            'name': loc.locationName ?? '',
+            'type': 'location',
+            'quantity': 1,
+            'time_info': slot['display'] as String? ?? '',
+            'start_time': DateFormat('yyyy-MM-dd HH:mm:ss').format(startDt),
+            'end_time': DateFormat('yyyy-MM-dd HH:mm:ss').format(endDt),
+          });
+        }
       }
 
-      // Phòng chỉ xin ý kiến (không chọn gì)
-      if (s.pickedAssets.isEmpty && s.pickedLocations.isEmpty) {
-        selectedItems.add({
-          'dept': _deptNames[key] ?? key,
-          'dept_id': null,
-          'item': 'Xin ý kiến',
-          'qty': '0',
-          'time': '',
-          'priority': s.stepOrder,
-          'entity': null,
-          'type': 'opinion',
-        });
-      }
+      departmentsPayload.add({
+        'dept_name': _deptNames[key] ?? key,
+        'dept_id': deptId,
+        'note': s.noteCtrl.text.trim(),
+        'priority': s.stepOrder,      // ← thứ tự đúng 1,2,3,...
+        'opinion_only': opinionOnly,  // ← true khi không chọn gì, chỉ xin ý kiến
+        'items': items,               // ← rỗng nếu opinion_only
+      });
     }
 
     context.read<SubmissionBloc>().add(SubmitCreateSubmission(
       title: _titleCtrl.text.trim(),
       description: _descCtrl.text.trim(),
-      workflowId: 0,
+      workflowId: 1,
       creatorId: widget.userId ?? 1,
-      startDate: DateFormat('yyyy-MM-dd HH:mm:ss')
-          .format(_programDateRange!.start),
-      endDate: DateFormat('yyyy-MM-dd HH:mm:ss')
-          .format(_programDateRange!.end),
-      selectedItems: selectedItems,
-      contentControllers: contentControllers,
+      startDate:
+      DateFormat('yyyy-MM-dd HH:mm:ss').format(_programDateRange!.start),
+      endDate:
+      DateFormat('yyyy-MM-dd HH:mm:ss').format(_programDateRange!.end),
+      departments: departmentsPayload,
       attachments: _attachments,
     ));
   }
 
-  void _snack(String msg) =>
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  void _snack(String msg) => ScaffoldMessenger.of(context)
+      .showSnackBar(SnackBar(content: Text(msg)));
 
-  // ── BUILD ────────────────────────────────────────────────────────────────
+  void _resetForm() {
+    setState(() {
+      _titleCtrl.clear();
+      _descCtrl.clear();
+      _searchCtrl.clear();
+      _programDateRange = null;
+      _attachments.clear();
+      _searchQuery = '';
+      _stepCounter = 0;
+      for (final s in _deptStates.values) {
+        s.dispose();
+      }
+      _deptStates.clear();
+      _deptNames.clear();
+    });
+  }
+
+  // ── BUILD ─────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -689,13 +707,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     cancelText: 'Tạo mới',
                     showCancel: true,
                     onConfirm: () {
-                      // Thoát → quay về màn trước
                       if (context.mounted) Navigator.pop(context);
                     },
-                    onCancel: () {
-                      // Ở lại → reset toàn bộ form
-                      _resetForm();
-                    },
+                    onCancel: () => _resetForm(),
                   ),
                 );
               } else if (state is SubmissionDeptError) {
@@ -736,7 +750,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── 1. Thông tin chung ────────────────────────────────
                   _sectionLabel('1', 'THÔNG TIN CHUNG'),
                   const SizedBox(height: 12),
                   _buildField(_titleCtrl, 'Tên tờ trình...'),
@@ -747,7 +760,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   _buildDatePicker(),
                   const SizedBox(height: 24),
 
-                  // ── 2. Phòng ban phối hợp ─────────────────────────────
                   _sectionLabel('2', 'PHÒNG BAN PHỐI HỢP'),
                   const SizedBox(height: 12),
                   _buildDeptSearchBar(),
@@ -755,19 +767,16 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   ...filtered.map((g) => _buildDeptCard(g)),
                   const SizedBox(height: 24),
 
-                  // ── 3. Các bước duyệt ─────────────────────────────────
                   _sectionLabel('3', 'CÁC BƯỚC DUYỆT'),
                   const SizedBox(height: 12),
                   _buildStepsSummary(),
                   const SizedBox(height: 24),
 
-                  // ── 4. Tệp đính kèm ───────────────────────────────────
                   _sectionLabel('4', 'TỆP ĐÍNH KÈM'),
                   const SizedBox(height: 12),
                   _buildAttachments(),
                   const SizedBox(height: 24),
 
-                  // ── Submit ────────────────────────────────────────────
                   SizedBox(
                     width: double.infinity,
                     height: 52,
@@ -839,11 +848,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     },
     borderRadius: BorderRadius.circular(14),
     child: Container(
-      padding:
-      const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(14)),
+          color: Colors.white, borderRadius: BorderRadius.circular(14)),
       child: Row(children: [
         Icon(Icons.calendar_today, size: 16, color: AppColors.primary),
         const SizedBox(width: 10),
@@ -893,10 +900,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     final hasAssets = g.assets.isNotEmpty;
     final hasLocs = g.locations.isNotEmpty;
 
-    // Chỉ có tab Vật tư và Địa điểm — KHÔNG có tab Ý kiến
     final tabs = <_TabDef>[];
-    if (hasAssets) tabs.add(_TabDef(icon: Icons.handyman_rounded, label: 'Vật tư'));
-    if (hasLocs) tabs.add(_TabDef(icon: Icons.pin_drop_rounded, label: 'Địa điểm'));
+    if (hasAssets)
+      tabs.add(_TabDef(icon: Icons.handyman_rounded, label: 'Vật tư'));
+    if (hasLocs)
+      tabs.add(_TabDef(icon: Icons.pin_drop_rounded, label: 'Địa điểm'));
 
     if (s.activeTab >= tabs.length && tabs.isNotEmpty) {
       s.activeTab = 0;
@@ -917,16 +925,14 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Header ──────────────────────────────────────────────────────
           InkWell(
             onTap: () => setState(() => s.isExpanded = !s.isExpanded),
             borderRadius:
             const BorderRadius.vertical(top: Radius.circular(16)),
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 14, vertical: 12),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               child: Row(children: [
-                // Step badge
                 if (s.includedInFlow)
                   Container(
                     margin: const EdgeInsets.only(right: 8),
@@ -948,23 +954,15 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     children: [
                       Text(g.name,
                           style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600)),
+                              fontSize: 13, fontWeight: FontWeight.w600)),
                       const SizedBox(height: 4),
                       Wrap(spacing: 4, children: [
                         if (hasAssets)
-                          _chip(
-                              'Vật tư',
-                              Icons.handyman_rounded,
-                              const Color(0xFF0F6E56),
-                              const Color(0xFFE1F5EE)),
+                          _chip('Vật tư', Icons.handyman_rounded,
+                              const Color(0xFF0F6E56), const Color(0xFFE1F5EE)),
                         if (hasLocs)
-                          _chip(
-                              'Địa điểm',
-                              Icons.pin_drop_rounded,
-                              const Color(0xFF185FA5),
-                              const Color(0xFFE6F1FB)),
-                        // Nếu không có asset lẫn location → hiện chip "Xin ý kiến"
+                          _chip('Địa điểm', Icons.pin_drop_rounded,
+                              const Color(0xFF185FA5), const Color(0xFFE6F1FB)),
                         if (!hasAssets && !hasLocs)
                           _chip(
                               'Xin ý kiến',
@@ -991,11 +989,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
             ),
           ),
 
-          // ── Body (expanded) ──────────────────────────────────────────────
           if (s.isExpanded) ...[
             Divider(height: 1, color: Colors.grey.shade100),
 
-            // Tab bar — chỉ hiện khi có ít nhất 1 tab (asset hoặc location)
             if (tabs.length >= 2)
               Container(
                 color: Colors.grey.shade50,
@@ -1006,11 +1002,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     final selected = s.activeTab == idx;
                     return Expanded(
                       child: InkWell(
-                        onTap: () =>
-                            setState(() => s.activeTab = idx),
+                        onTap: () => setState(() => s.activeTab = idx),
                         child: Container(
-                          padding:
-                          const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 10),
                           decoration: BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
@@ -1053,23 +1047,17 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Nội dung tab
                   if (tabs.isEmpty)
-                  // Phòng ban chỉ có "xin ý kiến" — không có gì để chọn
                     _buildOpinionOnlyHint()
                   else if (tabs.length == 1)
-                  // Chỉ có 1 loại → hiện thẳng không cần tab bar
                     tabs[0].label == 'Vật tư'
                         ? _buildAssetPane(g, s)
                         : _buildLocPane(g, s)
                   else
-                  // Có cả 2 tab
                     s.activeTab == 0
                         ? _buildAssetPane(g, s)
                         : _buildLocPane(g, s),
-
                   const SizedBox(height: 10),
-                  // Nút thêm/bỏ luồng duyệt
                   _buildFlowButton(g.key, s),
                 ],
               ),
@@ -1080,7 +1068,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── Hint khi phòng chỉ xin ý kiến ────────────────────────────────────────
   Widget _buildOpinionOnlyHint() => Container(
     width: double.infinity,
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
@@ -1088,11 +1075,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
       color: const Color(0xFFFAEEDA),
       borderRadius: BorderRadius.circular(10),
     ),
-    child: Row(children: [
-      const Icon(Icons.chat_bubble_outline_rounded,
+    child: const Row(children: [
+      Icon(Icons.chat_bubble_outline_rounded,
           size: 16, color: Color(0xFF854F0B)),
-      const SizedBox(width: 8),
-      const Expanded(
+      SizedBox(width: 8),
+      Expanded(
         child: Text(
           'Thêm phòng này vào luồng để xin ý kiến (không mượn vật tư hay địa điểm)',
           style: TextStyle(fontSize: 12, color: Color(0xFF854F0B)),
@@ -1101,7 +1088,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     ]),
   );
 
-  // ── Pane vật tư — dùng checkbox trực tiếp ────────────────────────────────
   Widget _buildAssetPane(_DeptGroup g, _DeptUIState s) {
     return ListView.separated(
       shrinkWrap: true,
@@ -1132,15 +1118,13 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
               ),
             ),
             child: Row(children: [
-              // Checkbox
               AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: isPicked
-                      ? const Color(0xFF3B6D11)
-                      : Colors.white,
+                  color:
+                  isPicked ? const Color(0xFF3B6D11) : Colors.white,
                   border: Border.all(
                     color: isPicked
                         ? const Color(0xFF3B6D11)
@@ -1179,7 +1163,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                             : AppColors.textDark,
                       ),
                     ),
-                    // Hiện thông tin đã chọn (qty, ngày)
                     if (isPicked) ...[
                       const SizedBox(height: 2),
                       Text(
@@ -1192,7 +1175,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   ],
                 ),
               ),
-              // Nút edit khi đã chọn
               if (isPicked)
                 GestureDetector(
                   onTap: () => _showAssetDialog(asset, g.key),
@@ -1209,7 +1191,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── Pane địa điểm — dùng checkbox trực tiếp ──────────────────────────────
   Widget _buildLocPane(_DeptGroup g, _DeptUIState s) {
     return ListView.separated(
       shrinkWrap: true,
@@ -1239,15 +1220,13 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
               ),
             ),
             child: Row(children: [
-              // Checkbox
               AnimatedContainer(
                 duration: const Duration(milliseconds: 150),
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  color: isPicked
-                      ? const Color(0xFF185FA5)
-                      : Colors.white,
+                  color:
+                  isPicked ? const Color(0xFF185FA5) : Colors.white,
                   border: Border.all(
                     color: isPicked
                         ? const Color(0xFF185FA5)
@@ -1279,7 +1258,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                             : AppColors.textDark,
                       ),
                     ),
-                    // Hiện danh sách slots
                     if (isPicked && picked.slots.isNotEmpty) ...[
                       const SizedBox(height: 2),
                       Text(
@@ -1295,7 +1273,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   ],
                 ),
               ),
-              // Nút edit khi đã chọn
               if (isPicked)
                 GestureDetector(
                   onTap: () => _showLocationDialog(loc, g.key),
@@ -1312,7 +1289,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── Nút thêm/bỏ luồng ────────────────────────────────────────────────────
   Widget _buildFlowButton(String key, _DeptUIState s) {
     if (s.includedInFlow) {
       return OutlinedButton.icon(
@@ -1347,7 +1323,6 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     );
   }
 
-  // ── Tóm tắt các bước duyệt ───────────────────────────────────────────────
   Widget _buildStepsSummary() {
     final steps = _deptStates.entries
         .where((e) => e.value.includedInFlow)
@@ -1361,8 +1336,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(14),
-          border:
-          Border.all(color: Colors.grey.shade200),
+          border: Border.all(color: Colors.grey.shade200),
         ),
         child: const Text(
           'Chưa có bước nào — hãy thêm phòng ban ở trên',
@@ -1395,8 +1369,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                 child: Row(children: [
                   CircleAvatar(
                     radius: 13,
-                    backgroundColor:
-                    AppColors.primary.withOpacity(0.12),
+                    backgroundColor: AppColors.primary.withOpacity(0.12),
                     child: Text('${s.stepOrder}',
                         style: TextStyle(
                             fontSize: 11,
@@ -1410,14 +1383,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       children: [
                         Text(realName,
                             style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600)),
+                                fontSize: 13, fontWeight: FontWeight.w600)),
                         const SizedBox(height: 4),
                         Wrap(spacing: 4, children: [
                           if (assetCount > 0)
-                            _chip(
-                                '$assetCount vật tư',
-                                Icons.handyman_rounded,
+                            _chip('$assetCount vật tư', Icons.handyman_rounded,
                                 const Color(0xFF0F6E56),
                                 const Color(0xFFE1F5EE)),
                           if (locCount > 0)
@@ -1439,8 +1409,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                 ]),
               ),
               Padding(
-                padding:
-                const EdgeInsets.fromLTRB(14, 0, 14, 12),
+                padding: const EdgeInsets.fromLTRB(14, 0, 14, 12),
                 child: _buildNoteField(s, realName),
               ),
             ],
@@ -1458,8 +1427,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
             size: 14, color: Colors.blueGrey.shade400),
         const SizedBox(width: 4),
         Text('Ghi chú gửi phòng này',
-            style: TextStyle(
-                fontSize: 11, color: Colors.blueGrey.shade400)),
+            style:
+            TextStyle(fontSize: 11, color: Colors.blueGrey.shade400)),
       ]),
       const SizedBox(height: 6),
       TextField(
@@ -1485,16 +1454,15 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(16),
-      border:
-      Border.all(color: AppColors.primary.withOpacity(0.2)),
+      border: Border.all(color: AppColors.primary.withOpacity(0.2)),
     ),
     child: Column(children: [
       if (_attachments.isEmpty)
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text('Chưa có tệp nào được chọn',
-              style: TextStyle(
-                  color: Colors.grey.shade500, fontSize: 13)),
+              style:
+              TextStyle(color: Colors.grey.shade500, fontSize: 13)),
         ),
       ..._attachments.map((file) => Container(
         margin: const EdgeInsets.only(bottom: 8),
@@ -1530,43 +1498,18 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     ]),
   );
 
-  Widget _chip(String label, IconData icon, Color fg, Color bg) =>
-      Container(
-        padding:
-        const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-        decoration: BoxDecoration(
-            color: bg, borderRadius: BorderRadius.circular(999)),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          Icon(icon, size: 10, color: fg),
-          const SizedBox(width: 3),
-          Text(label,
-              style: TextStyle(
-                  fontSize: 10,
-                  color: fg,
-                  fontWeight: FontWeight.w500)),
-        ]),
-      );
-  void _resetForm() {
-    setState(() {
-      _titleCtrl.clear();
-      _descCtrl.clear();
-      _searchCtrl.clear();
-      _programDateRange = null;
-      _attachments.clear();
-      _searchQuery = '';
-      _stepCounter = 0;
-
-      // Reset toàn bộ dept states
-      for (final s in _deptStates.values) {
-        s.dispose();
-      }
-      _deptStates.clear();
-      _deptNames.clear();
-
-      // Rebuild lại dept states từ _allDepts (giữ nguyên danh sách phòng ban)
-      // _buildGroups sẽ tự tạo lại khi rebuild widget
-    });
-  }
+  Widget _chip(String label, IconData icon, Color fg, Color bg) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+    decoration: BoxDecoration(
+        color: bg, borderRadius: BorderRadius.circular(999)),
+    child: Row(mainAxisSize: MainAxisSize.min, children: [
+      Icon(icon, size: 10, color: fg),
+      const SizedBox(width: 3),
+      Text(label,
+          style: TextStyle(
+              fontSize: 10, color: fg, fontWeight: FontWeight.w500)),
+    ]),
+  );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -11,38 +11,39 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
   final DepartmentListUseCase _departmentListUseCase;
 
   SubmissionBloc(this._createSubmissionUseCase, this._departmentListUseCase)
-    : super(SubmissionInitial()) {
+      : super(SubmissionInitial()) {
     on<SubmitCreateSubmission>(_onSubmitCreateSubmission);
     on<GetDepartmentList>(_onGetDepartmentList);
   }
 
   Future<void> _onSubmitCreateSubmission(
-    SubmitCreateSubmission event,
-    Emitter<SubmissionState> emit,
-  ) async {
+      SubmitCreateSubmission event,
+      Emitter<SubmissionState> emit,
+      ) async {
     emit(SubmissionDeptLoading());
 
     try {
       final params = CreateSubmissionParams(
         title: event.title,
+        description: event.description,
         workflowId: event.workflowId,
+        creatorId: event.creatorId,
         startDate: event.startDate,
         endDate: event.endDate,
-        creatorId: event.creatorId,
-        description: event.description,
-        selectedItems: event.selectedItems,
-        contentControllers: event.contentControllers,
+        departments: event.departments,
         attachments: event.attachments
             .map(
-              (f) => FileAttachment(name: f.name, path: f.path, bytes: f.bytes),
-            )
+              (f) => FileAttachment(
+            name: f.name,
+            path: f.path,
+            bytes: f.bytes,
+          ),
+        )
             .toList(),
       );
 
-      // 2. Chỉ gọi duy nhất Use Case xử lý nghiệp vụ
       final res = await _createSubmissionUseCase.call(params);
 
-      // 3. Xử lý phản hồi trả về từ Use Case và cập nhật UI State
       if (res['success'] == true) {
         emit(
           SubmissionSubmitSuccess(
@@ -51,7 +52,6 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
           ),
         );
       } else {
-        // Tách nhỏ lỗi validation, lỗi server nội bộ
         String msg = res['message'] ?? 'Có lỗi xảy ra.';
         final errors = res['errors'];
         if (errors is Map && errors.isNotEmpty) {
@@ -73,9 +73,9 @@ class SubmissionBloc extends Bloc<SubmissionEvent, SubmissionState> {
   }
 
   Future<void> _onGetDepartmentList(
-    GetDepartmentList event,
-    Emitter<SubmissionState> emit,
-  ) async {
+      GetDepartmentList event,
+      Emitter<SubmissionState> emit,
+      ) async {
     emit(SubmissionDeptLoading());
     try {
       final result = await _departmentListUseCase.callResources();
