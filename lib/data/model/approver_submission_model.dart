@@ -18,6 +18,7 @@ class ApproverSubmissionModel {
   final String? noteForDept;
   final List<ApproverLocationModel>? locations;
   final List<ApproverAssetModel>? assets;
+  final List<ApproverAttachmentModel>? attachments;
   @JsonKey(name: 'my_decision')
   final MyDecisionModel? myDecision;
 
@@ -32,6 +33,7 @@ class ApproverSubmissionModel {
     this.noteForDept,
     this.locations,
     this.assets,
+    this.attachments,
     this.myDecision,
   });
 
@@ -62,6 +64,30 @@ class ApproverAssetModel {
   ApproverAssetModel({this.assetName, this.quantity});
   factory ApproverAssetModel.fromJson(Map<String, dynamic> json) =>
       _$ApproverAssetModelFromJson(json);
+}
+
+@JsonSerializable()
+class ApproverAttachmentModel {
+  @JsonKey(name: 'file_name')
+  final String? fileName;
+  @JsonKey(name: 'file_size')
+  final int? fileSize;
+  @JsonKey(name: 'file_type')
+  final String? fileType;
+  @JsonKey(name: 'file_path')
+  final String? filePath;
+  final String? url;
+
+  ApproverAttachmentModel({
+    this.fileName,
+    this.fileSize,
+    this.fileType,
+    this.filePath,
+    this.url,
+  });
+
+  factory ApproverAttachmentModel.fromJson(Map<String, dynamic> json) =>
+      _$ApproverAttachmentModelFromJson(json);
 }
 
 @JsonSerializable()

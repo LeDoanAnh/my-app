@@ -10,6 +10,7 @@ class ApproverSubmissionEntity {
   final String? noteForDept;
   final List<ApproverLocationEntity>? locations;
   final List<ApproverAssetEntity>? assets;
+  final List<ApproverAttachmentEntity>? attachments;
   final MyDecisionEntity? myDecision;
 
   ApproverSubmissionEntity({
@@ -23,6 +24,7 @@ class ApproverSubmissionEntity {
     this.noteForDept,
     this.locations,
     this.assets,
+    this.attachments,
     this.myDecision,
   });
 }
@@ -38,6 +40,22 @@ class ApproverAssetEntity {
   final String? assetName;
   final int? quantity;
   ApproverAssetEntity({this.assetName, this.quantity});
+}
+
+class ApproverAttachmentEntity {
+  final String? fileName;
+  final int? fileSize;
+  final String? fileType;
+  final String? filePath;
+  final String? url;
+
+  ApproverAttachmentEntity({
+    this.fileName,
+    this.fileSize,
+    this.fileType,
+    this.filePath,
+    this.url,
+  });
 }
 
 class MyDecisionEntity {

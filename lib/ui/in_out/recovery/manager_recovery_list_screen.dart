@@ -84,7 +84,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: AppColors.scaffoldAlt,
       appBar: AppBar(
         title: const Text(
           "QUẢN LÝ THU HỒI",
@@ -156,7 +156,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           hintText: "Tìm tên người mượn hoặc tờ trình...",
           prefixIcon: const Icon(Icons.search),
           filled: true,
-          fillColor: const Color(0xFFF1F3F6),
+          fillColor: AppColors.fieldBgAlt,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -250,8 +250,8 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
             _buildStatusBox(
               Icons.hourglass_bottom,
               "Chờ người mượn xác nhận đã nhận đồ",
-              const Color(0xFFFFF3E0),
-              const Color(0xFFE65100),
+              AppColors.orangeBg,
+              AppColors.orangeDark,
             )
           else if (isWaitingManagerConfirm)
             _buildFullWidthButton(sub)
@@ -260,8 +260,8 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
               returnDate: sub.returnDate,
               isUrgent: true,
               label: "NHẮC TRẢ",
-              bgColor: const Color(0xFFFFEBEE),
-              textColor: const Color(0xFFC62828),
+              bgColor: AppColors.errorBg,
+              textColor: AppColors.errorDark,
               icon: Icons.notifications_active_outlined,
               onPressed: () => _onRemindReturn(sub),
             )
@@ -316,7 +316,7 @@ class _ManagerRecoveryListScreenState extends State<ManagerRecoveryListScreen> {
           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         ),
         style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFE8F5E9),
+          backgroundColor: AppColors.successBgSoft,
           foregroundColor: const Color(0xFF2E7D32),
           elevation: 0,
           shape: RoundedRectangleBorder(

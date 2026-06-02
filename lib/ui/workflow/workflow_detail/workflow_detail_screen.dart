@@ -27,7 +27,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
+      backgroundColor: AppColors.scaffold,
       appBar: AppBar(
         title: Text(
           "Cấu hình luồng phê duyệt",
@@ -325,7 +325,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
       style: const TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w800,
-        color: Color(0xFF64748B),
+        color: AppColors.textGrey,
         letterSpacing: 1.2,
       ),
     );
@@ -358,7 +358,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
           const Text(
             "Gỡ bỏ cấu hình phê duyệt?",
             style: TextStyle(
-              color: Color(0xFF1E293B),
+              color: AppColors.textDark,
               fontSize: 16,
               fontWeight: FontWeight.w800,
             ),

@@ -1056,29 +1056,29 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                               _chip(
                                 'Vật tư',
                                 Icons.handyman_rounded,
-                                const Color(0xFF0F6E56),
-                                const Color(0xFFE1F5EE),
+                                AppColors.asset,
+                                AppColors.assetBg,
                               ),
                             if (hasLocs)
                               _chip(
                                 'Địa điểm',
                                 Icons.pin_drop_rounded,
-                                const Color(0xFF185FA5),
-                                const Color(0xFFE6F1FB),
+                                AppColors.location,
+                                AppColors.locationBg,
                               ),
                             if (!hasAssets && !hasLocs)
                               _chip(
                                 'Xin ý kiến',
                                 Icons.chat_bubble_outline_rounded,
-                                const Color(0xFF854F0B),
-                                const Color(0xFFFAEEDA),
+                                AppColors.opinion,
+                                AppColors.opinionBg,
                               ),
                             if (s.totalPicked > 0)
                               _chip(
                                 '${s.totalPicked} đã chọn',
                                 Icons.check_circle_rounded,
-                                const Color(0xFF27500A),
-                                const Color(0xFFEAF3DE),
+                                AppColors.assetText,
+                                AppColors.assetSelectedBg,
                               ),
                           ],
                         ),
@@ -1184,7 +1184,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     width: double.infinity,
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
     decoration: BoxDecoration(
-      color: const Color(0xFFFAEEDA),
+      color: AppColors.opinionBg,
       borderRadius: BorderRadius.circular(10),
     ),
     child: const Row(
@@ -1192,13 +1192,13 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         Icon(
           Icons.chat_bubble_outline_rounded,
           size: 16,
-          color: Color(0xFF854F0B),
+          color: AppColors.opinion,
         ),
         SizedBox(width: 8),
         Expanded(
           child: Text(
             'Thêm phòng này vào luồng để xin ý kiến (không mượn vật tư hay địa điểm)',
-            style: TextStyle(fontSize: 12, color: Color(0xFF854F0B)),
+            style: TextStyle(fontSize: 12, color: AppColors.opinion),
           ),
         ),
       ],
@@ -1223,11 +1223,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: isPicked ? const Color(0xFFEAF3DE) : Colors.grey.shade50,
+              color: isPicked ? AppColors.assetSelectedBg : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isPicked
-                    ? const Color(0xFF97C459)
+                    ? AppColors.assetBorder
                     : Colors.grey.shade200,
               ),
             ),
@@ -1238,10 +1238,10 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: isPicked ? const Color(0xFF3B6D11) : Colors.white,
+                    color: isPicked ? AppColors.assetSelected : Colors.white,
                     border: Border.all(
                       color: isPicked
-                          ? const Color(0xFF3B6D11)
+                          ? AppColors.assetSelected
                           : Colors.grey.shade400,
                       width: 1.5,
                     ),
@@ -1262,8 +1262,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       : Icons.handyman_rounded,
                   size: 15,
                   color: isPicked
-                      ? const Color(0xFF3B6D11)
-                      : const Color(0xFF1D9E75),
+                      ? AppColors.assetSelected
+                      : AppColors.assetAccent,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -1276,7 +1276,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: isPicked
-                              ? const Color(0xFF27500A)
+                              ? AppColors.assetText
                               : AppColors.textDark,
                         ),
                       ),
@@ -1287,7 +1287,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                           '${picked.dateReturn != null ? '  •  Trả: ${DateFormat('dd/MM').format(picked.dateReturn!)}' : ''}',
                           style: const TextStyle(
                             fontSize: 10,
-                            color: Color(0xFF3B6D11),
+                            color: AppColors.assetSelected,
                           ),
                         ),
                       ],
@@ -1302,7 +1302,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       child: const Icon(
                         Icons.edit_rounded,
                         size: 14,
-                        color: Color(0xFF3B6D11),
+                        color: AppColors.assetSelected,
                       ),
                     ),
                   ),
@@ -1331,11 +1331,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: isPicked ? const Color(0xFFE6F1FB) : Colors.grey.shade50,
+              color: isPicked ? AppColors.locationBg : Colors.grey.shade50,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
                 color: isPicked
-                    ? const Color(0xFF85B7EB)
+                    ? AppColors.locationBorder
                     : Colors.grey.shade200,
               ),
             ),
@@ -1346,10 +1346,10 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: isPicked ? const Color(0xFF185FA5) : Colors.white,
+                    color: isPicked ? AppColors.location : Colors.white,
                     border: Border.all(
                       color: isPicked
-                          ? const Color(0xFF185FA5)
+                          ? AppColors.location
                           : Colors.grey.shade400,
                       width: 1.5,
                     ),
@@ -1367,7 +1367,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                 const Icon(
                   Icons.pin_drop_rounded,
                   size: 15,
-                  color: Color(0xFF378ADD),
+                  color: AppColors.locationAccent,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -1380,7 +1380,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           color: isPicked
-                              ? const Color(0xFF0C447C)
+                              ? AppColors.locationText
                               : AppColors.textDark,
                         ),
                       ),
@@ -1392,7 +1392,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                               .join(' | '),
                           style: const TextStyle(
                             fontSize: 10,
-                            color: Color(0xFF185FA5),
+                            color: AppColors.location,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -1409,7 +1409,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       child: const Icon(
                         Icons.edit_rounded,
                         size: 14,
-                        color: Color(0xFF185FA5),
+                        color: AppColors.location,
                       ),
                     ),
                   ),
@@ -1540,22 +1540,22 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                                 _chip(
                                   '$assetCount vật tư',
                                   Icons.handyman_rounded,
-                                  const Color(0xFF0F6E56),
-                                  const Color(0xFFE1F5EE),
+                                  AppColors.asset,
+                                  AppColors.assetBg,
                                 ),
                               if (locCount > 0)
                                 _chip(
                                   '$locCount địa điểm',
                                   Icons.pin_drop_rounded,
-                                  const Color(0xFF185FA5),
-                                  const Color(0xFFE6F1FB),
+                                  AppColors.location,
+                                  AppColors.locationBg,
                                 ),
                               if (assetCount == 0 && locCount == 0)
                                 _chip(
                                   'Xin ý kiến',
                                   Icons.chat_bubble_outline_rounded,
-                                  const Color(0xFF854F0B),
-                                  const Color(0xFFFAEEDA),
+                                  AppColors.opinion,
+                                  AppColors.opinionBg,
                                 ),
                             ],
                           ),

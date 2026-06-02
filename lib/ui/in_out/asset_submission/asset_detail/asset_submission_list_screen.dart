@@ -47,7 +47,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: AppColors.scaffoldAlt,
       appBar: AppBar(
         title: const Text(
           "Danh sách đơn vật tư",
@@ -122,7 +122,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
           hintText: "Tìm mã đơn hoặc tên vật tư...",
           prefixIcon: const Icon(Icons.search, size: 20),
           filled: true,
-          fillColor: const Color(0xFFF1F3F6),
+          fillColor: AppColors.fieldBgAlt,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -175,13 +175,13 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                         vertical: 5,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEEF2FF),
+                        color: AppColors.secondary,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
                         "#${task.id}",
                         style: const TextStyle(
-                          color: Color(0xFF4F46E5),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 12,
                         ),
@@ -199,7 +199,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E293B),
+                    color: AppColors.textDark,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -277,7 +277,7 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFECFDF5),
+                        color: AppColors.successBg,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: const Row(
@@ -285,13 +285,13 @@ class _AssetSubmissionListScreenState extends State<AssetSubmissionListScreen> {
                           Icon(
                             Icons.check_circle,
                             size: 12,
-                            color: Color(0xFF10B981),
+                            color: AppColors.success,
                           ),
                           SizedBox(width: 4),
                           Text(
                             "Đã duyệt",
                             style: TextStyle(
-                              color: Color(0xFF065F46),
+                              color: AppColors.successDark,
                               fontWeight: FontWeight.bold,
                               fontSize: 11,
                             ),

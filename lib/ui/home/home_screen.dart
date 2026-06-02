@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             _buildSectionHeader(
                               'Quản lý tờ trình',
                               Icons.description_rounded,
-                              const Color(0xFFEDE9FE),
+                              AppColors.noteBg,
                               AppColors.primary,
                             ),
                             const SizedBox(height: 12),
@@ -106,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             _buildSectionHeader(
                               'Quản lý vật tư',
                               Icons.inventory_2_rounded,
-                              const Color(0xFFFEF3C7),
-                              const Color(0xFFD97706),
+                              AppColors.warningBg,
+                              AppColors.warningDark,
                             ),
                             const SizedBox(height: 12),
                             _buildAssetRow(context),
@@ -116,8 +116,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           _buildSectionHeader(
                             'Hoạt động gần đây',
                             Icons.history_rounded,
-                            const Color(0xFFE0F2FE),
-                            const Color(0xFF0284C7),
+                            AppColors.infoBgSoft,
+                            AppColors.info,
                           ),
                           const SizedBox(height: 12),
                           _buildActivityList(
@@ -194,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 6,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF97316),
+                    color: AppColors.orange,
                     shape: BoxShape.circle,
                     border: Border.all(color: AppColors.background, width: 1),
                   ),
@@ -607,8 +607,8 @@ class _HomeScreenState extends State<HomeScreen> {
       statusColor = AppColors.error;
       statusBg = AppColors.error.withOpacity(0.10);
     } else {
-      statusColor = const Color(0xFFD97706);
-      statusBg = const Color(0xFFFEF3C7);
+      statusColor = AppColors.warningDark;
+      statusBg = AppColors.warningBg;
     }
 
     return Padding(

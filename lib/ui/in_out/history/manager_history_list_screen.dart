@@ -85,7 +85,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: AppColors.scaffoldAlt,
       appBar: AppBar(
         title: const Text(
           "LỊCH SỬ",
@@ -121,7 +121,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                     hintText: "Tìm kiếm...",
                     prefixIcon: const Icon(Icons.search),
                     filled: true,
-                    fillColor: const Color(0xFFF1F3F6),
+                    fillColor: AppColors.fieldBgAlt,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(15),
                       borderSide: BorderSide.none,
@@ -268,7 +268,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             icon: Icons.check_circle,
             text: "Đã nhập kho: ${item.completedDate ?? '-'}",
             color: Colors.green,
-            bgColor: const Color(0xFFE8F5E9),
+            bgColor: AppColors.successBgSoft,
           ),
         ],
       ),
@@ -321,7 +321,7 @@ class _HistoryScreenState extends State<HistoryScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             decoration: BoxDecoration(
-              color: const Color(0xFFF1F3F6),
+              color: AppColors.fieldBgAlt,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Row(

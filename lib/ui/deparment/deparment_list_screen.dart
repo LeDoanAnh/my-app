@@ -50,7 +50,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF1F5F9),
+      backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
@@ -58,7 +58,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
         title: const Text(
           "Đơn vị & Phòng ban",
           style: TextStyle(
-            color: Color(0xFF1E293B),
+            color: AppColors.textDark,
             fontWeight: FontWeight.w700,
             fontSize: 20,
             letterSpacing: -0.5,
@@ -186,7 +186,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                             Text(
                               "Mã đơn vị: #${dept.id}",
                               style: const TextStyle(
-                                color: Color(0xFF64748B),
+                                color: AppColors.textGrey,
                                 fontWeight: FontWeight.w600,
                                 fontSize: 11,
                               ),
@@ -194,7 +194,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                             const Icon(
                               Icons.arrow_forward_ios_rounded,
                               size: 12,
-                              color: Color(0xFFCBD5E1),
+                              color: AppColors.textDisabled,
                             ),
                           ],
                         ),
@@ -204,7 +204,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                           style: const TextStyle(
                             fontSize: 17,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF1E293B),
+                            color: AppColors.textDark,
                             letterSpacing: -0.4,
                           ),
                         ),
@@ -215,14 +215,14 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                               const Icon(
                                 Icons.location_on_rounded,
                                 size: 14,
-                                color: Color(0xFF94A3B8),
+                                color: AppColors.textMuted,
                               ),
                               const SizedBox(width: 4),
                               Expanded(
                                 child: Text(
                                   dept.locationDesc!,
                                   style: const TextStyle(
-                                    color: Color(0xFF64748B),
+                                    color: AppColors.textGrey,
                                     fontSize: 13,
                                   ),
                                   overflow: TextOverflow.ellipsis,
@@ -243,7 +243,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
                               "${dept.usersCount ?? 0} nhân sự",
                               style: const TextStyle(
                                 fontSize: 13,
-                                color: Color(0xFF475569),
+                                color: AppColors.textMedium,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -283,7 +283,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
           const SizedBox(height: 16),
           Text(
             message,
-            style: const TextStyle(color: Color(0xFF94A3B8), fontSize: 15),
+            style: const TextStyle(color: AppColors.textMuted, fontSize: 15),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
@@ -310,7 +310,7 @@ class _DepartmentListScreenState extends State<DepartmentListScreen> {
           const SizedBox(height: 16),
           const Text(
             "Không tìm thấy đơn vị phù hợp",
-            style: TextStyle(color: Color(0xFF94A3B8), fontSize: 15),
+            style: TextStyle(color: AppColors.textMuted, fontSize: 15),
           ),
         ],
       ),

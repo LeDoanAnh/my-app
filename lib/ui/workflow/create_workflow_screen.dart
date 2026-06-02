@@ -114,7 +114,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppColors.scaffold,
       appBar: AppBar(
         title: const Text(
           "Cấu hình Loại đơn & Luồng duyệt",
@@ -450,7 +450,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
+        color: AppColors.fieldBg,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -501,7 +501,7 @@ class _CreateWorkflowScreenState extends State<CreateWorkflowScreen> {
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: const Color(0xFFF1F5F9),
+          color: AppColors.fieldBg,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

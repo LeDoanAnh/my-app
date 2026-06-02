@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:my_app/core/router/app_router.dart';
+import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/notification_service.dart';
 import 'package:my_app/ui/auth/blog/auth_bloc.dart';
 import 'package:my_app/ui/auth/blog/auth_event.dart';
@@ -56,7 +57,7 @@ Future<void> main() async {
 
   final messaging = FirebaseMessaging.instance;
   final token = await messaging.getToken();
-  if (kDebugMode) print('TOKEN Cá»¦A MÃY NÃ€Y: $token');
+  if (kDebugMode) print('TOKEN CỦA MÁY NÀY: $token');
 
   final settings = await messaging.requestPermission(
     alert: true,
@@ -86,7 +87,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Khá»Ÿi táº¡o AuthBloc sá»›m Ä‘á»ƒ AppRouter cÃ³ thá»ƒ dÃ¹ng ngay
+  // Khởi tạo AuthBloc sớm để AppRouter có thể dùng ngay
   late final AuthBloc _authBloc = di.sl<AuthBloc>()..add(AppStarted());
   late final AppRouter _appRouter = AppRouter(authBloc: _authBloc);
   @override
@@ -99,7 +100,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // AuthBloc dÃ¹ng instance Ä‘Ã£ táº¡o á»Ÿ trÃªn (cÃ¹ng 1 instance vá»›i AppRouter)
+        // AuthBloc dùng instance đã tạo ở trên (cùng 1 instance với AppRouter)
         BlocProvider<AuthBloc>.value(value: _authBloc),
         BlocProvider<HomeBloc>(create: (_) => di.sl<HomeBloc>()),
         BlocProvider(create: (_) => di.sl<CalendarBloc>()),
@@ -129,8 +130,9 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp.router(
         routerConfig: _appRouter.router,
-        title: 'Hệ thống phê duyệt tờ trình',
+        title: 'Hệ thống phê duyệt',
         debugShowCheckedModeBanner: false,
+        theme: AppColors.theme(),
       ),
     );
   }

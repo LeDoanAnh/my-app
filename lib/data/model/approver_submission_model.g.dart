@@ -23,6 +23,9 @@ ApproverSubmissionModel _$ApproverSubmissionModelFromJson(
   assets: (json['assets'] as List<dynamic>?)
       ?.map((e) => ApproverAssetModel.fromJson(e as Map<String, dynamic>))
       .toList(),
+  attachments: (json['attachments'] as List<dynamic>?)
+      ?.map((e) => ApproverAttachmentModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
   myDecision: json['my_decision'] == null
       ? null
       : MyDecisionModel.fromJson(json['my_decision'] as Map<String, dynamic>),
@@ -41,6 +44,7 @@ Map<String, dynamic> _$ApproverSubmissionModelToJson(
   'note_for_dept': instance.noteForDept,
   'locations': instance.locations,
   'assets': instance.assets,
+  'attachments': instance.attachments,
   'my_decision': instance.myDecision,
 };
 
@@ -71,6 +75,26 @@ Map<String, dynamic> _$ApproverAssetModelToJson(ApproverAssetModel instance) =>
       'asset_name': instance.assetName,
       'quantity': instance.quantity,
     };
+
+ApproverAttachmentModel _$ApproverAttachmentModelFromJson(
+  Map<String, dynamic> json,
+) => ApproverAttachmentModel(
+  fileName: json['file_name'] as String?,
+  fileSize: (json['file_size'] as num?)?.toInt(),
+  fileType: json['file_type'] as String?,
+  filePath: json['file_path'] as String?,
+  url: json['url'] as String?,
+);
+
+Map<String, dynamic> _$ApproverAttachmentModelToJson(
+  ApproverAttachmentModel instance,
+) => <String, dynamic>{
+  'file_name': instance.fileName,
+  'file_size': instance.fileSize,
+  'file_type': instance.fileType,
+  'file_path': instance.filePath,
+  'url': instance.url,
+};
 
 MyDecisionModel _$MyDecisionModelFromJson(Map<String, dynamic> json) =>
     MyDecisionModel(

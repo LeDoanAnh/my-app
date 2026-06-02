@@ -43,6 +43,17 @@ class ApproverRepositoryImpl extends ApproverRepository {
               ),
             )
             .toList(),
+        attachments: d.attachments
+            ?.map(
+              (f) => ApproverAttachmentEntity(
+                fileName: f.fileName,
+                fileSize: f.fileSize,
+                fileType: f.fileType,
+                filePath: f.filePath,
+                url: f.url,
+              ),
+            )
+            .toList(),
         myDecision: d.myDecision == null
             ? null
             : MyDecisionEntity(

@@ -91,7 +91,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: AppColors.scaffoldAlt,
       appBar: AppBar(
         title: const Text(
           "ĐỒ ĐANG MƯỢN",
@@ -163,7 +163,7 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
           hintText: "Tìm kiếm tờ trình...",
           prefixIcon: const Icon(Icons.search),
           filled: true,
-          fillColor: const Color(0xFFF1F3F6),
+          fillColor: AppColors.fieldBgAlt,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide.none,
@@ -243,13 +243,13 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
               Icons.history_outlined,
               "Đã trả đồ - Chờ phòng ban xác nhận",
               const Color(0xFFE3F2FD),
-              const Color(0xFF1976D2),
+              AppColors.infoDark,
             )
           else if (isNewRequest)
             _buildActionRow(
               "Xác nhận bạn đã nhận đủ đồ?",
               "ĐÃ NHẬN ĐỦ",
-              const Color(0xFFE8F5E9),
+              AppColors.successBgSoft,
               const Color(0xFF2E7D32),
               onPressed: () => _onConfirmReceive(sub),
             )
@@ -339,11 +339,11 @@ class _StaffBorrowedListScreenState extends State<StaffBorrowedListScreen> {
 
   Widget _buildReturnActionRow(BorrowEntity sub, bool isUrgent) {
     final Color bgColor = isUrgent
-        ? const Color(0xFFFFEBEE)
-        : const Color(0xFFF3E5F5);
+        ? AppColors.errorBg
+        : AppColors.purpleBg;
     final Color textColor = isUrgent
-        ? const Color(0xFFC62828)
-        : const Color(0xFF7B1FA2);
+        ? AppColors.errorDark
+        : AppColors.purple;
 
     // Lấy expected_return từ item đầu tiên không consumable
     final deadline = sub.items

@@ -149,7 +149,7 @@ class _AssetSubmissionDetailScreenState
         detail.assets?.any((a) => a.status == 'pending') ?? false;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: AppColors.scaffoldAlt,
       appBar: AppBar(
         title: Text(
           "Chi tiết đơn #${detail.id}",
@@ -204,20 +204,20 @@ class _AssetSubmissionDetailScreenState
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 12),
-      color: const Color(0xFFECFDF5),
+      color: AppColors.successBg,
       child: const Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             Icons.verified_user_outlined,
             size: 16,
-            color: Color(0xFF10B981),
+            color: AppColors.success,
           ),
           SizedBox(width: 8),
           Text(
             "Đơn đã được ký duyệt - Sẵn sàng bàn giao",
             style: TextStyle(
-              color: Color(0xFF065F46),
+              color: AppColors.successDark,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),

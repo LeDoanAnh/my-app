@@ -6,6 +6,7 @@ import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/approver_aubmission_entity.dart';
 import 'package:my_app/ui/in_out/approver_decison/approver_bloc.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ApproverDecisionScreen extends StatefulWidget {
   final int submissionId;
@@ -63,13 +64,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
       builder: (context, state) {
         if (state is ApproverLoading) {
           return const Scaffold(
-            backgroundColor: Color(0xFFF8FAFC),
+            backgroundColor: AppColors.scaffold,
             body: Center(child: CircularProgressIndicator()),
           );
         }
         if (state is ApproverError) {
           return Scaffold(
-            backgroundColor: const Color(0xFFF8FAFC),
+            backgroundColor: AppColors.scaffold,
             body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +115,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     final alreadyDecided = submission.myDecision != null;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor: AppColors.scaffold,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -122,7 +123,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Color(0xFF1E293B),
+            color: AppColors.textDark,
             size: 20,
           ),
           onPressed: () {
@@ -136,7 +137,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         title: const Text(
           'Chi tiết phê duyệt',
           style: TextStyle(
-            color: Color(0xFF1E293B),
+            color: AppColors.textDark,
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
@@ -156,6 +157,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
 
                 _buildMainContentCard(submission),
                 const SizedBox(height: 20),
+
+                if (submission.attachments != null &&
+                    submission.attachments!.isNotEmpty) ...[
+                  _buildSectionLabel('TỆP ĐÍNH KÈM'),
+                  _buildAttachmentsCard(submission.attachments!),
+                  const SizedBox(height: 20),
+                ],
 
                 if (submission.startTime != null ||
                     submission.endTime != null) ...[
@@ -238,7 +246,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     '"${decision.comment}"',
                     style: const TextStyle(
                       fontSize: 12,
-                      color: Color(0xFF64748B),
+                      color: AppColors.textGrey,
                       fontStyle: FontStyle.italic,
                     ),
                   ),
@@ -249,7 +257,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                     decision.decidedAt!,
                     style: const TextStyle(
                       fontSize: 11,
-                      color: Color(0xFF94A3B8),
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ],
@@ -279,7 +287,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           Row(
             children: [
               const CircleAvatar(
-                backgroundColor: Color(0xFFEFF6FF),
+                backgroundColor: AppColors.infoBg,
                 radius: 18,
                 child: Icon(Icons.description, color: Colors.blue, size: 18),
               ),
@@ -290,7 +298,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   style: const TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w900,
-                    color: Color(0xFF0F172A),
+                    color: AppColors.textStrong,
                   ),
                 ),
               ),
@@ -308,7 +316,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             submission.content ?? '',
             style: const TextStyle(
               fontSize: 14,
-              color: Color(0xFF475569),
+              color: AppColors.textMedium,
               height: 1.6,
             ),
           ),
@@ -319,9 +327,9 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             Container(
               padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFFBEB),
+                color: AppColors.warningBgSoft,
                 borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: const Color(0xFFFEF3C7)),
+                border: Border.all(color: AppColors.warningBg),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,7 +337,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   const Icon(
                     Icons.auto_awesome,
                     size: 15,
-                    color: Color(0xFFD97706),
+                    color: AppColors.warningDark,
                   ),
                   const SizedBox(width: 10),
                   Expanded(
@@ -338,7 +346,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                       style: const TextStyle(
                         fontSize: 13,
                         fontStyle: FontStyle.italic,
-                        color: Color(0xFF92400E),
+                        color: AppColors.warningText,
                         height: 1.5,
                       ),
                     ),
@@ -420,14 +428,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                           const Icon(
                             Icons.access_time,
                             size: 13,
-                            color: Color(0xFF94A3B8),
+                            color: AppColors.textMuted,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             '${loc.startTime} → ${loc.endTime ?? ''}',
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Color(0xFF64748B),
+                              color: AppColors.textGrey,
                             ),
                           ),
                         ],
@@ -468,7 +476,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   children: [
                     const CircleAvatar(
                       radius: 14,
-                      backgroundColor: Color(0xFFEFF6FF),
+                      backgroundColor: AppColors.infoBg,
                       child: Icon(
                         Icons.inventory_2_outlined,
                         size: 14,
@@ -482,7 +490,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF1E293B),
+                          color: AppColors.textDark,
                         ),
                       ),
                     ),
@@ -492,7 +500,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFEFF6FF),
+                        color: AppColors.infoBg,
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
@@ -517,6 +525,96 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   // ── Input ghi chú ──────────────────────────────────────────────────────────
+
+  Widget _buildAttachmentsCard(List<ApproverAttachmentEntity> attachments) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: attachments.asMap().entries.map((entry) {
+          final i = entry.key;
+          final file = entry.value;
+          final fileName = file.fileName?.trim().isNotEmpty == true
+              ? file.fileName!.trim()
+              : 'Tệp đính kèm';
+          final fileType = file.fileType?.trim().toUpperCase();
+
+          return Column(
+            children: [
+              InkWell(
+                borderRadius: BorderRadius.vertical(
+                  top: i == 0 ? const Radius.circular(16) : Radius.zero,
+                  bottom: i == attachments.length - 1
+                      ? const Radius.circular(16)
+                      : Radius.zero,
+                ),
+                onTap: () => _openAttachment(file),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 14,
+                  ),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 16,
+                        backgroundColor: AppColors.infoBg,
+                        child: Icon(
+                          _attachmentIcon(file.fileType),
+                          size: 17,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              fileName,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textDark,
+                              ),
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              [
+                                if (fileType != null && fileType.isNotEmpty)
+                                  fileType,
+                                _formatFileSize(file.fileSize),
+                              ].join(' - '),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.open_in_new_rounded,
+                        size: 18,
+                        color: AppColors.textMuted,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              if (i < attachments.length - 1)
+                const Divider(height: 1, indent: 16, endIndent: 16),
+            ],
+          );
+        }).toList(),
+      ),
+    );
+  }
 
   Widget _buildCommentInput() {
     return Container(
@@ -556,7 +654,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             ),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.85),
-              border: const Border(top: BorderSide(color: Color(0xFFF1F5F9))),
+              border: const Border(top: BorderSide(color: AppColors.fieldBg)),
             ),
             child: Row(
               children: [
@@ -582,7 +680,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   child: ElevatedButton(
                     onPressed: () => _showPasswordDialogWithLoading(true),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF10B981),
+                      backgroundColor: AppColors.success,
                       foregroundColor: Colors.white,
                       elevation: 0,
                       minimumSize: const Size(0, 50),
@@ -614,7 +712,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         style: const TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.bold,
-          color: Color(0xFF94A3B8),
+          color: AppColors.textMuted,
           letterSpacing: 1,
         ),
       ),
@@ -622,18 +720,18 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   Widget _buildInfoRow(
-      IconData icon,
-      String label,
-      String value,
-      Color iconColor,
-      ) {
+    IconData icon,
+    String label,
+    String value,
+    Color iconColor,
+  ) {
     return Row(
       children: [
         Icon(icon, size: 16, color: iconColor),
         const SizedBox(width: 8),
         Text(
           label,
-          style: const TextStyle(color: Color(0xFF64748B), fontSize: 13),
+          style: const TextStyle(color: AppColors.textGrey, fontSize: 13),
         ),
         if (value.isNotEmpty) ...[
           const Spacer(),
@@ -641,13 +739,58 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             value,
             style: const TextStyle(
               fontWeight: FontWeight.w600,
-              color: Color(0xFF1E293B),
+              color: AppColors.textDark,
               fontSize: 13,
             ),
           ),
         ],
       ],
     );
+  }
+
+  IconData _attachmentIcon(String? fileType) {
+    final ext = (fileType ?? '').toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp'].contains(ext)) {
+      return Icons.image_outlined;
+    }
+    if (ext == 'pdf') return Icons.picture_as_pdf_outlined;
+    if (['doc', 'docx'].contains(ext)) return Icons.description_outlined;
+    if (['xls', 'xlsx'].contains(ext)) return Icons.table_chart_outlined;
+    return Icons.attach_file_rounded;
+  }
+
+  String _formatFileSize(int? bytes) {
+    if (bytes == null || bytes <= 0) return 'Không rõ dung lượng';
+    if (bytes < 1024) return '$bytes B';
+    final kb = bytes / 1024;
+    if (kb < 1024) return '${kb.toStringAsFixed(kb >= 100 ? 0 : 1)} KB';
+    final mb = kb / 1024;
+    return '${mb.toStringAsFixed(mb >= 100 ? 0 : 1)} MB';
+  }
+
+  Future<void> _openAttachment(ApproverAttachmentEntity file) async {
+    final url = file.url;
+    if (url == null || url.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không tìm thấy đường dẫn tệp')),
+      );
+      return;
+    }
+
+    final uri = Uri.tryParse(url.trim());
+    if (uri == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Đường dẫn tệp không hợp lệ')),
+      );
+      return;
+    }
+
+    final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không mở được tệp đính kèm')),
+      );
+    }
   }
 
   Future<void> _showDecisionResultDialog({
@@ -727,8 +870,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
             _handlingDecisionInPasswordDialog = true;
             final bloc = context.read<ApproverBloc>();
             final resultFuture = bloc.stream.firstWhere(
-                  (state) =>
-              state is ApproverDecideSuccess ||
+              (state) =>
+                  state is ApproverDecideSuccess ||
                   state is ApproverActionError,
             );
             bloc.add(
@@ -776,8 +919,8 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                   onPressed: isSubmitting
                       ? null
                       : () => setDialogState(() {
-                    obscurePassword = !obscurePassword;
-                  }),
+                          obscurePassword = !obscurePassword;
+                        }),
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -797,7 +940,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 onPressed: isSubmitting ? null : () => Navigator.of(ctx).pop(),
                 child: const Text(
                   'Hủy',
-                  style: TextStyle(color: Color(0xFF94A3B8)),
+                  style: TextStyle(color: AppColors.textMuted),
                 ),
               ),
               ElevatedButton(
@@ -812,13 +955,13 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 ),
                 child: isSubmitting
                     ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
-                )
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
                     : const Text('Tiếp tục'),
               ),
             ],
@@ -900,7 +1043,7 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               onPressed: () => Navigator.of(ctx).pop(),
               child: const Text(
                 'Hủy',
-                style: TextStyle(color: Color(0xFF94A3B8)),
+                style: TextStyle(color: AppColors.textMuted),
               ),
             ),
             ElevatedButton(
@@ -965,14 +1108,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           isApprove
               ? 'Bạn đồng ý phê duyệt tờ trình này. Hành động này không thể hoàn tác.'
               : 'Bạn sẽ từ chối tờ trình này. Toàn bộ quy trình sẽ bị dừng lại.',
-          style: const TextStyle(fontSize: 14, color: Color(0xFF64748B)),
+          style: const TextStyle(fontSize: 14, color: AppColors.textGrey),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
             child: const Text(
               'Hủy',
-              style: TextStyle(color: Color(0xFF94A3B8)),
+              style: TextStyle(color: AppColors.textMuted),
             ),
           ),
           ElevatedButton(
