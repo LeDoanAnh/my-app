@@ -12,6 +12,14 @@ class CreateUserUseCase {
     return await _repository.createUser(params.toJson());
   }
 
+  Future<CreateResponse> update(int id, Map<String, dynamic> body) async {
+    return await _repository.updateUser(id, body);
+  }
+
+  Future<CreateResponse> deactivate(int id) async {
+    return await _repository.deactivateUser(id);
+  }
+
   Future<List<RoleEntity>> getRoleList(Map<String, dynamic> body) async {
     return await _repository.getRoleList();
   }

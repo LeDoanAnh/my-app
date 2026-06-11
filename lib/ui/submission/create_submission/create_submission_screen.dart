@@ -194,6 +194,11 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
   }
 
   void _toggleAsset(AssetEntity asset, String deptKey) {
+    if (_isReturnableAssetDisabled(asset)) {
+      _snack('Vật dụng này đã hết số lượng khả dụng trong khoảng thời gian đã chọn.');
+      return;
+    }
+
     final s = _deptStates[deptKey]!;
     if (s.pickedAssets.containsKey(asset.id)) {
       setState(() => s.pickedAssets.remove(asset.id));
@@ -202,7 +207,116 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     }
   }
 
+  bool _isConsumableAsset(AssetEntity asset) {
+    if (asset.type == 'consumable') return true;
+    if (asset.type == 'returnable') return false;
+
+    final unit = (asset.unit ?? '').toLowerCase();
+    return unit == 'thùng' ||
+        unit == 'thung' ||
+        unit == 'chai' ||
+        unit == 'hộp' ||
+        unit == 'hop';
+  }
+
+  bool _isReturnableAsset(AssetEntity asset) => !_isConsumableAsset(asset);
+
+  int? _availableReturnableQty(AssetEntity asset) {
+    if (_isConsumableAsset(asset)) return null;
+    if (asset.availableQuantity != null) return asset.availableQuantity;
+    if (asset.totalQuantity == null) return null;
+
+    final borrowed = asset.borrowedQuantity ?? 0;
+    final pending = asset.pendingQuantity ?? 0;
+    final available = asset.totalQuantity! - borrowed - pending;
+    return available < 0 ? 0 : available;
+  }
+
+  String? _assetAvailabilityLabel(AssetEntity asset) {
+    if (_isConsumableAsset(asset)) return null;
+
+    final total = asset.totalQuantity;
+    final available = _availableReturnableQty(asset);
+    if (available == null || total == null) return null;
+
+    return 'Còn $available/$total';
+  }
+
+  bool _isReturnableAssetDisabled(AssetEntity asset) {
+    final available = _availableReturnableQty(asset);
+    return _isReturnableAsset(asset) && available != null && available <= 0;
+  }
+
+  Color _assetKindColor(AssetEntity asset, bool isPicked) {
+    if (isPicked) {
+      return _isReturnableAsset(asset)
+          ? AppColors.assetSelected
+          : Colors.blue.shade700;
+    }
+
+    return _isReturnableAsset(asset)
+        ? AppColors.assetAccent
+        : Colors.blue.shade500;
+  }
+
+  Color _assetKindBg(AssetEntity asset, bool isPicked) {
+    if (!isPicked) return Colors.grey.shade50;
+    return _isReturnableAsset(asset)
+        ? AppColors.assetSelectedBg
+        : Colors.blue.shade50;
+  }
+
+  Color _assetKindBorder(AssetEntity asset, bool isPicked) {
+    if (!isPicked) return Colors.grey.shade200;
+    return _isReturnableAsset(asset)
+        ? AppColors.assetBorder
+        : Colors.blue.shade200;
+  }
+
+  String _availabilityKey(String? value) => (value ?? '').toLowerCase().trim();
+
+  bool _isApprovedLocationBusy(LocationEntity loc) {
+    final values = [
+      loc.availabilityStatus,
+      loc.conflictStatus,
+      loc.status,
+    ].map(_availabilityKey);
+
+    return values.any(
+      (value) =>
+          value.contains('approved') ||
+          value.contains('booked') ||
+          value.contains('busy') ||
+          value.contains('unavailable') ||
+          value.contains('đã duyệt') ||
+          value.contains('da duyet') ||
+          value.contains('đang sử dụng') ||
+          value.contains('dang su dung'),
+    );
+  }
+
+  bool _isPendingLocation(LocationEntity loc) {
+    final values = [
+      loc.availabilityStatus,
+      loc.conflictStatus,
+      loc.status,
+    ].map(_availabilityKey);
+
+    return values.any(
+      (value) =>
+          value.contains('pending') ||
+          value.contains('waiting') ||
+          value.contains('chờ duyệt') ||
+          value.contains('cho duyet'),
+    );
+  }
+
   void _toggleLocation(LocationEntity loc, String deptKey) {
+    if (_isApprovedLocationBusy(loc)) {
+      _snack('Địa điểm đã được duyệt trong khoảng thời gian này.');
+      return;
+    }
+
     final s = _deptStates[deptKey]!;
     if (s.pickedLocations.containsKey(loc.id)) {
       setState(() => s.pickedLocations.remove(loc.id));
@@ -220,7 +334,8 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
     DateTime dateGet = existing?.dateGet ?? init;
     DateTime dateReturn =
         existing?.dateReturn ?? (_programDateRange?.end ?? DateTime.now());
-    final isConsumable = asset.unit == 'thùng' || asset.unit == 'chai';
+    final isReturnable = _isReturnableAsset(asset);
+    final isConsumable = !isReturnable;
 
     showDialog(
       context: context,
@@ -229,7 +344,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          title: Text('Mượn ${asset.assetName}'),
+          title: Text('${isReturnable ? 'Mượn' : 'Lấy'} ${asset.assetName}'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -264,7 +379,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   if (d != null) setSt(() => dateGet = d);
                 },
               ),
-              if (!isConsumable)
+              if (isReturnable)
                 ListTile(
                   contentPadding: EdgeInsets.zero,
                   title: Text(
@@ -298,12 +413,12 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  s.pickedAssets[asset.id!] = _PickedAsset(
+                  s.pickedAssets[asset.id] = _PickedAsset(
                     entity: asset,
                     qty: qtyCtrl.text,
                     dateGet: dateGet,
-                    dateReturn: isConsumable ? null : dateReturn,
-                    type: isConsumable ? 'consumable' : 'fixed_asset',
+                    dateReturn: isReturnable ? dateReturn : null,
+                    type: isReturnable ? 'returnable' : 'consumable',
                   );
                   _autoInclude(deptKey);
                 });
@@ -571,7 +686,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                           '${DateFormat('dd/MM').format(d)} ${fmtTime(st)}–${fmtTime(et)}',
                     };
                   }).toList();
-                  s.pickedLocations[loc.id!] = _PickedLocation(
+                  s.pickedLocations[loc.id] = _PickedLocation(
                     entity: loc,
                     slots: formattedSlots,
                   );
@@ -646,9 +761,15 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         items.add({
           'entity_id': asset.id,
           'name': asset.assetName ?? '',
-          'type': picked.type, // 'fixed_asset' | 'consumable'
+          'type': picked.type, // 'returnable' | 'consumable'
           'quantity': int.tryParse(picked.qty) ?? 1,
           'time_info': timeInfo,
+          'expected_borrow_date': DateFormat(
+            'yyyy-MM-dd HH:mm:ss',
+          ).format(picked.dateGet),
+          'expected_return_date': picked.dateReturn == null
+              ? null
+              : DateFormat('yyyy-MM-dd HH:mm:ss').format(picked.dateReturn!),
         });
       }
 
@@ -1215,7 +1336,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
         final asset = g.assets[i];
         final picked = s.pickedAssets[asset.id];
         final isPicked = picked != null;
-        final isConsumable = asset.unit == 'thùng' || asset.unit == 'chai';
+        final isReturnable = _isReturnableAsset(asset);
+        final isConsumable = !isReturnable;
+        final kindColor = _assetKindColor(asset, isPicked);
 
         return InkWell(
           onTap: () => _toggleAsset(asset, g.key),
@@ -1223,13 +1346,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
             decoration: BoxDecoration(
-              color: isPicked ? AppColors.assetSelectedBg : Colors.grey.shade50,
+              color: _assetKindBg(asset, isPicked),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: isPicked
-                    ? AppColors.assetBorder
-                    : Colors.grey.shade200,
-              ),
+              border: Border.all(color: _assetKindBorder(asset, isPicked)),
             ),
             child: Row(
               children: [
@@ -1238,11 +1357,9 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                   width: 20,
                   height: 20,
                   decoration: BoxDecoration(
-                    color: isPicked ? AppColors.assetSelected : Colors.white,
+                    color: isPicked ? kindColor : Colors.white,
                     border: Border.all(
-                      color: isPicked
-                          ? AppColors.assetSelected
-                          : Colors.grey.shade400,
+                      color: isPicked ? kindColor : Colors.grey.shade400,
                       width: 1.5,
                     ),
                     borderRadius: BorderRadius.circular(5),
@@ -1261,9 +1378,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                       ? Icons.water_drop_rounded
                       : Icons.handyman_rounded,
                   size: 15,
-                  color: isPicked
-                      ? AppColors.assetSelected
-                      : AppColors.assetAccent,
+                  color: kindColor,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -1275,9 +1390,16 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
-                          color: isPicked
-                              ? AppColors.assetText
-                              : AppColors.textDark,
+                          color: isPicked ? kindColor : AppColors.textDark,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        isReturnable ? 'Cần hoàn trả' : 'Không cần trả',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                          color: kindColor,
                         ),
                       ),
                       if (isPicked) ...[
@@ -1285,10 +1407,7 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                         Text(
                           'SL: ${picked.qty}  •  Lấy: ${DateFormat('dd/MM').format(picked.dateGet)}'
                           '${picked.dateReturn != null ? '  •  Trả: ${DateFormat('dd/MM').format(picked.dateReturn!)}' : ''}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.assetSelected,
-                          ),
+                          style: TextStyle(fontSize: 10, color: kindColor),
                         ),
                       ],
                     ],
@@ -1299,10 +1418,10 @@ class _CreateSubmissionScreenState extends State<CreateSubmissionScreen> {
                     onTap: () => _showAssetDialog(asset, g.key),
                     child: Container(
                       padding: const EdgeInsets.all(4),
-                      child: const Icon(
+                      child: Icon(
                         Icons.edit_rounded,
                         size: 14,
-                        color: AppColors.assetSelected,
+                        color: kindColor,
                       ),
                     ),
                   ),

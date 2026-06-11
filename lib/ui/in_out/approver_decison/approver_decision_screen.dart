@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/approver_aubmission_entity.dart';
 import 'package:my_app/ui/in_out/approver_decison/approver_bloc.dart';
@@ -12,12 +13,14 @@ class ApproverDecisionScreen extends StatefulWidget {
   final int submissionId;
   final int deptId;
   final int approverId;
+  final bool isPreApproval;
 
   const ApproverDecisionScreen({
     super.key,
     required this.submissionId,
     required this.deptId,
     required this.approverId,
+    this.isPreApproval = false,
   });
 
   @override
@@ -26,6 +29,8 @@ class ApproverDecisionScreen extends StatefulWidget {
 
 class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   final TextEditingController _commentController = TextEditingController();
+  final List<PlatformFile> _selectedAttachments = [];
+  ApproverSubmissionEntity? _currentSubmission;
   bool? _lastDecisionIsApprove;
   bool _isShowingResultDialog = false;
   bool _handlingDecisionInPasswordDialog = false;
@@ -57,11 +62,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
         }
         if (state is ApproverDecideSuccess) {
           _showDecisionResultDialog(success: true, message: state.message);
+        } else if (state is ApproverPreSignSuccess) {
+          _showDecisionResultDialog(success: true, message: state.message);
         } else if (state is ApproverActionError) {
           _showDecisionResultDialog(success: false, message: state.message);
         }
       },
       builder: (context, state) {
+        ApproverSubmissionEntity? submission;
         if (state is ApproverLoading) {
           return const Scaffold(
             backgroundColor: AppColors.scaffold,
@@ -98,13 +106,24 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
           );
         }
         if (state is ApproverLoaded) {
-          return _buildMain(context, state.submission);
+          _currentSubmission = state.submission;
+          submission = state.submission;
+          return _buildMain(context, submission);
         }
         if (state is ApproverDeciding) {
-          return _buildMain(context, state.submission);
+          _currentSubmission = state.submission;
+          submission = state.submission;
+          return _buildMain(context, submission);
         }
         if (state is ApproverActionError) {
-          return _buildMain(context, state.submission);
+          _currentSubmission = state.submission;
+          submission = state.submission;
+          return _buildMain(context, submission);
+        }
+        if (state is ApproverDecideSuccess || state is ApproverPreSignSuccess) {
+          if (_currentSubmission != null) {
+            return _buildMain(context, _currentSubmission!);
+          }
         }
         return const Scaffold(body: SizedBox());
       },
@@ -112,7 +131,10 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   Widget _buildMain(BuildContext context, ApproverSubmissionEntity submission) {
-    final alreadyDecided = submission.myDecision != null;
+    final preApproval = submission.preApproval;
+    final alreadyDecided = widget.isPreApproval
+        ? preApproval != null
+        : submission.myDecision != null;
 
     return Scaffold(
       backgroundColor: AppColors.scaffold,
@@ -151,12 +173,27 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (alreadyDecided) ...[
-                  _buildDecisionBanner(submission.myDecision!),
+                  widget.isPreApproval
+                      ? _buildPreApprovalCard(preApproval!)
+                      : _buildDecisionBanner(submission.myDecision!),
                   const SizedBox(height: 20),
                 ],
 
                 _buildMainContentCard(submission),
                 const SizedBox(height: 20),
+
+                if (preApproval != null && !widget.isPreApproval) ...[
+                  _buildSectionLabel('NHÂN VIÊN PHÒNG ĐÃ KÝ NHÁY'),
+                  _buildPreApprovalCard(preApproval),
+                  const SizedBox(height: 20),
+                ],
+
+                if (submission.previousApprovals != null &&
+                    submission.previousApprovals!.isNotEmpty) ...[
+                  _buildSectionLabel('CÁC PHÒNG ĐÃ KÝ TRƯỚC'),
+                  _buildPreviousApprovalsCard(submission.previousApprovals!),
+                  const SizedBox(height: 20),
+                ],
 
                 if (submission.attachments != null &&
                     submission.attachments!.isNotEmpty) ...[
@@ -187,8 +224,14 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
                 ],
 
                 if (!alreadyDecided) ...[
-                  _buildSectionLabel('GHI CHÚ PHÊ DUYỆT'),
-                  _buildCommentInput(),
+                  _buildSectionLabel(
+                    widget.isPreApproval
+                        ? 'GHI CHÚ KÝ NHÁY'
+                        : 'GHI CHÚ PHÊ DUYỆT',
+                  ),
+                  widget.isPreApproval
+                      ? _buildPreApprovalComposer()
+                      : _buildCommentInput(),
                 ],
               ],
             ),
@@ -264,6 +307,83 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPreApprovalCard(PreApprovalEntity preApproval) {
+    final isSigned = preApproval.action == 'signed';
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: isSigned ? Colors.green.withOpacity(0.08) : Colors.orange.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSigned ? Colors.green.withOpacity(0.25) : Colors.orange.withOpacity(0.25),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                isSigned ? Icons.verified_rounded : Icons.edit_note_rounded,
+                color: isSigned ? Colors.green : Colors.orange,
+                size: 24,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(
+                  isSigned
+                      ? 'Phòng đã ký nháy'
+                      : 'Phòng đã gửi yêu cầu chỉnh sửa',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: isSigned ? Colors.green : Colors.orange,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Người xử lý: ${preApproval.staffName ?? 'Không xác định'}${preApproval.staffDept != null ? ' - ${preApproval.staffDept}' : ''}',
+            style: const TextStyle(
+              fontSize: 13,
+              color: AppColors.textDark,
+              height: 1.4,
+            ),
+          ),
+          if (preApproval.decidedAt != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              preApproval.decidedAt!,
+              style: const TextStyle(
+                fontSize: 11,
+                color: AppColors.textMuted,
+              ),
+            ),
+          ],
+          if (preApproval.comment != null &&
+              preApproval.comment!.trim().isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Text(
+              preApproval.comment!,
+              style: const TextStyle(
+                fontSize: 13,
+                fontStyle: FontStyle.italic,
+                color: AppColors.textMedium,
+                height: 1.45,
+              ),
+            ),
+          ],
+          if (preApproval.attachments != null &&
+              preApproval.attachments!.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            _buildAttachmentsCard(preApproval.attachments!),
+          ],
         ],
       ),
     );
@@ -361,6 +481,95 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   // ── Card thời gian ─────────────────────────────────────────────────────────
+
+  Widget _buildPreviousApprovalsCard(List<PreviousApprovalEntity> approvals) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 15),
+        ],
+      ),
+      child: Column(
+        children: approvals.asMap().entries.map((entry) {
+          final index = entry.key;
+          final approval = entry.value;
+          final isApproved = approval.action == 'approved';
+          final color = isApproved ? Colors.green : Colors.redAccent;
+
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: index == approvals.length - 1 ? 0 : 14,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 15,
+                  backgroundColor: color.withOpacity(0.12),
+                  child: Icon(
+                    isApproved ? Icons.check_rounded : Icons.close_rounded,
+                    size: 17,
+                    color: color,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        approval.deptName ?? 'Phòng ban',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.textStrong,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        approval.approverName == null
+                            ? 'Chưa có người ký'
+                            : 'Người ký: ${approval.approverName}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.textMedium,
+                        ),
+                      ),
+                      if (approval.decidedAt != null) ...[
+                        const SizedBox(height: 2),
+                        Text(
+                          approval.decidedAt!,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
+                      ],
+                      if (approval.comment != null &&
+                          approval.comment!.trim().isNotEmpty) ...[
+                        const SizedBox(height: 6),
+                        Text(
+                          approval.comment!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontStyle: FontStyle.italic,
+                            color: AppColors.textMedium,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
   Widget _buildTimeCard(ApproverSubmissionEntity submission) {
     return Container(
@@ -635,9 +844,100 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
     );
   }
 
+  Widget _buildPreApprovalComposer() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.fieldBg),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextField(
+            controller: _commentController,
+            maxLines: 4,
+            decoration: InputDecoration(
+              hintText: 'Ghi chú cho người tạo đơn...',
+              hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+              contentPadding: const EdgeInsets.all(16),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade200),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(color: Colors.grey.shade200),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: const BorderSide(color: AppColors.primary),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              OutlinedButton.icon(
+                onPressed: _pickRevisionAttachments,
+                icon: const Icon(Icons.attach_file_rounded, size: 18),
+                label: const Text('Chọn file'),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                '${_selectedAttachments.length} file đã chọn',
+                style: const TextStyle(
+                  color: AppColors.textGrey,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+          if (_selectedAttachments.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            ..._selectedAttachments.map(
+              (file) => Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.insert_drive_file_outlined,
+                      size: 18,
+                      color: AppColors.textGrey,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        file.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close_rounded, size: 16),
+                      onPressed: () {
+                        setState(() => _selectedAttachments.remove(file));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   // ── Bottom action bar ──────────────────────────────────────────────────────
 
   Widget _buildBottomActionBar(ApproverSubmissionEntity submission) {
+    if (widget.isPreApproval) {
+      return _buildPreApprovalActionBar();
+    }
+
     return Positioned(
       bottom: 0,
       left: 0,
@@ -703,6 +1003,127 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
+
+  Widget _buildPreApprovalActionBar() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: ClipRect(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(
+              20,
+              16,
+              20,
+              MediaQuery.of(context).padding.bottom + 16,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.9),
+              border: const Border(top: BorderSide(color: AppColors.fieldBg)),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () =>
+                        _confirmAndSubmitPreApproval('revision_requested'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      side: const BorderSide(color: Colors.redAccent),
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'BÁO SỬA',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => _confirmAndSubmitPreApproval('signed'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.success,
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'KÝ NHÁY',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _pickRevisionAttachments() async {
+    final result = await FilePicker.pickFiles(
+      allowMultiple: true,
+      withData: false,
+      type: FileType.any,
+    );
+
+    if (result == null || result.files.isEmpty) return;
+    setState(() {
+      _selectedAttachments.addAll(
+        result.files.where((file) => file.path != null),
+      );
+    });
+  }
+
+  Future<void> _confirmAndSubmitPreApproval(String action) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AppConfirmationDialog(
+        title: action == 'signed' ? 'Xác nhận ký nháy?' : 'Xác nhận báo sửa?',
+        content: action == 'signed'
+            ? 'Bạn xác nhận đã xem tờ trình và ký nháy.'
+            : 'Bạn gửi lại tờ trình cho người tạo để chỉnh sửa.',
+        confirmText: 'Tiếp tục',
+        cancelText: 'Hủy',
+        confirmColor: action == 'signed' ? AppColors.success : Colors.redAccent,
+        icon: action == 'signed'
+            ? Icons.verified_rounded
+            : Icons.edit_note_rounded,
+        showCancel: true,
+        onConfirm: () {},
+        onCancel: () {},
+      ),
+    );
+
+    if (confirmed != true || !mounted) return;
+
+    final attachmentPaths = _selectedAttachments
+        .map((file) => file.path)
+        .whereType<String>()
+        .toList();
+
+    _lastDecisionIsApprove = null;
+    context.read<ApproverBloc>().add(
+      PreSignSubmission(
+        submissionId: widget.submissionId,
+        staffId: widget.approverId,
+        action: action,
+        comment: _commentController.text.trim(),
+        attachmentPaths: attachmentPaths,
+      ),
+    );
+  }
 
   Widget _buildSectionLabel(String title) {
     return Padding(
@@ -811,13 +1232,15 @@ class _ApproverDecisionScreenState extends State<ApproverDecisionScreen> {
       builder: (_) => AppConfirmationDialog(
         title: success ? 'Thành công' : 'Thất bại',
         content: message,
-        confirmText: success ? 'OK' : 'Thực hiện lại',
+        confirmText: success
+            ? 'OK'
+            : (_lastDecisionIsApprove == null ? 'Đóng' : 'Thực hiện lại'),
         cancelText: 'Hủy',
         confirmColor: success ? AppColors.success : AppColors.error,
         icon: success
             ? Icons.check_circle_rounded
             : Icons.error_outline_rounded,
-        showCancel: !success,
+        showCancel: !success && _lastDecisionIsApprove != null,
         onConfirm: () {},
         onCancel: () {},
       ),

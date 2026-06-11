@@ -1,6 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/asset_detail_entity.dart';
 import 'package:my_app/ui/location_asset/asset_detail/asset_detail_bloc.dart';
@@ -47,6 +47,33 @@ class _AssetDetailScreenState extends State<AssetDetailScreen> {
           ),
           onPressed: () => context.pop(),
         ),
+        actions: [
+          BlocBuilder<AssetDetailBloc, AssetDetailState>(
+            builder: (context, state) {
+              if (state is! AssetDetailLoaded) {
+                return const SizedBox(width: 48);
+              }
+
+              return IconButton(
+                tooltip: "Sửa vật tư",
+                icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+                onPressed: () async {
+                  final updated = await context.push(
+                    '/create-resource',
+                    extra: {'asset': state.asset},
+                  );
+                  if (!context.mounted) return;
+                  if (updated == true) {
+                    context.read<AssetDetailBloc>().add(
+                      GetAssetDetail(widget.assetId),
+                    );
+                  }
+                },
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocBuilder<AssetDetailBloc, AssetDetailState>(
         builder: (context, state) {

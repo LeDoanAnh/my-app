@@ -39,12 +39,24 @@ class DepartmentRepositoryImpl extends DepartmentRepository {
     required String deptName,
     required String locationDesc,
     required int? parentDeptId,
+    required String status,
   }) async {
     final response = await api.createDepartment(
       deptName,
       locationDesc,
       parentDeptId,
+      status,
     );
     return response;
+  }
+
+  @override
+  Future<CreateResponse> updateDepartment(int id, Map<String, dynamic> body) {
+    return api.updateDepartment(id, body);
+  }
+
+  @override
+  Future<CreateResponse> deactivateDepartment(int id) {
+    return api.deactivateDepartment(id);
   }
 }

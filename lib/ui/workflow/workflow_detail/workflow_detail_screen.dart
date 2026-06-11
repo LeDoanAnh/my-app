@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/approval_step_entity.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_state.dart';
 
 class WorkflowDetailScreen extends StatefulWidget {
   final int workflowId;
+
   const WorkflowDetailScreen({super.key, required this.workflowId});
 
   @override
@@ -15,10 +17,15 @@ class WorkflowDetailScreen extends StatefulWidget {
 }
 
 class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
+  bool _hasChanged = false;
+
   @override
   void initState() {
     super.initState();
-    // Gửi sự kiện lấy dữ liệu khi khởi tạo màn hình
+    _loadDetail();
+  }
+
+  void _loadDetail() {
     context.read<WorkflowDetailBloc>().add(
       GetWorkflowDetailEvent(widget.workflowId),
     );
@@ -29,8 +36,8 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
     return Scaffold(
       backgroundColor: AppColors.scaffold,
       appBar: AppBar(
-        title: Text(
-          "Cấu hình luồng phê duyệt",
+        title: const Text(
+          'Cấu hình luồng phê duyệt',
           style: TextStyle(
             color: AppColors.textDark,
             fontWeight: FontWeight.w800,
@@ -46,7 +53,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
             size: 18,
             color: Colors.black87,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => Navigator.pop(context, _hasChanged),
         ),
       ),
       body: BlocBuilder<WorkflowDetailBloc, WorkflowDetailState>(
@@ -64,10 +71,8 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                   const SizedBox(height: 16),
                   Text(state.message, textAlign: TextAlign.center),
                   TextButton(
-                    onPressed: () => context.read<WorkflowDetailBloc>().add(
-                      GetWorkflowDetailEvent(widget.workflowId),
-                    ),
-                    child: const Text("Thử lại"),
+                    onPressed: _loadDetail,
+                    child: const Text('Thử lại'),
                   ),
                 ],
               ),
@@ -81,17 +86,15 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
             return SingleChildScrollView(
               child: Column(
                 children: [
-                  _buildHeaderHeader(entity),
+                  _buildHeader(entity),
                   Padding(
                     padding: const EdgeInsets.all(24.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildSectionTitle("TRÌNH TỰ PHÊ DUYỆT"),
+                        _buildSectionTitle('TRÌNH TỰ PHÊ DUYỆT'),
                         const SizedBox(height: 20),
                         _buildModernTimeline(steps),
-                        const SizedBox(height: 40),
-                        _buildDangerZoneModern(),
                         const SizedBox(height: 40),
                       ],
                     ),
@@ -107,7 +110,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
     );
   }
 
-  Widget _buildHeaderHeader(ApprovalStepEntity entity) {
+  Widget _buildHeader(ApprovalStepEntity entity) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(24, 10, 24, 30),
@@ -141,7 +144,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Mã loại: #CAT-${widget.workflowId.toString().padLeft(3, '0')}",
+                      'Mã loại: #CAT-${widget.workflowId.toString().padLeft(3, '0')}',
                       style: const TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.w600,
@@ -149,7 +152,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                       ),
                     ),
                     Text(
-                      entity.categoryName ?? "N/A",
+                      entity.categoryName ?? 'N/A',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w900,
@@ -160,14 +163,22 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final result = await context.push<bool>(
+                    '/create-workflow',
+                    extra: widget.workflowId,
+                  );
+                  if (!context.mounted || result != true) return;
+                  _hasChanged = true;
+                  _loadDetail();
+                },
                 icon: const Icon(Icons.settings_outlined, color: Colors.grey),
               ),
             ],
           ),
           const SizedBox(height: 20),
           _buildTag(
-            entity.applyForDept ?? "Tất cả đơn vị",
+            entity.applyForDept ?? 'Tất cả đơn vị',
             Icons.business_rounded,
           ),
         ],
@@ -189,7 +200,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
           Icon(icon, size: 16, color: Colors.blue),
           const SizedBox(width: 6),
           Text(
-            "Áp dụng: $label",
+            'Áp dụng: $label',
             style: const TextStyle(
               color: Colors.blue,
               fontSize: 12,
@@ -207,7 +218,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 20),
           child: Text(
-            "Chưa có cấu hình bước duyệt",
+            'Chưa có cấu hình bước duyệt',
             style: TextStyle(color: Colors.grey),
           ),
         ),
@@ -219,8 +230,9 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: steps.length,
       itemBuilder: (context, index) {
-        bool isLast = index == steps.length - 1;
+        final isLast = index == steps.length - 1;
         final step = steps[index];
+
         return IntrinsicHeight(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -243,7 +255,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          "${step.stepOrder ?? index + 1}",
+                          '${step.stepOrder ?? index + 1}',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12,
@@ -283,7 +295,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "THỨ TỰ: BƯỚC ${step.stepOrder ?? index + 1}",
+                        'THỨ TỰ: BƯỚC ${step.stepOrder ?? index + 1}',
                         style: TextStyle(
                           color: AppColors.primary.withValues(alpha: 0.6),
                           fontSize: 10,
@@ -292,7 +304,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                       ),
                       const SizedBox(height: 6),
                       Text(
-                        step.desc ?? "N/A",
+                        step.desc ?? 'N/A',
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 15,
@@ -301,7 +313,7 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        step.role ?? "",
+                        step.role ?? '',
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
@@ -327,63 +339,6 @@ class _WorkflowDetailScreenState extends State<WorkflowDetailScreen> {
         fontWeight: FontWeight.w800,
         color: AppColors.textGrey,
         letterSpacing: 1.2,
-      ),
-    );
-  }
-
-  Widget _buildDangerZoneModern() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.red.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.red.withValues(alpha: 0.1)),
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.delete_forever_rounded,
-              color: Colors.redAccent,
-              size: 28,
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            "Gỡ bỏ cấu hình phê duyệt?",
-            style: TextStyle(
-              color: AppColors.textDark,
-              fontSize: 16,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-          const SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: const Text(
-                "XÓA CẤU HÌNH NGAY",
-                style: TextStyle(fontWeight: FontWeight.w900, fontSize: 13),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

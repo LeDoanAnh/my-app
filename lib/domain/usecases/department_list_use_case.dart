@@ -20,11 +20,24 @@ class DepartmentListUseCase {
     String deptName,
     String locationDesc,
     int? parentDeptId,
+    String status,
   ) async {
     return await repository.createDepartment(
       deptName: deptName,
       locationDesc: locationDesc,
       parentDeptId: parentDeptId,
+      status: status,
     );
+  }
+
+  Future<CreateResponse> updateDepartment(
+    int id,
+    Map<String, dynamic> body,
+  ) async {
+    return await repository.updateDepartment(id, body);
+  }
+
+  Future<CreateResponse> deactivateDepartment(int id) async {
+    return await repository.deactivateDepartment(id);
   }
 }

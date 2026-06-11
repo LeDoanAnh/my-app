@@ -35,4 +35,9 @@ class AssetRepositoryImpl extends AssetRepository {
   Future<CreateResponse> createAsset(Map<String, dynamic> body) async {
     return await api.createAsset(body);
   }
+
+  @override
+  Future<CreateResponse> updateAsset(int id, Map<String, dynamic> body) async {
+    return await api.updateAsset(id, body);
+  }
 }

@@ -23,7 +23,7 @@ class NotificationRepositoryImpl extends NotificationRepository {
   @override
   Future<dynamic> markAsRead(int notificationId) {
     try {
-      return api.markAsRead({"notification_id": notificationId});
+      return api.markAsRead(notificationId);
     } catch (e) {
       throw Exception("Đánh dấu đã đọc thất bại: ${e.toString()}");
     }

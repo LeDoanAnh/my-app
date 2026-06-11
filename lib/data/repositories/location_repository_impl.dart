@@ -35,4 +35,12 @@ class LocationRepositoryImpl extends LocationRepository {
   Future<CreateResponse> createLocation(Map<String, dynamic> body) async {
     return await api.createLocation(body);
   }
+
+  @override
+  Future<CreateResponse> updateLocation(
+    int id,
+    Map<String, dynamic> body,
+  ) async {
+    return await api.updateLocation(id, body);
+  }
 }

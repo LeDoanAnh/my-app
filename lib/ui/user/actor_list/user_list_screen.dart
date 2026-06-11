@@ -17,7 +17,7 @@ class UserListScreen extends StatefulWidget {
 class _UserListScreenState extends State<UserListScreen> {
   final TextEditingController _searchController = TextEditingController();
 
-  String _searchKeyword = "";
+  String _searchKeyword = '';
   String _statusFilter = 'Tất cả';
   String _deptFilter = 'Tất cả đơn vị';
 
@@ -39,7 +39,7 @@ class _UserListScreenState extends State<UserListScreen> {
       backgroundColor: AppColors.fieldBg,
       appBar: AppBar(
         title: const Text(
-          "Quản lý tài khoản",
+          'Quản lý tài khoản',
           style: TextStyle(
             color: AppColors.textDark,
             fontWeight: FontWeight.bold,
@@ -53,7 +53,11 @@ class _UserListScreenState extends State<UserListScreen> {
               Icons.person_add_alt_1_rounded,
               color: AppColors.primary,
             ),
-            onPressed: () => context.push('/create-user'), // ← go_router
+            onPressed: () async {
+              final result = await context.push<bool>('/create-user');
+              if (!context.mounted || result != true) return;
+              context.read<ActorListBloc>().add(GetActorListEvent());
+            },
           ),
           const SizedBox(width: 10),
         ],
@@ -63,48 +67,7 @@ class _UserListScreenState extends State<UserListScreen> {
           if (state is ActorListLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is ActorListLoaded) {
-            final deptOptions = [
-              "Tất cả đơn vị",
-              ...state.departments
-                  .map((e) => e.deptName ?? "")
-                  .where((name) => name.isNotEmpty),
-            ];
 
-            // Reset deptFilter nếu không còn trong list mới
-            final currentDept = deptOptions.contains(_deptFilter)
-                ? _deptFilter
-                : "Tất cả đơn vị";
-
-            return Column(
-              children: [
-                _FilterBar(
-                  searchController: _searchController,
-                  searchKeyword: _searchKeyword,
-                  statusFilter: _statusFilter,
-                  deptFilter: currentDept,
-                  deptOptions: deptOptions,
-                  onSearchChanged: (val) =>
-                      setState(() => _searchKeyword = val),
-                  onSearchCleared: () {
-                    _searchController.clear();
-                    setState(() => _searchKeyword = "");
-                  },
-                  onStatusChanged: (val) =>
-                      setState(() => _statusFilter = val!),
-                  onDeptChanged: (val) => setState(() => _deptFilter = val!),
-                ),
-                Expanded(
-                  child: _UserList(
-                    users: state.actors,
-                    searchKeyword: _searchKeyword,
-                    statusFilter: _statusFilter,
-                    deptFilter: currentDept,
-                  ),
-                ),
-              ],
-            );
-          }
           if (state is ActorListError) {
             return Center(
               child: Padding(
@@ -117,14 +80,64 @@ class _UserListScreenState extends State<UserListScreen> {
               ),
             );
           }
-          return const SizedBox();
+
+          if (state is! ActorListLoaded) {
+            return const SizedBox.shrink();
+          }
+
+          final deptOptions = [
+            'Tất cả đơn vị',
+            ...state.departments
+                .map((department) => department.deptName ?? '')
+                .where((name) => name.isNotEmpty),
+          ];
+          final currentDept = deptOptions.contains(_deptFilter)
+              ? _deptFilter
+              : 'Tất cả đơn vị';
+
+          final users = state.actors.where((user) {
+            final matchesSearch = (user.fullName ?? '').toLowerCase().contains(
+              _searchKeyword.toLowerCase(),
+            );
+            final matchesDept =
+                currentDept == 'Tất cả đơn vị' ||
+                user.department?.deptName == currentDept;
+            final isActive = user.status == 'active';
+            final matchesStatus =
+                _statusFilter == 'Tất cả' ||
+                (_statusFilter == 'Đang hoạt động' && isActive) ||
+                (_statusFilter == 'Không hoạt động' && !isActive);
+
+            return matchesSearch && matchesDept && matchesStatus;
+          }).toList();
+
+          return Column(
+            children: [
+              _FilterBar(
+                searchController: _searchController,
+                searchKeyword: _searchKeyword,
+                statusFilter: _statusFilter,
+                deptFilter: currentDept,
+                deptOptions: deptOptions,
+                onSearchChanged: (value) =>
+                    setState(() => _searchKeyword = value),
+                onSearchCleared: () {
+                  _searchController.clear();
+                  setState(() => _searchKeyword = '');
+                },
+                onStatusChanged: (value) =>
+                    setState(() => _statusFilter = value ?? 'Tất cả'),
+                onDeptChanged: (value) =>
+                    setState(() => _deptFilter = value ?? 'Tất cả đơn vị'),
+              ),
+              Expanded(child: _UserList(users: users)),
+            ],
+          );
         },
       ),
     );
   }
 }
-
-// ── Filter Bar ────────────────────────────────────────────────────
 
 class _FilterBar extends StatelessWidget {
   final TextEditingController searchController;
@@ -159,7 +172,7 @@ class _FilterBar extends StatelessWidget {
           TextField(
             controller: searchController,
             decoration: InputDecoration(
-              hintText: "Tìm kiếm tên hoặc mã người dùng...",
+              hintText: 'Tìm kiếm tên người dùng...',
               prefixIcon: const Icon(Icons.search, size: 20),
               filled: true,
               fillColor: AppColors.fieldBg,
@@ -167,7 +180,6 @@ class _FilterBar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
               suffixIcon: searchKeyword.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear, size: 18),
@@ -183,7 +195,7 @@ class _FilterBar extends StatelessWidget {
               Expanded(
                 child: _Dropdown(
                   value: statusFilter,
-                  items: const ["Tất cả", "Hoạt động", "Bị khóa"],
+                  items: const ['Tất cả', 'Đang hoạt động', 'Không hoạt động'],
                   onChanged: onStatusChanged,
                 ),
               ),
@@ -203,43 +215,17 @@ class _FilterBar extends StatelessWidget {
   }
 }
 
-// ── User List ─────────────────────────────────────────────────────
-
 class _UserList extends StatelessWidget {
   final List<ActorEntity> users;
-  final String searchKeyword;
-  final String statusFilter;
-  final String deptFilter;
 
-  const _UserList({
-    required this.users,
-    required this.searchKeyword,
-    required this.statusFilter,
-    required this.deptFilter,
-  });
-
-  List<ActorEntity> _filtered() {
-    return users.where((user) {
-      final matchesSearch = (user.fullName ?? "").toLowerCase().contains(
-        searchKeyword.toLowerCase(),
-      );
-      final matchesDept =
-          deptFilter == "Tất cả đơn vị" ||
-          user.department?.deptName == deptFilter;
-      final matchesStatus =
-          statusFilter == "Tất cả" || statusFilter == "Hoạt động";
-      return matchesSearch && matchesDept && matchesStatus;
-    }).toList();
-  }
+  const _UserList({required this.users});
 
   @override
   Widget build(BuildContext context) {
-    final filtered = _filtered();
-
-    if (filtered.isEmpty) {
+    if (users.isEmpty) {
       return const Center(
         child: Text(
-          "Không tìm thấy kết quả phù hợp",
+          'Không tìm thấy kết quả phù hợp',
           style: TextStyle(color: Colors.grey),
         ),
       );
@@ -247,13 +233,11 @@ class _UserList extends StatelessWidget {
 
     return ListView.builder(
       padding: const EdgeInsets.all(16),
-      itemCount: filtered.length,
-      itemBuilder: (context, index) => _UserCard(user: filtered[index]),
+      itemCount: users.length,
+      itemBuilder: (context, index) => _UserCard(user: users[index]),
     );
   }
 }
-
-// ── User Card ─────────────────────────────────────────────────────
 
 class _UserCard extends StatelessWidget {
   final ActorEntity user;
@@ -262,7 +246,7 @@ class _UserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const isActive = true;
+    final isActive = user.status == 'active';
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -272,7 +256,7 @@ class _UserCard extends StatelessWidget {
         border: Border.all(color: Colors.grey.shade200),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 5,
             offset: const Offset(0, 2),
           ),
@@ -280,11 +264,11 @@ class _UserCard extends StatelessWidget {
       ),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: AppColors.primary.withOpacity(0.1),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
           child: Text(
             (user.fullName?.isNotEmpty == true)
                 ? user.fullName![0].toUpperCase()
-                : "?",
+                : '?',
             style: const TextStyle(
               color: AppColors.primary,
               fontWeight: FontWeight.bold,
@@ -292,28 +276,26 @@ class _UserCard extends StatelessWidget {
           ),
         ),
         title: Text(
-          user.fullName ?? "N/A",
+          user.fullName ?? 'N/A',
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              user.department?.deptName ?? "Chưa rõ phòng ban",
+              user.department?.deptName ?? 'Chưa rõ phòng ban',
               style: const TextStyle(fontSize: 12),
             ),
             const SizedBox(height: 4),
-            const _StatusChip(isActive: isActive),
+            _StatusChip(isActive: isActive),
           ],
         ),
         trailing: const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
-        onTap: () => context.push('/user-detail/${user.id}'), // ← go_router
+        onTap: () => context.push('/user-detail/${user.id}'),
       ),
     );
   }
 }
-
-// ── Dropdown ──────────────────────────────────────────────────────
 
 class _Dropdown extends StatelessWidget {
   final String value;
@@ -342,9 +324,9 @@ class _Dropdown extends StatelessWidget {
           style: const TextStyle(fontSize: 13, color: AppColors.textDark),
           items: items
               .map(
-                (e) => DropdownMenuItem(
-                  value: e,
-                  child: Text(e, overflow: TextOverflow.ellipsis),
+                (item) => DropdownMenuItem(
+                  value: item,
+                  child: Text(item, overflow: TextOverflow.ellipsis),
                 ),
               )
               .toList(),
@@ -354,8 +336,6 @@ class _Dropdown extends StatelessWidget {
     );
   }
 }
-
-// ── Status Chip ───────────────────────────────────────────────────
 
 class _StatusChip extends StatelessWidget {
   final bool isActive;
@@ -367,11 +347,11 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: (isActive ? Colors.green : Colors.red).withOpacity(0.1),
+        color: (isActive ? Colors.green : Colors.red).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(
-        isActive ? "Đang hoạt động" : "Ngừng hoạt động",
+        isActive ? 'Đang hoạt động' : 'Không hoạt động',
         style: TextStyle(
           color: isActive ? Colors.green : Colors.red,
           fontSize: 10,

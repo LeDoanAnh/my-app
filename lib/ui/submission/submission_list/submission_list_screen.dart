@@ -27,6 +27,12 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
     _refreshData();
   }
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
   void _refreshData() {
     context.read<SubmissionListBloc>().add(
       FetchSubmissionList(
@@ -37,15 +43,17 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final isApprover = widget.user.roles!.any((role) => role.id == 3);
-    final tabCount = isApprover ? 4 : 3;
+    final roles = widget.user.roles ?? [];
+    final hasRole3 = roles.any((role) => role.id == 3);
+    final hasRole4 = roles.any((role) => role.id == 4);
+    final showActionTab = hasRole3 || hasRole4;
+    final tabCount = showActionTab ? 4 : 3;
+    final actionTabLabel = hasRole3 && hasRole4
+        ? 'Chờ xử lý'
+        : hasRole3
+        ? 'Cần duyệt'
+        : 'Cần ký nháy';
 
     return DefaultTabController(
       length: tabCount,
@@ -54,14 +62,14 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
         appBar: AppBar(
           backgroundColor: AppColors.background,
           elevation: 0,
-          title: Text(
-            'Danh sách tờ đơn',
-            style: const TextStyle(
+          centerTitle: true,
+          title: const Text(
+            'Danh sách tờ trình',
+            style: TextStyle(
               color: AppColors.textDark,
               fontWeight: FontWeight.bold,
             ),
           ),
-          centerTitle: true,
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(110),
             child: Column(
@@ -71,12 +79,12 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                   labelColor: AppColors.primary,
                   unselectedLabelColor: AppColors.textGrey,
                   indicatorColor: AppColors.primary,
-                  isScrollable: isApprover,
+                  isScrollable: showActionTab,
                   tabs: [
-                    Tab(text: 'Đang chờ'),
-                    Tab(text: 'Đã duyệt'),
-                    Tab(text: 'Từ chối'),
-                    if (isApprover) Tab(text: 'Cần duyệt'),
+                    const Tab(text: 'Đang chờ'),
+                    const Tab(text: 'Đã duyệt'),
+                    const Tab(text: 'Từ chối'),
+                    if (showActionTab) Tab(text: actionTabLabel),
                   ],
                 ),
               ],
@@ -112,13 +120,13 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
             if (state is SubmissionListLoaded) {
               return TabBarView(
                 children: [
-                  _buildListByStatus(state.mySubmissions, 'pending'),
-                  _buildListByStatus(state.mySubmissions, 'approved'),
-                  _buildListByStatus(state.mySubmissions, 'rejected'),
-                  if (isApprover)
+                  _buildListByStatus(state.mySubmissions, const ['pending']),
+                  _buildListByStatus(state.mySubmissions, const ['approved']),
+                  _buildListByStatus(state.mySubmissions, const ['rejected']),
+                  if (showActionTab)
                     _buildListByStatus(
                       state.pendingApproval ?? [],
-                      'waiting_for_me',
+                      const ['waiting_for_me', 'waiting_pre_approval'],
                       isApproverTab: true,
                     ),
                 ],
@@ -144,9 +152,9 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
         child: TextField(
           controller: _searchController,
           onChanged: (value) => setState(() => _searchKeyword = value),
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             hintText: 'Tìm mã đơn hoặc tiêu đề...',
-            prefixIcon: const Icon(Icons.search, color: AppColors.textGrey),
+            prefixIcon: Icon(Icons.search, color: AppColors.textGrey),
             border: InputBorder.none,
           ),
         ),
@@ -156,27 +164,24 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
 
   Widget _buildListByStatus(
     List<SubmissionEntity> data,
-    String statusCode, {
+    List<String> statusCodes, {
     bool isApproverTab = false,
   }) {
+    final searchKeyword = _searchKeyword.toLowerCase();
     final filteredList = data.where((item) {
-      final matchesStatus =
-          item.statusCode?.toLowerCase() == statusCode.toLowerCase();
+      final matchesStatus = statusCodes
+          .map((code) => code.toLowerCase())
+          .contains(item.statusCode?.toLowerCase());
       final matchesSearch =
-          (item.submissionCode?.toLowerCase() ?? '').contains(
-            _searchKeyword.toLowerCase(),
-          ) ||
-          (item.title?.toLowerCase() ?? '').contains(
-            _searchKeyword.toLowerCase(),
-          );
+          (item.submissionCode?.toLowerCase() ?? '').contains(searchKeyword) ||
+          (item.title?.toLowerCase() ?? '').contains(searchKeyword);
       return matchesStatus && matchesSearch;
     }).toList();
 
     Future<void> handleRefresh() async {
       _refreshData();
       await context.read<SubmissionListBloc>().stream.firstWhere(
-        (state) =>
-            state is SubmissionListLoaded || state is SubmissionListError,
+        (state) => state is SubmissionListLoaded || state is SubmissionListError,
       );
     }
 
@@ -207,15 +212,21 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
         physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
         itemCount: filteredList.length,
-        itemBuilder: (context, index) =>
-            _buildSubmissionCard(filteredList[index], isApproverTab),
+        itemBuilder: (context, index) {
+          return _buildSubmissionCard(filteredList[index], isApproverTab);
+        },
       ),
     );
   }
 
   Widget _buildSubmissionCard(SubmissionEntity item, bool isApproverTab) {
-    Color statusColor;
-    switch (item.statusCode?.toLowerCase()) {
+    final statusCode = item.statusCode?.toLowerCase();
+    final isPendingPreApproval = statusCode == 'waiting_pre_approval';
+    final isActionItem =
+        isApproverTab && (statusCode == 'waiting_for_me' || isPendingPreApproval);
+
+    final Color statusColor;
+    switch (statusCode) {
       case 'approved':
         statusColor = AppColors.success;
         break;
@@ -224,11 +235,22 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
         break;
       case 'pending':
       case 'waiting_for_me':
+      case 'waiting_pre_approval':
         statusColor = AppColors.warning;
         break;
       default:
         statusColor = AppColors.textGrey;
     }
+
+    final bool showPreApproverInfo =
+        isApproverTab && (isPendingPreApproval || item.preApproverName != null);
+    final String displayRoleLabel =
+        isApproverTab ? (showPreApproverInfo ? 'Người ký nháy' : 'Người tạo') : 'Người duyệt';
+    final String displayRoleValue = isApproverTab
+        ? (showPreApproverInfo
+            ? (item.preApproverName ?? 'Đang chờ')
+            : (item.creatorName ?? 'Đang chờ'))
+        : (item.approverName ?? 'Đang chờ');
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -246,21 +268,24 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
         onTap: () async {
-          if (isApproverTab && item.statusCode == 'waiting_for_me') {
+          if (isActionItem) {
             final result = await context.push<bool>(
               '/approver-decision',
               extra: {
                 'submissionId': item.id,
                 'deptId': widget.user.departmentId ?? 1,
                 'approverId': widget.user.id,
+                'isPreApproval': isPendingPreApproval,
               },
             );
+
             if (mounted && result == true) {
               _refreshData();
             }
-          } else {
-            context.push('/submission-detail/${item.id}');
+            return;
           }
+
+          context.push('/submission-detail/${item.id}');
         },
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -300,6 +325,8 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
               const SizedBox(height: 12),
               Text(
                 item.title ?? 'Không có tiêu đề',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -317,9 +344,7 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
-                      isApproverTab
-                          ? '${'Người tạo'}: ${item.creatorName}'
-                          : '${'Người duyệt'}: ${item.approverName ?? 'Đang chờ'}',
+                      '$displayRoleLabel: $displayRoleValue',
                       style: const TextStyle(
                         color: AppColors.textDark,
                         fontSize: 12,
@@ -338,14 +363,17 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
                     color: AppColors.textGrey,
                   ),
                   const SizedBox(width: 4),
-                  Text(
-                    item.categoryName ?? 'Loại đơn',
-                    style: const TextStyle(
-                      color: AppColors.textGrey,
-                      fontSize: 13,
+                  Expanded(
+                    child: Text(
+                      item.categoryName ?? 'Loại đơn',
+                      style: const TextStyle(
+                        color: AppColors.textGrey,
+                        fontSize: 13,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Spacer(),
+                  const SizedBox(width: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12,
@@ -374,7 +402,10 @@ class _SubmissionListScreenState extends State<SubmissionListScreen> {
   }
 
   String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return '';
+    if (dateStr == null || dateStr.isEmpty) {
+      return '';
+    }
+
     try {
       final date = DateTime.parse(dateStr);
       return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';

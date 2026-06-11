@@ -12,6 +12,12 @@ class LocationModel {
   @JsonKey(name: "location_name")
   final String? locationName;
   final String? status;
+  @JsonKey(name: "availability_status")
+  final String? availabilityStatus;
+  @JsonKey(name: "conflict_status")
+  final String? conflictStatus;
+  @JsonKey(name: "conflict_message")
+  final String? conflictMessage;
   final String? capacity;
 
   final DepartmentModel? department;
@@ -21,6 +27,9 @@ class LocationModel {
     this.departmentId,
     this.locationName,
     this.status,
+    this.availabilityStatus,
+    this.conflictStatus,
+    this.conflictMessage,
     this.capacity,
     this.department,
   });
@@ -35,6 +44,9 @@ class LocationModel {
       departmentId: departmentId,
       locationName: locationName,
       status: status,
+      availabilityStatus: availabilityStatus,
+      conflictStatus: conflictStatus,
+      conflictMessage: conflictMessage,
       capacity: capacity,
       department: department?.toEntity(),
     );

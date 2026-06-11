@@ -6,7 +6,12 @@ class AssetEntity {
   final String? assetName;
   final String? assetCode;
   final String? unit;
+  final String? type;
   final String? status;
+  final int? totalQuantity;
+  final int? borrowedQuantity;
+  final int? pendingQuantity;
+  final int? availableQuantity;
   final DepartmentEntity? department;
 
   AssetEntity({
@@ -15,7 +20,12 @@ class AssetEntity {
     this.assetName,
     this.assetCode,
     this.unit,
+    this.type,
     this.status,
+    this.totalQuantity,
+    this.borrowedQuantity,
+    this.pendingQuantity,
+    this.availableQuantity,
     this.department,
   });
 }

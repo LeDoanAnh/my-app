@@ -22,6 +22,10 @@ class SubmissionModel {
   final String? creatorName;
   @JsonKey(name: 'approver_name')
   final String? approverName;
+  @JsonKey(name: 'pre_approval_status')
+  final String? preApprovalStatus;
+  @JsonKey(name: 'pre_approver_name')
+  final String? preApproverName;
 
   SubmissionModel({
     this.id,
@@ -32,6 +36,8 @@ class SubmissionModel {
     this.time,
     this.creatorName,
     this.approverName,
+    this.preApprovalStatus,
+    this.preApproverName,
     this.date,
     this.categoryName,
     this.submissionCode,
@@ -39,21 +45,24 @@ class SubmissionModel {
 
   factory SubmissionModel.fromJson(Map<String, dynamic> json) =>
       _$SubmissionModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$SubmissionModelToJson(this);
 
   SubmissionEntity toEntity() => SubmissionEntity(
-    id: id ?? 0,
-    submissionCode: submissionCode ?? 'Không xác định',
-    title: title ?? 'Không tiêu đề',
-    date: date ?? DateTime.now().toString(),
-    categoryName: categoryName ?? 'Không xác định',
-    creatorName: creatorName ?? 'Không xác định',
-    approverName: approverName ?? 'Không xác định',
-    status: status ?? 'unknown',
-    statusLabel: statusLabel ?? 'Không xác định',
-    statusCode: statusCode ?? 'unknown',
-    time: time ?? '',
-  );
+        id: id ?? 0,
+        submissionCode: submissionCode ?? 'Khong xac dinh',
+        title: title ?? 'Khong tieu de',
+        date: date ?? DateTime.now().toString(),
+        categoryName: categoryName ?? 'Khong xac dinh',
+        creatorName: creatorName ?? 'Khong xac dinh',
+        approverName: approverName ?? 'Khong xac dinh',
+        preApprovalStatus: preApprovalStatus,
+        preApproverName: preApproverName,
+        status: status ?? 'unknown',
+        statusLabel: statusLabel ?? 'Khong xac dinh',
+        statusCode: statusCode ?? 'unknown',
+        time: time ?? '',
+      );
 }
 
 @JsonSerializable()
@@ -64,5 +73,6 @@ class SubmissionResponseModel {
 
   factory SubmissionResponseModel.fromJson(Map<String, dynamic> json) =>
       _$SubmissionResponseModelFromJson(json);
+
   Map<String, dynamic> toJson() => _$SubmissionResponseModelToJson(this);
 }

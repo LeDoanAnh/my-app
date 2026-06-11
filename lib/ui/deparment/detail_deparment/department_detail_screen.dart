@@ -2,13 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_app/core/theme/app_colors.dart';
-import 'package:my_app/data/model/asset_model.dart';
-import 'package:my_app/data/model/location_model.dart';
 import 'package:my_app/data/model/user_model.dart';
 import 'package:my_app/domain/entities/department_entity.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_bloc.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_event.dart';
 import 'package:my_app/ui/deparment/detail_deparment/department_detail_state.dart';
+import 'package:my_app/ui/deparment/form_department/create_derpartment_screen.dart';
 
 class DepartmentDetailScreen extends StatefulWidget {
   final int departmentId;
@@ -99,6 +98,27 @@ class _DepartmentDetailScreenState extends State<DepartmentDetailScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              onPressed: () async {
+                final result = await Navigator.push<bool>(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) =>
+                        CreateDepartmentScreen(initialDepartment: dept),
+                  ),
+                );
+                if (!mounted || result != true) return;
+                context.read<DepartmentDetailBloc>().add(
+                  GetDepartmentDetail(widget.departmentId),
+                );
+              },
+              icon: const Icon(Icons.edit_outlined),
+              label: const Text('Chỉnh sửa'),
+            ),
+          ),
+          const SizedBox(height: 12),
           _buildQuickStats(dept),
           const SizedBox(height: 20),
 

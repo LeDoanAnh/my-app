@@ -83,6 +83,7 @@ import 'package:my_app/ui/submission/submission_list/submission_list_bloc.dart';
 import 'package:my_app/ui/user/actor_list/actor_list_bloc.dart';
 import 'package:my_app/ui/user/form_user/form_user_bloc.dart';
 import 'package:my_app/ui/user/user_detail_bloc.dart';
+import 'package:my_app/ui/workflow/create_workflow/create_workflow_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_bloc.dart';
 
@@ -196,6 +197,13 @@ Future<void> init() async {
     () => AssetLocationListBloc(assetUseCase: sl(), locationUseCase: sl()),
   );
   sl.registerFactory(() => WorkflowListBloc(workflowListUseCase: sl()));
+  sl.registerFactory(
+    () => CreateWorkflowBloc(
+      workflowUseCase: sl(),
+      approvalStepUseCase: sl(),
+      departmentUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => WorkflowDetailBloc(useCase: sl()));
   sl.registerFactory(() => AssetDetailBloc(useCase: sl()));
   sl.registerFactory(() => LocationDetailBloc(useCase: sl()));

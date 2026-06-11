@@ -9,4 +9,6 @@ abstract class AssetRepository {
   Future<AssetDetailEntity> getAssetDetail(int id);
 
   Future<CreateResponse> createAsset(Map<String, dynamic> body);
+
+  Future<CreateResponse> updateAsset(int id, Map<String, dynamic> body);
 }

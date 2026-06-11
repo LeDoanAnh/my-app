@@ -5,13 +5,16 @@ import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/data/model/create_user_params.dart';
 import 'package:my_app/domain/entities/department_entity.dart';
 import 'package:my_app/domain/entities/role_entity.dart';
+import 'package:my_app/domain/entities/user_entity.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
 import 'package:my_app/ui/user/form_user/form_user_bloc.dart';
 import 'package:my_app/ui/user/form_user/form_user_event.dart';
 import 'package:my_app/ui/user/form_user/form_user_state.dart';
 
 class CreateUserScreen extends StatefulWidget {
-  const CreateUserScreen({super.key});
+  final UserEntity? initialUser;
+
+  const CreateUserScreen({super.key, this.initialUser});
 
   @override
   State<CreateUserScreen> createState() => _CreateUserScreenState();
@@ -29,6 +32,9 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   DepartmentEntity? _selectedDept;
   bool _isActive = true;
   bool _showPassword = false;
+  bool _hydrated = false;
+
+  bool get _isEditMode => widget.initialUser != null;
 
   // Data từ API
   List<RoleEntity> _roles = [];
@@ -80,6 +86,23 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     });
   }
 
+  void _hydrateForEdit() {
+    if (_hydrated || widget.initialUser == null) return;
+
+    final user = widget.initialUser!;
+    _fullNameController.text = user.fullName ?? '';
+    _usernameController.text = user.username ?? '';
+    _emailController.text = user.email ?? '';
+    _isActive = user.status == 'active';
+    _selectedRoleIds =
+        user.roles?.map((role) => role.id).whereType<int>().toList() ?? [];
+    _selectedDept = _departments
+        .where((dept) => dept.id == user.departmentId)
+        .cast<DepartmentEntity?>()
+        .firstOrNull;
+    _hydrated = true;
+  }
+
   void _submitForm() {
     if (!_formKey.currentState!.validate()) return;
     if (_selectedRoleIds.isEmpty) {
@@ -102,10 +125,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       password: _passwordController.text,
       departmentId: _selectedDept!.id,
       roleIds: _selectedRoleIds,
-      status: _isActive ? 'active' : 'locked',
+      status: _isActive ? 'active' : 'inactive',
     );
 
-    context.read<CreateUserBloc>().add(SubmitCreateUser(params));
+    context.read<CreateUserBloc>().add(
+      SubmitCreateUser(params, userId: widget.initialUser?.id),
+    );
   }
 
   @override
@@ -116,6 +141,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           setState(() {
             _roles = state.roles;
             _departments = state.departments;
+            _hydrateForEdit();
           });
         }
         if (state is CreateUserSubmitSuccess) {
@@ -262,6 +288,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
           controller: _passwordController,
           obscureText: !_showPassword,
           validator: (v) {
+            if (_isEditMode && (v == null || v.isEmpty)) return null;
             if (v == null || v.isEmpty) return 'Vui lòng nhập mật khẩu';
             if (!RegExp(r'(?=.*[a-z])').hasMatch(v))
               return 'Cần có ít nhất 1 chữ thường';

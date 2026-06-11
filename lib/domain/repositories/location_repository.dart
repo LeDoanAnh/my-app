@@ -9,4 +9,6 @@ abstract class LocationRepository {
   Future<LocationDetailEntity> getLocationDetail(int locationId);
 
   Future<CreateResponse> createLocation(Map<String, dynamic> body);
+
+  Future<CreateResponse> updateLocation(int id, Map<String, dynamic> body);
 }

@@ -9,6 +9,7 @@ part of 'actor_model.dart';
 ActorModel _$ActorModelFromJson(Map<String, dynamic> json) => ActorModel(
   id: (json['id'] as num).toInt(),
   fullName: json['full_name'] as String?,
+  status: json['status'] as String?,
   department: json['department'] == null
       ? null
       : DepartmentModel.fromJson(json['department'] as Map<String, dynamic>),
@@ -20,6 +21,7 @@ Map<String, dynamic> _$ActorModelToJson(ActorModel instance) =>
       'id': instance.id,
       'actor_id': instance.actorId,
       'full_name': instance.fullName,
+      'status': instance.status,
       'department': instance.department,
     };
 

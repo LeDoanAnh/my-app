@@ -26,6 +26,13 @@ ApproverSubmissionModel _$ApproverSubmissionModelFromJson(
   attachments: (json['attachments'] as List<dynamic>?)
       ?.map((e) => ApproverAttachmentModel.fromJson(e as Map<String, dynamic>))
       .toList(),
+  previousApprovals: (json['previous_approvals'] as List<dynamic>?)
+      ?.map((e) => PreviousApprovalModel.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  preApproval: json['pre_approval'] == null
+      ? null
+      : PreApprovalModel.fromJson(json['pre_approval'] as Map<String, dynamic>),
+  isPreApproved: json['is_pre_approved'] as bool?,
   myDecision: json['my_decision'] == null
       ? null
       : MyDecisionModel.fromJson(json['my_decision'] as Map<String, dynamic>),
@@ -45,6 +52,9 @@ Map<String, dynamic> _$ApproverSubmissionModelToJson(
   'locations': instance.locations,
   'assets': instance.assets,
   'attachments': instance.attachments,
+  'previous_approvals': instance.previousApprovals,
+  'pre_approval': instance.preApproval,
+  'is_pre_approved': instance.isPreApproved,
   'my_decision': instance.myDecision,
 };
 
@@ -96,6 +106,36 @@ Map<String, dynamic> _$ApproverAttachmentModelToJson(
   'url': instance.url,
 };
 
+PreviousApprovalModel _$PreviousApprovalModelFromJson(
+  Map<String, dynamic> json,
+) => PreviousApprovalModel(
+  stepId: (json['step_id'] as num?)?.toInt(),
+  stepOrder: (json['step_order'] as num?)?.toInt(),
+  deptId: (json['dept_id'] as num?)?.toInt(),
+  deptName: json['dept_name'] as String?,
+  action: json['action'] as String?,
+  comment: json['comment'] as String?,
+  decidedAt: json['decided_at'] as String?,
+  approverId: (json['approver_id'] as num?)?.toInt(),
+  approverName: json['approver_name'] as String?,
+  approverDept: json['approver_dept'] as String?,
+);
+
+Map<String, dynamic> _$PreviousApprovalModelToJson(
+  PreviousApprovalModel instance,
+) => <String, dynamic>{
+  'step_id': instance.stepId,
+  'step_order': instance.stepOrder,
+  'dept_id': instance.deptId,
+  'dept_name': instance.deptName,
+  'action': instance.action,
+  'comment': instance.comment,
+  'decided_at': instance.decidedAt,
+  'approver_id': instance.approverId,
+  'approver_name': instance.approverName,
+  'approver_dept': instance.approverDept,
+};
+
 MyDecisionModel _$MyDecisionModelFromJson(Map<String, dynamic> json) =>
     MyDecisionModel(
       action: json['action'] as String?,
@@ -108,6 +148,34 @@ Map<String, dynamic> _$MyDecisionModelToJson(MyDecisionModel instance) =>
       'action': instance.action,
       'comment': instance.comment,
       'decided_at': instance.decidedAt,
+    };
+
+PreApprovalModel _$PreApprovalModelFromJson(Map<String, dynamic> json) =>
+    PreApprovalModel(
+      id: (json['id'] as num?)?.toInt(),
+      action: json['action'] as String?,
+      comment: json['comment'] as String?,
+      decidedAt: json['decided_at'] as String?,
+      staffId: (json['staff_id'] as num?)?.toInt(),
+      staffName: json['staff_name'] as String?,
+      staffDept: json['staff_dept'] as String?,
+      attachments: (json['attachments'] as List<dynamic>?)
+          ?.map(
+            (e) => ApproverAttachmentModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList(),
+    );
+
+Map<String, dynamic> _$PreApprovalModelToJson(PreApprovalModel instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'action': instance.action,
+      'comment': instance.comment,
+      'decided_at': instance.decidedAt,
+      'staff_id': instance.staffId,
+      'staff_name': instance.staffName,
+      'staff_dept': instance.staffDept,
+      'attachments': instance.attachments,
     };
 
 ApproverSubmissionResponse _$ApproverSubmissionResponseFromJson(

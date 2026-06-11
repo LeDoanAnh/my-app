@@ -31,10 +31,12 @@ class SubmissionListBloc
       return;
     }
     final hasRole3 = roles.any((role) => role.id == 3);
+    final hasRole4 = roles.any((role) => role.id == 4);
+    final hasPendingRole = hasRole3 || hasRole4;
     final List<SubmissionEntity> mySubmission;
     final List<SubmissionEntity>? pendingApproval;
     try {
-      if (hasRole3) {
+      if (hasPendingRole) {
         final results = await Future.wait([
           submissionListUseCase.callMySubmission(userId, 'my_submission'),
           submissionListUseCase.callPendingApproval(userId, 'pending_approval'),

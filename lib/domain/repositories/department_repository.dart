@@ -11,5 +11,10 @@ abstract class DepartmentRepository {
     required String deptName,
     required String locationDesc,
     required int? parentDeptId,
+    required String status,
   });
+
+  Future<CreateResponse> updateDepartment(int id, Map<String, dynamic> body);
+
+  Future<CreateResponse> deactivateDepartment(int id);
 }

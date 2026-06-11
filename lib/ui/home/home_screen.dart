@@ -162,7 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         _iconButton(
           Icons.notifications_none_rounded,
-          onTap: () => context.push('/notification/${widget.user.id}'),
+          onTap: () => context.push(
+            '/notification/${widget.user.id}',
+            extra: widget.user.departmentId,
+          ),
           badge: true,
         ),
         const SizedBox(width: 10),

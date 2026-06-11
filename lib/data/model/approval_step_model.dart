@@ -8,15 +8,22 @@ class ApprovalStepModel {
   final int? id;
   @JsonKey(name: 'category_name')
   final String? categoryName;
+  final String? description;
+  @JsonKey(name: 'apply_for_dept_id')
+  final int? applyForDeptId;
   @JsonKey(name: 'apply_for_dept')
   final String? applyForDept;
+  final String? status;
   @JsonKey(name: 'approval_steps')
   final List<ApprovalStepDetail>? approvalSteps;
 
   ApprovalStepModel({
     this.id,
     this.categoryName,
+    this.description,
+    this.applyForDeptId,
     this.applyForDept,
+    this.status,
     this.approvalSteps,
   });
   factory ApprovalStepModel.fromJson(Map<String, dynamic> json) =>
@@ -28,7 +35,10 @@ class ApprovalStepModel {
     return ApprovalStepEntity(
       id: id,
       categoryName: categoryName,
+      description: description,
+      applyForDeptId: applyForDeptId,
       applyForDept: applyForDept,
+      status: status,
       approvalSteps: approvalSteps?.map((step) => step.toEntity()).toList(),
     );
   }
@@ -42,8 +52,19 @@ class ApprovalStepDetail {
   final int? stepOrder;
   @JsonKey(name: 'dept_id')
   final int? deptId;
+  @JsonKey(name: 'target_role_id')
+  final int? targetRoleId;
+  @JsonKey(name: 'target_dept_name')
+  final String? targetDeptName;
 
-  ApprovalStepDetail({this.role, this.desc, this.stepOrder, this.deptId});
+  ApprovalStepDetail({
+    this.role,
+    this.desc,
+    this.stepOrder,
+    this.deptId,
+    this.targetRoleId,
+    this.targetDeptName,
+  });
 
   factory ApprovalStepDetail.fromJson(Map<String, dynamic> json) =>
       _$ApprovalStepDetailFromJson(json);
@@ -55,6 +76,8 @@ class ApprovalStepDetail {
       desc: desc,
       stepOrder: stepOrder,
       deptId: deptId,
+      targetRoleId: targetRoleId,
+      targetDeptName: targetDeptName,
     );
   }
 }

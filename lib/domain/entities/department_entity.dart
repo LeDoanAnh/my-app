@@ -7,6 +7,7 @@ class DepartmentEntity {
   final int id;
   final String? deptName;
   final String? locationDesc;
+  final String? status;
   final int? parentDeptId;
   final int? usersCount;
   final DateTime? createdAt;
@@ -23,6 +24,7 @@ class DepartmentEntity {
     required this.id,
     this.deptName,
     this.locationDesc,
+    this.status,
     this.parentDeptId,
     this.assets,
     this.locations,

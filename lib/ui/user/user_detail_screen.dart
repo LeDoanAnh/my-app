@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_app/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/core/theme/app_colors.dart';
+import 'package:my_app/domain/entities/role_entity.dart';
+import 'package:my_app/domain/entities/user_entity.dart';
 import 'package:my_app/ui/user/user_detail_bloc.dart';
 import 'package:my_app/ui/user/user_detail_event.dart';
 import 'package:my_app/ui/user/user_detail_state.dart';
-import 'package:my_app/ui/user/form_user/create_user_screen.dart';
 
 class UserDetailScreen extends StatefulWidget {
   final int userId;
+
   const UserDetailScreen({super.key, required this.userId});
 
   @override
@@ -19,11 +22,15 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
   @override
   void initState() {
     super.initState();
+    _load();
+  }
+
+  void _load() {
     context.read<UserDetailBloc>().add(GetUserDetail(widget.userId));
   }
 
   String _formatDate(dynamic raw) {
-    if (raw == null || raw.toString().isEmpty) return "Chưa cập nhật";
+    if (raw == null || raw.toString().isEmpty) return 'Chưa cập nhật';
     try {
       return DateFormat('dd/MM/yyyy').format(DateTime.parse(raw.toString()));
     } catch (_) {
@@ -40,212 +47,139 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
             body: Center(child: CircularProgressIndicator()),
           );
         }
+
         if (state is UserDetailError) {
           return Scaffold(
             body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.error_outline,
-                    color: Colors.redAccent,
-                    size: 48,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(state.message, textAlign: TextAlign.center),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    onPressed: () => context.read<UserDetailBloc>().add(
-                      GetUserDetail(widget.userId),
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.redAccent,
+                      size: 48,
                     ),
-                    child: const Text("Thử lại"),
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Text(state.message, textAlign: TextAlign.center),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: _load,
+                      child: const Text('Thử lại'),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         }
-        if (state is UserDetailLoaded) {
-          final user = state.user;
-          final userData = {
-            "id": user.id,
-            "username": user.username ?? "-",
-            "full_name": user.fullName ?? "Không rõ",
-            "email": user.email ?? "-",
-            "roles":
-                user.roles
-                    ?.map((r) => {"id": r.id, "name": r.roleName ?? "Không rõ"})
-                    .toList() ??
-                [],
-            "dept_name": user.departmentName ?? "Chưa phân công",
-            "status": user.status ?? "locked",
-            "created_at": _formatDate(user.createdAt),
-            "updated_at": _formatDate(user.updatedAt),
-            "total_submissions": user.totalSubmissions ?? 0,
-            "unread_notifications": user.unreadNotifications ?? 0,
-          };
 
-          return Scaffold(
-            backgroundColor: AppColors.fieldBg,
-            appBar: AppBar(
-              title: const Text(
-                "Chi tiết nhân sự",
-                style: TextStyle(
-                  color: AppColors.textDark,
-                  fontWeight: FontWeight.bold,
-                ),
+        if (state is! UserDetailLoaded) {
+          return const Scaffold(body: SizedBox.shrink());
+        }
+
+        final user = state.user;
+        final isActive = user.status == 'active';
+
+        return Scaffold(
+          backgroundColor: AppColors.fieldBg,
+          appBar: AppBar(
+            title: const Text(
+              'Chi tiết nhân sự',
+              style: TextStyle(
+                color: AppColors.textDark,
+                fontWeight: FontWeight.bold,
               ),
-              backgroundColor: AppColors.background,
-              elevation: 0,
-              actions: [
-                TextButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CreateUserScreen(),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.edit, size: 18),
-                  label: const Text("Chỉnh sửa"),
+            ),
+            backgroundColor: AppColors.background,
+            elevation: 0,
+            actions: [
+              TextButton.icon(
+                onPressed: () async {
+                  final result = await context.push<bool>(
+                    '/create-user',
+                    extra: user,
+                  );
+                  if (!context.mounted || result != true) return;
+                  _load();
+                },
+                icon: const Icon(Icons.edit, size: 18),
+                label: const Text('Chỉnh sửa'),
+              ),
+            ],
+          ),
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                _buildProfileHeader(user),
+                const SizedBox(height: 20),
+                _buildSectionTitle('TỔ CHỨC & PHÂN QUYỀN'),
+                _buildInfoCard([
+                  _buildInfoRow(
+                    Icons.badge_outlined,
+                    'Mã nhân viên',
+                    '#${user.id}',
+                  ),
+                  _buildRoleRow(user.roles ?? const []),
+                  _buildInfoRow(
+                    Icons.account_balance,
+                    'Đơn vị trực thuộc',
+                    user.departmentName ?? 'Chưa phân công',
+                  ),
+                  _buildInfoRow(
+                    Icons.calendar_month,
+                    'Ngày tham gia',
+                    _formatDate(user.createdAt),
+                  ),
+                  _buildInfoRow(
+                    Icons.calendar_month,
+                    'Ngày cập nhật',
+                    _formatDate(user.updatedAt),
+                  ),
+                ]),
+                const SizedBox(height: 20),
+                _buildSectionTitle('TÀI KHOẢN & BẢO MẬT'),
+                _buildInfoCard([
+                  _buildInfoRow(
+                    Icons.alternate_email,
+                    'Tên đăng nhập',
+                    user.username ?? '-',
+                  ),
+                  _buildInfoRow(Icons.mail_outline, 'Email', user.email ?? '-'),
+                  _buildStatusRow(isActive),
+                ]),
+                const SizedBox(height: 20),
+                _buildSectionTitle('HOẠT ĐỘNG'),
+                Row(
+                  children: [
+                    _buildStatCard(
+                      'Tờ trình đã tạo',
+                      '${user.totalSubmissions ?? 0}',
+                      Colors.blue,
+                    ),
+                    const SizedBox(width: 12),
+                    _buildStatCard(
+                      'Thông báo mới',
+                      '${user.unreadNotifications ?? 0}',
+                      Colors.orange,
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 40),
+                if (isActive) _buildDeactivateButton(),
+                const SizedBox(height: 20),
               ],
             ),
-            body: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  _buildProfileHeader(userData),
-                  const SizedBox(height: 20),
-                  _buildSectionTitle("TỔ CHỨC & PHÂN QUYỀN"),
-                  _buildInfoCard([
-                    _buildInfoRow(
-                      Icons.badge_outlined,
-                      "Mã nhân viên",
-                      "#${userData['id']}",
-                    ),
-                    _buildMultiRoleRow(
-                      Icons.admin_panel_settings,
-                      "Vai trò hệ thống",
-                      userData['roles'] as List,
-                    ),
-                    _buildInfoRow(
-                      Icons.account_balance,
-                      "Đơn vị trực thuộc",
-                      userData['dept_name'] as String,
-                    ),
-                    _buildInfoRow(
-                      Icons.calendar_month,
-                      "Ngày tham gia",
-                      userData['created_at'] as String,
-                    ),
-                    _buildInfoRow(
-                      Icons.calendar_month,
-                      "Ngày cập nhật",
-                      userData['updated_at'] as String,
-                    ),
-                  ]),
-                  const SizedBox(height: 20),
-                  _buildSectionTitle("TÀI KHOẢN & BẢO MẬT"),
-                  _buildInfoCard([
-                    _buildInfoRow(
-                      Icons.alternate_email,
-                      "Tên đăng nhập",
-                      userData['username'] as String,
-                    ),
-                    _buildInfoRow(
-                      Icons.mail_outline,
-                      "Email liên hệ",
-                      userData['email'] as String,
-                    ),
-                    _buildStatusRow(userData['status'] as String),
-                  ]),
-                  const SizedBox(height: 20),
-                  _buildSectionTitle("HOẠT ĐỘNG"),
-                  Row(
-                    children: [
-                      _buildStatCard(
-                        "Tờ trình đã tạo",
-                        userData['total_submissions'].toString(),
-                        Colors.blue,
-                      ),
-                      const SizedBox(width: 12),
-                      _buildStatCard(
-                        "Thông báo mới",
-                        userData['unread_notifications'].toString(),
-                        Colors.orange,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 40),
-                  _buildDeleteButton(context),
-                  const SizedBox(height: 20),
-                ],
-              ),
-            ),
-          );
-        }
-        return const Scaffold(body: SizedBox());
+          ),
+        );
       },
     );
   }
 
-  // ── Giữ nguyên 100% các widget cũ ───────────────────────────────────────
-
-  Widget _buildMultiRoleRow(IconData icon, String label, List<dynamic> roles) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(icon, size: 20, color: AppColors.primary),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(color: Colors.grey, fontSize: 13),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: roles.map((role) {
-                    return Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.primary.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(
-                          color: AppColors.primary.withOpacity(0.2),
-                        ),
-                      ),
-                      child: Text(
-                        role['name'],
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileHeader(Map<String, dynamic> userData) {
+  Widget _buildProfileHeader(UserEntity user) {
+    final name = user.fullName ?? 'Không rõ';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -257,9 +191,9 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         children: [
           CircleAvatar(
             radius: 40,
-            backgroundColor: AppColors.primary.withOpacity(0.1),
+            backgroundColor: AppColors.primary.withValues(alpha: 0.1),
             child: Text(
-              userData['full_name'][0],
+              name.isEmpty ? '?' : name[0].toUpperCase(),
               style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
@@ -269,11 +203,12 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
           ),
           const SizedBox(height: 12),
           Text(
-            userData['full_name'],
+            name,
+            textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Text(
-            userData['email'],
+            user.email ?? '-',
             style: const TextStyle(color: Colors.grey, fontSize: 13),
           ),
         ],
@@ -315,40 +250,76 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
         children: [
           Icon(icon, size: 20, color: AppColors.primary),
           const SizedBox(width: 12),
-          Text(label, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-          const Spacer(),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+          Expanded(
+            child: Text(label, style: const TextStyle(color: Colors.grey)),
+          ),
+          Flexible(
+            child: Text(
+              value,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildStatusRow(String status) {
-    bool isActive = status == "active" || status == "Active";
+  Widget _buildRoleRow(List<RoleEntity> roles) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.admin_panel_settings,
+            size: 20,
+            color: AppColors.primary,
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Text('Vai trò', style: TextStyle(color: Colors.grey)),
+          ),
+          Flexible(
+            flex: 2,
+            child: Wrap(
+              alignment: WrapAlignment.end,
+              spacing: 6,
+              runSpacing: 6,
+              children: roles
+                  .map(
+                    (role) => Chip(
+                      label: Text(role.roleName ?? 'Không rõ'),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusRow(bool isActive) {
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
           const Icon(Icons.shield_outlined, size: 20, color: AppColors.primary),
           const SizedBox(width: 12),
-          const Text(
-            "Trạng thái",
-            style: TextStyle(color: Colors.grey, fontSize: 13),
-          ),
+          const Text('Trạng thái', style: TextStyle(color: Colors.grey)),
           const Spacer(),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: isActive
-                  ? Colors.green.withOpacity(0.1)
-                  : Colors.red.withOpacity(0.1),
+              color: (isActive ? Colors.green : Colors.red).withValues(
+                alpha: 0.1,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
-              isActive ? "ĐANG HOẠT ĐỘNG" : "BỊ KHÓA",
+              isActive ? 'ĐANG HOẠT ĐỘNG' : 'KHÔNG HOẠT ĐỘNG',
               style: TextStyle(
                 color: isActive ? Colors.green : Colors.red,
                 fontSize: 10,
@@ -381,24 +352,21 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 11, color: Colors.grey),
-            ),
+            Text(label, style: const TextStyle(fontSize: 11)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDeleteButton(BuildContext context) {
+  Widget _buildDeactivateButton() {
     return SizedBox(
       width: double.infinity,
       child: OutlinedButton.icon(
-        onPressed: () => _showDeleteConfirmDialog(context),
-        icon: const Icon(Icons.delete_forever_rounded, color: Colors.red),
+        onPressed: _showDeactivateConfirmDialog,
+        icon: const Icon(Icons.block_rounded, color: Colors.red),
         label: const Text(
-          "XÓA TÀI KHOẢN NÀY",
+          'NGỪNG HOẠT ĐỘNG TÀI KHOẢN',
           style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
         ),
         style: OutlinedButton.styleFrom(
@@ -412,29 +380,31 @@ class _UserDetailScreenState extends State<UserDetailScreen> {
     );
   }
 
-  void _showDeleteConfirmDialog(BuildContext context) {
+  void _showDeactivateConfirmDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
-          "Xác nhận xóa?",
+          'Ngừng hoạt động tài khoản?',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         content: const Text(
-          "Dữ liệu liên quan đến người dùng này (Tờ trình, yêu cầu vật tư) có thể bị ảnh hưởng. Bạn có chắc chắn muốn xóa vĩnh viễn không?",
-          style: TextStyle(fontSize: 14),
+          'Tài khoản sẽ được chuyển sang trạng thái không hoạt động, dữ liệu cũ vẫn được giữ lại.',
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text("HỦY", style: TextStyle(color: Colors.grey)),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('HỦY'),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              context.read<UserDetailBloc>().add(DeactivateUser(widget.userId));
+            },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             child: const Text(
-              "XÓA VĨNH VIỄN",
+              'NGỪNG HOẠT ĐỘNG',
               style: TextStyle(color: Colors.white),
             ),
           ),

@@ -10,6 +10,8 @@ class SubmissionEntity {
   final String? statusCode;
   final String? creatorName;
   final String? approverName;
+  final String? preApprovalStatus;
+  final String? preApproverName;
 
   SubmissionEntity({
     required this.id,
@@ -20,6 +22,8 @@ class SubmissionEntity {
     this.statusLabel,
     this.creatorName,
     this.approverName,
+    this.preApprovalStatus,
+    this.preApproverName,
     this.date,
     this.submissionCode,
     this.categoryName,

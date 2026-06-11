@@ -5,6 +5,10 @@ import 'package:my_app/domain/entities/user_entity.dart';
 abstract class UserRepository {
   Future<CreateResponse> createUser(Map<String, dynamic> body);
 
+  Future<CreateResponse> updateUser(int id, Map<String, dynamic> body);
+
+  Future<CreateResponse> deactivateUser(int id);
+
   Future<List<RoleEntity>> getRoleList();
 
   Future<UserEntity> getUserDetail(int userId);

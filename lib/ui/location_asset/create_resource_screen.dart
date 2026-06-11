@@ -1,15 +1,24 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
+import 'package:my_app/domain/entities/asset_detail_entity.dart';
 import 'package:my_app/domain/entities/department_entity.dart';
+import 'package:my_app/domain/entities/location_detail_entity.dart';
 import 'package:my_app/ui/item_widget/app_confirmation_dialog.dart';
 import 'package:my_app/ui/location_asset/form_resource_bloc.dart';
 import 'package:my_app/ui/location_asset/form_resource_event.dart';
 import 'package:my_app/ui/location_asset/form_resource_state.dart';
 
 class CreateResourceScreen extends StatefulWidget {
-  const CreateResourceScreen({super.key});
+  final AssetDetailEntity? initialAsset;
+  final LocationDetailEntity? initialLocation;
+
+  const CreateResourceScreen({
+    super.key,
+    this.initialAsset,
+    this.initialLocation,
+  });
 
   @override
   State<CreateResourceScreen> createState() => _CreateResourceScreenState();
@@ -29,10 +38,15 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
 
   final _capacityController = TextEditingController();
   final _addressController = TextEditingController();
+  bool _hydratedDepartment = false;
+
+  bool get _isEditMode =>
+      widget.initialAsset != null || widget.initialLocation != null;
 
   @override
   void initState() {
     super.initState();
+    _hydrateInitialValues();
     context.read<FormResourceBloc>().add(GetDepartmentList());
   }
 
@@ -46,6 +60,40 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
     super.dispose();
   }
 
+  void _hydrateInitialValues() {
+    final asset = widget.initialAsset;
+    final location = widget.initialLocation;
+
+    if (asset != null) {
+      _resourceType = "asset";
+      _nameController.text = asset.assetName ?? '';
+      _assetCodeController.text = asset.assetCode ?? '';
+      _unitController.text = asset.unit ?? '';
+      _selectedAssetMode = (asset.isConsumable ?? false)
+          ? "consumable"
+          : "returnable";
+    } else if (location != null) {
+      _resourceType = "location";
+      _nameController.text = location.locationName ?? '';
+      _capacityController.text = location.capacity ?? '';
+      _addressController.text = location.address ?? '';
+    }
+  }
+
+  void _hydrateDepartment(List<DepartmentEntity> departments) {
+    if (_hydratedDepartment || !_isEditMode || departments.isEmpty) return;
+
+    final deptName =
+        widget.initialAsset?.deptName ?? widget.initialLocation?.deptName;
+    if (deptName != null && deptName.isNotEmpty) {
+      _selectedDept = departments
+          .where((dept) => dept.deptName == deptName)
+          .cast<DepartmentEntity?>()
+          .firstOrNull;
+    }
+    _hydratedDepartment = true;
+  }
+
   void _onSubmit(List<DepartmentEntity> departments) {
     if (_formKey.currentState!.validate()) {
       if (_selectedDept == null) {
@@ -55,21 +103,22 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
         return;
       }
 
+      final actionLabel = _isEditMode ? "Cập nhật" : "Tạo";
       final confirmContent = _resourceType == "asset"
-          ? "Tạo vật tư \"${_nameController.text.trim()}\" "
+          ? "$actionLabel vật tư \"${_nameController.text.trim()}\" "
                 "(${_selectedAssetMode == 'returnable' ? 'Mượn trả' : 'Tiêu hao'}) "
                 "thuộc ${_selectedDept!.deptName}?"
-          : "Tạo địa điểm \"${_nameController.text.trim()}\" "
+          : "$actionLabel địa điểm \"${_nameController.text.trim()}\" "
                 "thuộc ${_selectedDept!.deptName}?";
 
       showDialog(
         context: context,
         builder: (_) => AppConfirmationDialog(
           title: _resourceType == "asset"
-              ? "Xác nhận tạo vật tư"
-              : "Xác nhận tạo địa điểm",
+              ? "Xác nhận ${_isEditMode ? 'sửa' : 'tạo'} vật tư"
+              : "Xác nhận ${_isEditMode ? 'sửa' : 'tạo'} địa điểm",
           content: confirmContent,
-          confirmText: "Tạo",
+          confirmText: _isEditMode ? "Cập nhật" : "Tạo",
           cancelText: "Kiểm tra lại",
           icon: _resourceType == "asset"
               ? Icons.inventory_2_rounded
@@ -78,6 +127,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
             if (_resourceType == "asset") {
               context.read<FormResourceBloc>().add(
                 SubmitCreateAsset(
+                  id: widget.initialAsset?.id,
                   name: _nameController.text.trim(),
                   description: _assetCodeController.text.trim(),
                   unit: _unitController.text.trim(),
@@ -88,6 +138,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
             } else {
               context.read<FormResourceBloc>().add(
                 SubmitCreateLocation(
+                  id: widget.initialLocation?.id,
                   name: _nameController.text.trim(),
                   capacity: _capacityController.text.trim(),
                   address: _addressController.text.trim(),
@@ -230,7 +281,17 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
     return BlocConsumer<FormResourceBloc, FormResourceState>(
       listener: (context, state) {
         if (state is FormResourceSuccess) {
-          _showSuccessDialog(state.message);
+          if (_isEditMode) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pop(context, true);
+          } else {
+            _showSuccessDialog(state.message);
+          }
         } else if (state is FormResourceError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -253,11 +314,13 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
           isDeptLoading = false; // Đang submit, dept đã có rồi
         }
 
+        _hydrateDepartment(departments);
+
         return Scaffold(
           backgroundColor: AppColors.fieldBg,
           appBar: AppBar(
-            title: const Text(
-              "Thêm mới CSVC",
+            title: Text(
+              _isEditMode ? "Sửa CSVC" : "Thêm mới CSVC",
               style: TextStyle(
                 color: AppColors.textDark,
                 fontWeight: FontWeight.bold,
@@ -284,8 +347,10 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTypeToggle(),
-                        const SizedBox(height: 30),
+                        if (!_isEditMode) ...[
+                          _buildTypeToggle(),
+                          const SizedBox(height: 30),
+                        ],
                         Container(
                           padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
@@ -394,7 +459,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
     );
   }
 
-  // ── Dropdown phòng ban thật ──────────────────────────────────────────────
+  // -- Dropdown phòng ban thật ----------------------------------------------
 
   Widget _buildDeptDropdown(List<DepartmentEntity> departments) {
     return Container(
@@ -428,7 +493,7 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
     );
   }
 
-  // ── Giữ nguyên toàn bộ widget cũ ────────────────────────────────────────
+  // -- Giữ nguyên toàn bộ widget cũ ----------------------------------------
 
   Widget _buildTypeToggle() {
     return Container(
@@ -609,8 +674,8 @@ class _CreateResourceScreenState extends State<CreateResourceScreen> {
           elevation: 5,
           shadowColor: AppColors.primary.withOpacity(0.3),
         ),
-        child: const Text(
-          "XÁC NHẬN TẠO",
+        child: Text(
+          _isEditMode ? "CẬP NHẬT" : "XÁC NHẬN TẠO",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,

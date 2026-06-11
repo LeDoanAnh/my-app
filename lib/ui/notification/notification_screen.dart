@@ -9,8 +9,13 @@ import 'package:my_app/ui/notification/notification_state.dart';
 
 class NotificationScreen extends StatefulWidget {
   final int userId;
+  final int? departmentId;
 
-  const NotificationScreen({super.key, required this.userId});
+  const NotificationScreen({
+    super.key,
+    required this.userId,
+    this.departmentId,
+  });
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
@@ -123,13 +128,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
             context.read<NotificationBloc>().add(MarkAsRead(item.id));
 
             if (item.submissionId != null) {
-              if (item.type == 'warning') {
+              if (item.type == 'pending_approval' ||
+                  item.type == 'pending_pre_approval' ||
+                  item.type == 'warning') {
                 await context.push<bool>(
                   '/approver-decision',
                   extra: {
                     'submissionId': item.submissionId!,
-                    'deptId': 1,
+                    'deptId': widget.departmentId ?? 1,
                     'approverId': widget.userId,
+                    'isPreApproval': item.type == 'pending_pre_approval',
                   },
                 );
                 if (mounted) {
@@ -138,7 +146,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   );
                 }
               } else {
-                context.push('/submission-detail/${item.submissionId}');
+                await context.push('/submission-detail/${item.submissionId}');
+                if (mounted) {
+                  context.read<NotificationBloc>().add(
+                    GetNotificationList(widget.userId),
+                  );
+                }
               }
             }
           },

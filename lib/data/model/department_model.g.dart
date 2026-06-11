@@ -11,6 +11,7 @@ DepartmentModel _$DepartmentModelFromJson(Map<String, dynamic> json) =>
       id: (json['id'] as num?)?.toInt(),
       deptName: json['dept_name'] as String?,
       locationDesc: json['location_desc'] as String?,
+      status: json['status'] as String?,
       parentDeptId: (json['parent_dept_id'] as num?)?.toInt(),
       assets: (json['assets'] as List<dynamic>?)
           ?.map((e) => AssetModel.fromJson(e as Map<String, dynamic>))
@@ -36,6 +37,7 @@ Map<String, dynamic> _$DepartmentModelToJson(DepartmentModel instance) =>
       'id': instance.id,
       'dept_name': instance.deptName,
       'location_desc': instance.locationDesc,
+      'status': instance.status,
       'parent_dept_id': instance.parentDeptId,
       'users_count': instance.usersCount,
       'created_at': instance.createdAt,

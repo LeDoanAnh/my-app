@@ -13,6 +13,7 @@ class DepartmentModel {
   final String? deptName;
   @JsonKey(name: 'location_desc')
   final String? locationDesc;
+  final String? status;
   @JsonKey(name: 'parent_dept_id')
   final int? parentDeptId;
   @JsonKey(name: "users_count")
@@ -34,6 +35,7 @@ class DepartmentModel {
     this.id,
     this.deptName,
     this.locationDesc,
+    this.status,
     this.parentDeptId,
     this.assets,
     this.locations,
@@ -56,6 +58,7 @@ class DepartmentModel {
       id: id ?? 1,
       deptName: deptName,
       locationDesc: locationDesc,
+      status: status,
       parentDeptId: parentDeptId,
       usersCount: usersCount,
       assets: assets,
@@ -69,7 +72,7 @@ class DepartmentModel {
 
   @override
   String toString() {
-    return 'DepartmentModel{id: $id, deptName: $deptName, locationDesc: $locationDesc, parentDeptId: $parentDeptId, usersCount: $usersCount, createdAt: $createdAt, updatedAt: $updatedAt, assetsCount: $assetsCount, submissionsCount: $submissionsCount, parent: $parent, assets: $assets, locations: $locations, users: $users}';
+    return 'DepartmentModel{id: $id, deptName: $deptName, locationDesc: $locationDesc, status: $status, parentDeptId: $parentDeptId, usersCount: $usersCount, createdAt: $createdAt, updatedAt: $updatedAt, assetsCount: $assetsCount, submissionsCount: $submissionsCount, parent: $parent, assets: $assets, locations: $locations, users: $users}';
   }
 }
 

@@ -25,4 +25,20 @@ class ApproverUseCase {
       if (comment != null && comment.isNotEmpty) 'comment': comment,
     });
   }
+
+  Future<CreateResponse> preSign(
+    int submissionId, {
+    required int staffId,
+    required String action,
+    String? comment,
+    List<String> attachmentPaths = const [],
+  }) {
+    return repository.preSign(
+      submissionId,
+      staffId: staffId,
+      action: action,
+      comment: comment,
+      attachmentPaths: attachmentPaths,
+    );
+  }
 }

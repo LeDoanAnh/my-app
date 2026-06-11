@@ -20,4 +20,8 @@ class AssetUseCase {
   Future<CreateResponse> createAsset(Map<String, dynamic> body) {
     return repository.createAsset(body);
   }
+
+  Future<CreateResponse> updateAsset(int id, Map<String, dynamic> body) {
+    return repository.updateAsset(id, body);
+  }
 }

@@ -32,13 +32,24 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     Emitter<NotificationState> emit,
   ) async {
     final int notificationId = event.notificationId;
+    final currentState = state;
+
+    if (currentState is! NotificationLoaded) {
+      return;
+    }
     try {
       await useCase.markAsRead(notificationId);
-      emit(
-        NotificationLoaded(
-          notifications: (state as NotificationLoaded).notifications,
-        ),
-      );
+      final updatedNotifications = currentState.notifications.map((
+        notification,
+      ) {
+        if (notification.id != notificationId) {
+          return notification;
+        }
+
+        return _copyNotification(notification, isRead: true);
+      }).toList();
+
+      emit(NotificationLoaded(notifications: updatedNotifications));
     } catch (e) {
       emit(NotificationError("Lỗi đánh dấu đã đọc: ${e.toString()}"));
     }
@@ -55,16 +66,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       final updatedNotifications = currentState.notifications.map((
         notification,
       ) {
-        return NotificationEntity(
-          id: notification.id,
-          type: notification.type,
-          userId: notification.userId,
-          title: notification.title,
-          message: notification.message,
-          submissionId: notification.submissionId,
-          timeAgo: notification.timeAgo,
-          isRead: true,
-        );
+        return _copyNotification(notification, isRead: true);
       }).toList();
       emit(NotificationLoaded(notifications: updatedNotifications));
       final int userId = event.userId;
@@ -79,5 +81,21 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         emit(NotificationError("Lỗi đánh dấu tất cả đã đọc: ${e.toString()}"));
       }
     }
+  }
+
+  NotificationEntity _copyNotification(
+    NotificationEntity notification, {
+    bool? isRead,
+  }) {
+    return NotificationEntity(
+      id: notification.id,
+      type: notification.type,
+      userId: notification.userId,
+      title: notification.title,
+      message: notification.message,
+      submissionId: notification.submissionId,
+      timeAgo: notification.timeAgo,
+      isRead: isRead ?? notification.isRead,
+    );
   }
 }

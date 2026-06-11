@@ -45,12 +45,16 @@ class FormResourceBloc extends Bloc<FormResourceEvent, FormResourceState> {
     final currentDepts = state.departments;
     emit(FormResourceLoading(departments: currentDepts));
     try {
-      final response = await locationUseCase.createLocation({
+      final body = {
         'name': event.name!,
         'capacity': event.capacity!,
         'address': event.address!,
         'dept_id': event.deptId!,
-      });
+        'status': event.status,
+      };
+      final response = event.id == null
+          ? await locationUseCase.createLocation(body)
+          : await locationUseCase.updateLocation(event.id!, body);
       if (response.success) {
         emit(FormResourceSuccess(response.message, departments: currentDepts));
       } else {
@@ -77,13 +81,17 @@ class FormResourceBloc extends Bloc<FormResourceEvent, FormResourceState> {
     final currentDepts = state.departments;
     emit(FormResourceLoading(departments: currentDepts));
     try {
-      final response = await assetUseCase.createAsset({
+      final body = {
         'name': event.name!,
         'description': event.description!,
         'unit': event.unit!,
         'asset_type': event.assetType!,
         'dept_id': event.deptId!,
-      });
+        'status': event.status,
+      };
+      final response = event.id == null
+          ? await assetUseCase.createAsset(body)
+          : await assetUseCase.updateAsset(event.id!, body);
       if (response.success) {
         emit(FormResourceSuccess(response.message, departments: currentDepts));
       } else {

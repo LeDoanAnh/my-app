@@ -31,6 +31,7 @@ import 'package:my_app/ui/submission/submission_list/submission_list_bloc.dart';
 import 'package:my_app/ui/user/actor_list/actor_list_bloc.dart';
 import 'package:my_app/ui/user/form_user/form_user_bloc.dart';
 import 'package:my_app/ui/user/user_detail_bloc.dart';
+import 'package:my_app/ui/workflow/create_workflow/create_workflow_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
@@ -39,7 +40,6 @@ import 'package:talker_flutter/talker_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'data/local/search_history_box.dart';
 import 'firebase_options.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 
 Future<void> main() async {
@@ -108,6 +108,7 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<ActorListBloc>()),
         BlocProvider(create: (_) => di.sl<AssetLocationListBloc>()),
         BlocProvider(create: (_) => di.sl<WorkflowListBloc>()),
+        BlocProvider(create: (_) => di.sl<CreateWorkflowBloc>()),
         BlocProvider(create: (_) => di.sl<WorkflowDetailBloc>()),
         BlocProvider(create: (_) => di.sl<AssetDetailBloc>()),
         BlocProvider(create: (_) => di.sl<LocationDetailBloc>()),

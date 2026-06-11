@@ -18,6 +18,16 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<CreateResponse> updateUser(int id, Map<String, dynamic> body) async {
+    return await _authApi.updateUser(id, body);
+  }
+
+  @override
+  Future<CreateResponse> deactivateUser(int id) async {
+    return await _authApi.deactivateUser(id);
+  }
+
+  @override
   Future<List<RoleEntity>> getRoleList() async {
     try {
       final RoleResponseModel models = await _authApi.getRoleList();

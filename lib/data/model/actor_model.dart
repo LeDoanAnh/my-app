@@ -11,9 +11,16 @@ class ActorModel {
   final int? actorId;
   @JsonKey(name: 'full_name')
   final String? fullName;
+  final String? status;
   final DepartmentModel? department;
 
-  ActorModel({required this.id, this.fullName, this.department, this.actorId});
+  ActorModel({
+    required this.id,
+    this.fullName,
+    this.status,
+    this.department,
+    this.actorId,
+  });
 
   factory ActorModel.fromJson(Map<String, dynamic> json) =>
       _$ActorModelFromJson(json);
@@ -24,6 +31,7 @@ class ActorModel {
     return ActorEntity(
       id: id,
       fullName: fullName,
+      status: status,
       department: department?.toEntity(),
     );
   }

@@ -1,6 +1,6 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_app/core/theme/app_colors.dart';
 import 'package:my_app/domain/entities/location_detail_entity.dart';
 import 'package:my_app/ui/location_asset/location_detail/location_detail_bloc.dart';
@@ -48,6 +48,33 @@ class _LocationDetailScreenState extends State<LocationDetailScreen> {
           ),
           onPressed: () => context.pop(),
         ),
+        actions: [
+          BlocBuilder<LocationDetailBloc, LocationDetailState>(
+            builder: (context, state) {
+              if (state is! LocationDetailLoaded) {
+                return const SizedBox(width: 48);
+              }
+
+              return IconButton(
+                tooltip: "Sửa địa điểm",
+                icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+                onPressed: () async {
+                  final updated = await context.push(
+                    '/create-resource',
+                    extra: {'location': state.locationDetail},
+                  );
+                  if (!context.mounted) return;
+                  if (updated == true) {
+                    context.read<LocationDetailBloc>().add(
+                      GetLocationDetail(widget.locationId),
+                    );
+                  }
+                },
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocBuilder<LocationDetailBloc, LocationDetailState>(
         builder: (context, state) {

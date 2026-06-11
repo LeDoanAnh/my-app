@@ -9,7 +9,6 @@ import 'package:my_app/data/model/asset_task_model.dart';
 import 'package:my_app/data/model/borrow_model.dart';
 import 'package:my_app/data/model/calendar_model.dart';
 import 'package:my_app/data/model/create_response.dart';
-import 'package:my_app/data/model/create_user_response.dart';
 import 'package:my_app/data/model/department_model.dart';
 import 'package:my_app/data/model/history_model.dart';
 import 'package:my_app/data/model/location_detail_model.dart';
@@ -19,7 +18,6 @@ import 'package:my_app/data/model/recovery_model.dart';
 import 'package:my_app/data/model/role_model.dart';
 import 'package:my_app/data/model/search_model.dart';
 import 'package:my_app/data/model/submission_model.dart';
-import 'package:my_app/data/model/submission_response_model.dart';
 import 'package:my_app/data/model/submission_stats_model.dart';
 import 'package:my_app/data/model/submission_step_model.dart';
 import 'package:my_app/data/model/user_model.dart';
@@ -91,6 +89,15 @@ abstract class AuthApi {
   @GET("/workflow/detail/{id}")
   Future<WorkflowDetail> getWorkflowDetail(@Path("id") int id);
 
+  @POST("/workflow/store")
+  Future<CreateResponse> createWorkflow(@Body() Map<String, dynamic> body);
+
+  @PUT("/workflow/update/{id}")
+  Future<CreateResponse> updateWorkflow(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
+
   @GET("/asset/detail/{id}")
   Future<AssetDetailModel> getAssetDetail(@Path("id") int id);
 
@@ -103,7 +110,7 @@ abstract class AuthApi {
   );
 
   @POST("/notifications/{id}/read")
-  Future<dynamic> markAsRead(@Body() Map<String, dynamic> body);
+  Future<dynamic> markAsRead(@Path("id") int id);
 
   @POST("/notifications/read_all/{user_id}")
   Future<dynamic> markAllAsRead(@Path("user_id") int userId);
@@ -128,6 +135,15 @@ abstract class AuthApi {
   @POST("/actor/create")
   Future<CreateResponse> createUser(@Body() Map<String, dynamic> body);
 
+  @PUT("/actor/update/{id}")
+  Future<CreateResponse> updateUser(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @DELETE("/actor/{id}")
+  Future<CreateResponse> deactivateUser(@Path("id") int id);
+
   @GET("/role/list")
   Future<RoleResponseModel> getRoleList();
 
@@ -139,13 +155,35 @@ abstract class AuthApi {
     @Part(name: "dept_name") String deptName,
     @Part(name: "location_desc") String locationDesc,
     @Part(name: "parent_dept_id") int? parentDeptId,
+    @Part(name: "status") String status,
   );
+
+  @PUT("/department/{id}")
+  Future<CreateResponse> updateDepartment(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @DELETE("/department/{id}")
+  Future<CreateResponse> deactivateDepartment(@Path("id") int id);
 
   @POST("/asset/create")
   Future<CreateResponse> createAsset(@Body() Map<String, dynamic> body);
 
+  @PUT("/asset/update/{id}")
+  Future<CreateResponse> updateAsset(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
+
   @POST("/location/create")
   Future<CreateResponse> createLocation(@Body() Map<String, dynamic> body);
+
+  @PUT("/location/update/{id}")
+  Future<CreateResponse> updateLocation(
+    @Path("id") int id,
+    @Body() Map<String, dynamic> body,
+  );
 
   // data/api/api.dart — thêm vào AuthApi
   @GET("/v1/approver/submission/{submissionId}")
@@ -158,6 +196,16 @@ abstract class AuthApi {
   Future<CreateResponse> decideSubmission(
     @Path("submissionId") int submissionId,
     @Body() Map<String, dynamic> body,
+  );
+
+  @MultiPart()
+  @POST("/v1/approver/submission/{submissionId}/pre-sign")
+  Future<CreateResponse> preSignSubmission(
+    @Path("submissionId") int submissionId,
+    @Part(name: "staff_id") int staffId,
+    @Part(name: "action") String action,
+    @Part(name: "comment") String? comment,
+    @Part(name: "attachments[]") List<MultipartFile>? attachments,
   );
 
   @GET("/asset/asset-tasks")

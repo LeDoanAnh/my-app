@@ -20,7 +20,13 @@ class CreateUserBloc extends Bloc<CreateUserEvent, CreateUserState> {
   ) async {
     emit(CreateUserRoleLoading());
     try {
-      final response = await _createUserUseCase.call(event.params);
+      final body = event.params.toJson();
+      if (event.userId != null && body['password'].toString().isEmpty) {
+        body.remove('password');
+      }
+      final response = event.userId == null
+          ? await _createUserUseCase.call(event.params)
+          : await _createUserUseCase.update(event.userId!, body);
       if (response.success) {
         emit(CreateUserSubmitSuccess(response.message));
       } else {

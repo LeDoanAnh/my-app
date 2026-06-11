@@ -5,6 +5,9 @@ class LocationEntity {
   final int? departmentId;
   final String? locationName;
   final String? status;
+  final String? availabilityStatus;
+  final String? conflictStatus;
+  final String? conflictMessage;
   final String? capacity;
   final DepartmentEntity? department;
 
@@ -13,6 +16,9 @@ class LocationEntity {
     this.departmentId,
     this.locationName,
     this.status,
+    this.availabilityStatus,
+    this.conflictStatus,
+    this.conflictMessage,
     this.capacity,
     this.department,
   });

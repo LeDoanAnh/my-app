@@ -4,4 +4,11 @@ import 'package:my_app/data/model/create_response.dart';
 abstract class ApproverRepository {
   Future<ApproverSubmissionEntity> getSubmission(int submissionId, int deptId);
   Future<CreateResponse> decide(int submissionId, Map<String, dynamic> body);
+  Future<CreateResponse> preSign(
+    int submissionId, {
+    required int staffId,
+    required String action,
+    String? comment,
+    List<String> attachmentPaths = const [],
+  });
 }

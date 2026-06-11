@@ -12,6 +12,7 @@ class FormDepartmentBloc
     : super(FormDepartmentInitial()) {
     on<GetDepartmentList>(_onGetDepartmentList);
     on<SubmitCreateDepartment>(_onSubmitCreateDepartment);
+    on<SubmitUpdateDepartment>(_onSubmitUpdateDepartment);
   }
   Future<void> _onGetDepartmentList(
     GetDepartmentList event,
@@ -30,12 +31,6 @@ class FormDepartmentBloc
     SubmitCreateDepartment event,
     Emitter<FormDepartmentState> emit,
   ) async {
-    List departments = [];
-    final currentState = state;
-    if (currentState is FormDepartmentLoaded) {
-      departments = currentState.departments;
-    }
-
     emit(FormDepartmentLoading());
 
     try {
@@ -43,6 +38,7 @@ class FormDepartmentBloc
         event.deptName!,
         event.locationDesc!,
         event.parentDeptId,
+        event.status,
       );
 
       if (response.success) {
@@ -60,6 +56,39 @@ class FormDepartmentBloc
         );
       } else {
         emit(FormDepartmentError('Lỗi không xác định: ${e.toString()}'));
+      }
+    }
+  }
+
+  Future<void> _onSubmitUpdateDepartment(
+    SubmitUpdateDepartment event,
+    Emitter<FormDepartmentState> emit,
+  ) async {
+    emit(FormDepartmentLoading());
+
+    try {
+      final response = await departmentListUseCase.updateDepartment(event.id, {
+        'dept_name': event.deptName,
+        'location_desc': event.locationDesc,
+        'parent_dept_id': event.parentDeptId,
+        'status': event.status,
+      });
+
+      if (response.success) {
+        emit(FormDepartmentSuccess(response.message));
+      } else {
+        emit(FormDepartmentError(response.message));
+      }
+    } catch (e) {
+      if (e is DioException) {
+        emit(
+          FormDepartmentError(
+            e.response?.data?['message'] ??
+                'Lá»—i káº¿t ná»‘i. Vui lÃ²ng kiá»ƒm tra máº¡ng.',
+          ),
+        );
+      } else {
+        emit(FormDepartmentError('Lá»—i khÃ´ng xÃ¡c Ä‘á»‹nh: ${e.toString()}'));
       }
     }
   }

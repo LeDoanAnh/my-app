@@ -27,6 +27,22 @@ class DecideSubmission extends ApproverEvent {
   });
 }
 
+class PreSignSubmission extends ApproverEvent {
+  final int submissionId;
+  final int staffId;
+  final String action; // 'signed' | 'revision_requested'
+  final String? comment;
+  final List<String> attachmentPaths;
+
+  PreSignSubmission({
+    required this.submissionId,
+    required this.staffId,
+    required this.action,
+    this.comment,
+    this.attachmentPaths = const [],
+  });
+}
+
 // State
 abstract class ApproverState {}
 
@@ -49,6 +65,11 @@ class ApproverDecideSuccess extends ApproverState {
   ApproverDecideSuccess(this.message);
 }
 
+class ApproverPreSignSuccess extends ApproverState {
+  final String message;
+  ApproverPreSignSuccess(this.message);
+}
+
 class ApproverError extends ApproverState {
   final String message;
   ApproverError(this.message);
@@ -67,6 +88,7 @@ class ApproverBloc extends Bloc<ApproverEvent, ApproverState> {
   ApproverBloc({required this.useCase}) : super(ApproverInitial()) {
     on<LoadApproverSubmission>(_onLoad);
     on<DecideSubmission>(_onDecide);
+    on<PreSignSubmission>(_onPreSign);
   }
 
   Future<void> _onLoad(
@@ -117,6 +139,47 @@ class ApproverBloc extends Bloc<ApproverEvent, ApproverState> {
         } else {
           emit(ApproverError(response.message));
         }
+      }
+    } catch (e) {
+      if (currentSubmission != null) {
+        emit(ApproverActionError(e.toString(), currentSubmission));
+      } else {
+        emit(ApproverError(e.toString()));
+      }
+    }
+  }
+
+  Future<void> _onPreSign(
+    PreSignSubmission event,
+    Emitter<ApproverState> emit,
+  ) async {
+    final currentSubmission = state is ApproverLoaded
+        ? (state as ApproverLoaded).submission
+        : state is ApproverDeciding
+        ? (state as ApproverDeciding).submission
+        : state is ApproverActionError
+        ? (state as ApproverActionError).submission
+        : null;
+    if (currentSubmission != null) {
+      emit(ApproverDeciding(currentSubmission));
+    } else {
+      emit(ApproverLoading());
+    }
+
+    try {
+      final response = await useCase.preSign(
+        event.submissionId,
+        staffId: event.staffId,
+        action: event.action,
+        comment: event.comment,
+        attachmentPaths: event.attachmentPaths,
+      );
+      if (response.success) {
+        emit(ApproverPreSignSuccess(response.message));
+      } else if (currentSubmission != null) {
+        emit(ApproverActionError(response.message, currentSubmission));
+      } else {
+        emit(ApproverError(response.message));
       }
     } catch (e) {
       if (currentSubmission != null) {

@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:my_app/data/model/department_model.dart';
 import 'package:my_app/domain/entities/asset_entity.dart';
-import 'package:my_app/domain/entities/department_entity.dart';
 
 part 'asset_model.g.dart';
 
@@ -15,7 +14,16 @@ class AssetModel {
   @JsonKey(name: "asset_code")
   final String? assetCode;
   final String? unit;
+  final String? type;
   final String? status;
+  @JsonKey(name: "total_quantity")
+  final int? totalQuantity;
+  @JsonKey(name: "borrowed_quantity")
+  final int? borrowedQuantity;
+  @JsonKey(name: "pending_quantity")
+  final int? pendingQuantity;
+  @JsonKey(name: "available_quantity")
+  final int? availableQuantity;
   final DepartmentModel? department;
 
   AssetModel({
@@ -24,7 +32,12 @@ class AssetModel {
     this.assetName,
     this.assetCode,
     this.unit,
+    this.type,
     this.status,
+    this.totalQuantity,
+    this.borrowedQuantity,
+    this.pendingQuantity,
+    this.availableQuantity,
     this.department,
   });
 
@@ -39,7 +52,12 @@ class AssetModel {
       assetName: assetName,
       assetCode: assetCode,
       unit: unit,
+      type: type,
       status: status,
+      totalQuantity: totalQuantity,
+      borrowedQuantity: borrowedQuantity,
+      pendingQuantity: pendingQuantity,
+      availableQuantity: availableQuantity,
       department: department?.toEntity(),
     );
   }

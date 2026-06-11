@@ -16,6 +16,8 @@ SubmissionModel _$SubmissionModelFromJson(Map<String, dynamic> json) =>
       time: json['time'] as String?,
       creatorName: json['creator_name'] as String?,
       approverName: json['approver_name'] as String?,
+      preApprovalStatus: json['pre_approval_status'] as String?,
+      preApproverName: json['pre_approver_name'] as String?,
       date: json['date'] as String?,
       categoryName: json['category_name'] as String?,
       submissionCode: json['submission_code'] as String?,
@@ -34,6 +36,8 @@ Map<String, dynamic> _$SubmissionModelToJson(SubmissionModel instance) =>
       'time': instance.time,
       'creator_name': instance.creatorName,
       'approver_name': instance.approverName,
+      'pre_approval_status': instance.preApprovalStatus,
+      'pre_approver_name': instance.preApproverName,
     };
 
 SubmissionResponseModel _$SubmissionResponseModelFromJson(

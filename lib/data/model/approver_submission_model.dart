@@ -19,6 +19,12 @@ class ApproverSubmissionModel {
   final List<ApproverLocationModel>? locations;
   final List<ApproverAssetModel>? assets;
   final List<ApproverAttachmentModel>? attachments;
+  @JsonKey(name: 'previous_approvals')
+  final List<PreviousApprovalModel>? previousApprovals;
+  @JsonKey(name: 'pre_approval')
+  final PreApprovalModel? preApproval;
+  @JsonKey(name: 'is_pre_approved')
+  final bool? isPreApproved;
   @JsonKey(name: 'my_decision')
   final MyDecisionModel? myDecision;
 
@@ -34,6 +40,9 @@ class ApproverSubmissionModel {
     this.locations,
     this.assets,
     this.attachments,
+    this.previousApprovals,
+    this.preApproval,
+    this.isPreApproved,
     this.myDecision,
   });
 
@@ -91,6 +100,44 @@ class ApproverAttachmentModel {
 }
 
 @JsonSerializable()
+class PreviousApprovalModel {
+  @JsonKey(name: 'step_id')
+  final int? stepId;
+  @JsonKey(name: 'step_order')
+  final int? stepOrder;
+  @JsonKey(name: 'dept_id')
+  final int? deptId;
+  @JsonKey(name: 'dept_name')
+  final String? deptName;
+  final String? action;
+  final String? comment;
+  @JsonKey(name: 'decided_at')
+  final String? decidedAt;
+  @JsonKey(name: 'approver_id')
+  final int? approverId;
+  @JsonKey(name: 'approver_name')
+  final String? approverName;
+  @JsonKey(name: 'approver_dept')
+  final String? approverDept;
+
+  PreviousApprovalModel({
+    this.stepId,
+    this.stepOrder,
+    this.deptId,
+    this.deptName,
+    this.action,
+    this.comment,
+    this.decidedAt,
+    this.approverId,
+    this.approverName,
+    this.approverDept,
+  });
+
+  factory PreviousApprovalModel.fromJson(Map<String, dynamic> json) =>
+      _$PreviousApprovalModelFromJson(json);
+}
+
+@JsonSerializable()
 class MyDecisionModel {
   final String? action;
   final String? comment;
@@ -100,6 +147,36 @@ class MyDecisionModel {
   MyDecisionModel({this.action, this.comment, this.decidedAt});
   factory MyDecisionModel.fromJson(Map<String, dynamic> json) =>
       _$MyDecisionModelFromJson(json);
+}
+
+@JsonSerializable()
+class PreApprovalModel {
+  final int? id;
+  final String? action;
+  final String? comment;
+  @JsonKey(name: 'decided_at')
+  final String? decidedAt;
+  @JsonKey(name: 'staff_id')
+  final int? staffId;
+  @JsonKey(name: 'staff_name')
+  final String? staffName;
+  @JsonKey(name: 'staff_dept')
+  final String? staffDept;
+  final List<ApproverAttachmentModel>? attachments;
+
+  PreApprovalModel({
+    this.id,
+    this.action,
+    this.comment,
+    this.decidedAt,
+    this.staffId,
+    this.staffName,
+    this.staffDept,
+    this.attachments,
+  });
+
+  factory PreApprovalModel.fromJson(Map<String, dynamic> json) =>
+      _$PreApprovalModelFromJson(json);
 }
 
 @JsonSerializable()

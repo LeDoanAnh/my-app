@@ -43,7 +43,11 @@ class _WorkflowListScreenState extends State<WorkflowListScreen> {
               color: AppColors.primary,
               size: 28,
             ),
-            onPressed: () => context.push('/create-workflow'), // ← go_router
+            onPressed: () async {
+              final result = await context.push<bool>('/create-workflow');
+              if (!context.mounted || result != true) return;
+              context.read<WorkflowListBloc>().add(GetWorkflowList());
+            },
           ),
           const SizedBox(width: 8),
         ],
@@ -65,8 +69,12 @@ class _WorkflowListScreenState extends State<WorkflowListScreen> {
                   child: ListView.builder(
                     padding: const EdgeInsets.all(20),
                     itemCount: workflows.length,
-                    itemBuilder: (context, index) =>
-                        _WorkflowCard(wf: workflows[index]),
+                    itemBuilder: (context, index) => _WorkflowCard(
+                      wf: workflows[index],
+                      onChanged: () => context.read<WorkflowListBloc>().add(
+                        GetWorkflowList(),
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -119,8 +127,9 @@ class _SummaryHeader extends StatelessWidget {
 
 class _WorkflowCard extends StatelessWidget {
   final WorkflowListEntity wf;
+  final VoidCallback onChanged;
 
-  const _WorkflowCard({required this.wf});
+  const _WorkflowCard({required this.wf, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +142,7 @@ class _WorkflowCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -142,7 +151,14 @@ class _WorkflowCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: InkWell(
-          onTap: () => context.push('/workflow-detail/${wf.id}'), // ← go_router
+          onTap: () async {
+            final result = await context.push<bool>(
+              '/workflow-detail/${wf.id}',
+            );
+            if (result == true) {
+              onChanged();
+            }
+          },
           child: Column(
             children: [
               Padding(
@@ -153,7 +169,7 @@ class _WorkflowCard extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor:
                           (isActive ? AppColors.primary : Colors.grey)
-                              .withOpacity(0.1),
+                              .withValues(alpha: 0.1),
                       child: Icon(
                         Icons.alt_route_rounded,
                         color: isActive ? AppColors.primary : Colors.grey,
@@ -191,7 +207,7 @@ class _WorkflowCard extends StatelessWidget {
                   horizontal: 20,
                   vertical: 15,
                 ),
-                color: AppColors.fieldBg.withOpacity(0.5),
+                color: AppColors.fieldBg.withValues(alpha: 0.5),
                 child: Row(
                   children: [
                     const Text(
@@ -268,7 +284,7 @@ class _StatusChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: (isActive ? Colors.green : Colors.grey).withOpacity(0.1),
+        color: (isActive ? Colors.green : Colors.grey).withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

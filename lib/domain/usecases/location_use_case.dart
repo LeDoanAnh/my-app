@@ -20,4 +20,8 @@ class LocationUseCase {
   Future<CreateResponse> createLocation(Map<String, dynamic> body) {
     return repository.createLocation(body);
   }
+
+  Future<CreateResponse> updateLocation(int id, Map<String, dynamic> body) {
+    return repository.updateLocation(id, body);
+  }
 }

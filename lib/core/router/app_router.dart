@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_app/domain/entities/asset_detail_entity.dart';
+import 'package:my_app/domain/entities/department_entity.dart';
+import 'package:my_app/domain/entities/location_detail_entity.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
 import 'package:my_app/ui/auth/blog/auth_bloc.dart';
 import 'package:my_app/ui/auth/blog/auth_state.dart';
@@ -29,7 +32,7 @@ import 'package:my_app/ui/submission/submission_list/submission_list_screen.dart
 import 'package:my_app/ui/user/actor_list/user_list_screen.dart';
 import 'package:my_app/ui/user/form_user/create_user_screen.dart';
 import 'package:my_app/ui/user/user_detail_screen.dart';
-import 'package:my_app/ui/workflow/create_workflow_screen.dart';
+import 'package:my_app/ui/workflow/create_workflow/create_workflow_screen.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_screen.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_screen.dart';
 
@@ -125,7 +128,8 @@ class AppRouter {
         name: 'notification',
         builder: (context, state) {
           final userId = int.parse(state.pathParameters['userId']!);
-          return NotificationScreen(userId: userId);
+          final departmentId = state.extra as int?;
+          return NotificationScreen(userId: userId, departmentId: departmentId);
         },
       ),
       GoRoute(
@@ -142,11 +146,12 @@ class AppRouter {
         path: '/approver-decision',
         name: 'approver-decision',
         builder: (context, state) {
-          final args = state.extra as Map<String, int>;
+          final args = state.extra as Map<String, dynamic>;
           return ApproverDecisionScreen(
-            submissionId: args['submissionId']!,
-            deptId: args['deptId']!,
-            approverId: args['approverId']!,
+            submissionId: args['submissionId'] as int,
+            deptId: args['deptId'] as int,
+            approverId: args['approverId'] as int,
+            isPreApproval: args['isPreApproval'] as bool? ?? false,
           );
         },
       ),
@@ -168,7 +173,10 @@ class AppRouter {
       GoRoute(
         path: '/create-department',
         name: 'create-department',
-        builder: (context, state) => CreateDepartmentScreen(),
+        builder: (context, state) {
+          final department = state.extra as DepartmentEntity?;
+          return CreateDepartmentScreen(initialDepartment: department);
+        },
       ),
 
       // ── ASSET & LOCATION ───────────────────────────────────────
@@ -196,7 +204,20 @@ class AppRouter {
       GoRoute(
         path: '/create-resource',
         name: 'create-resource',
-        builder: (context, state) => const CreateResourceScreen(),
+        builder: (context, state) {
+          final args = state.extra;
+          final initialAsset = args is Map<String, dynamic>
+              ? args['asset'] as AssetDetailEntity?
+              : null;
+          final initialLocation = args is Map<String, dynamic>
+              ? args['location'] as LocationDetailEntity?
+              : null;
+
+          return CreateResourceScreen(
+            initialAsset: initialAsset,
+            initialLocation: initialLocation,
+          );
+        },
       ),
 
       // ── ASSET SUBMISSION ───────────────────────────────────────
@@ -270,7 +291,10 @@ class AppRouter {
       GoRoute(
         path: '/create-workflow',
         name: 'create-workflow',
-        builder: (context, state) => const CreateWorkflowScreen(),
+        builder: (context, state) {
+          final workflowId = state.extra as int?;
+          return CreateWorkflowScreen(workflowId: workflowId);
+        },
       ),
 
       // ── USER ───────────────────────────────────────────────────
@@ -290,7 +314,10 @@ class AppRouter {
       GoRoute(
         path: '/create-user',
         name: 'create-user',
-        builder: (context, state) => const CreateUserScreen(),
+        builder: (context, state) {
+          final user = state.extra as UserEntity?;
+          return CreateUserScreen(initialUser: user);
+        },
       ),
 
       // ── MISC ───────────────────────────────────────────────────
