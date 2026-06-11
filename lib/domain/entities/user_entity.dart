@@ -15,6 +15,7 @@ class UserEntity {
   final String? updatedAt;
   final int? totalSubmissions;
   final int? unreadNotifications;
+  final bool isFirstLogin;
 
   UserEntity({
     required this.id,
@@ -31,5 +32,42 @@ class UserEntity {
     this.updatedAt,
     this.totalSubmissions,
     this.unreadNotifications,
+    this.isFirstLogin = false,
   });
+
+  UserEntity copyWith({
+    int? id,
+    String? username,
+    String? fullName,
+    String? email,
+    String? sessionId,
+    String? token,
+    String? departmentName,
+    List<RoleEntity>? roles,
+    int? departmentId,
+    String? status,
+    String? createdAt,
+    String? updatedAt,
+    int? totalSubmissions,
+    int? unreadNotifications,
+    bool? isFirstLogin,
+  }) {
+    return UserEntity(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      sessionId: sessionId ?? this.sessionId,
+      token: token ?? this.token,
+      departmentName: departmentName ?? this.departmentName,
+      roles: roles ?? this.roles,
+      departmentId: departmentId ?? this.departmentId,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      totalSubmissions: totalSubmissions ?? this.totalSubmissions,
+      unreadNotifications: unreadNotifications ?? this.unreadNotifications,
+      isFirstLogin: isFirstLogin ?? this.isFirstLogin,
+    );
+  }
 }

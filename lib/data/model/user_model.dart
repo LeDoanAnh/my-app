@@ -29,6 +29,8 @@ class UserModel {
   final int? totalSubmissions;
   @JsonKey(name: "unread_notifications")
   final int? unreadNotifications;
+  @JsonKey(name: "is_first_login", fromJson: _boolFromJson)
+  final bool isFirstLogin;
 
   UserModel({
     required this.id,
@@ -45,6 +47,7 @@ class UserModel {
     this.updatedAt,
     this.totalSubmissions,
     this.unreadNotifications,
+    this.isFirstLogin = false,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
@@ -78,7 +81,17 @@ class UserModel {
       updatedAt: updatedAt,
       totalSubmissions: totalSubmissions,
       unreadNotifications: unreadNotifications,
+      isFirstLogin: isFirstLogin,
     );
+  }
+
+  static bool _boolFromJson(dynamic value) {
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+    if (value is String) {
+      return value == '1' || value.toLowerCase() == 'true';
+    }
+    return false;
   }
 }
 

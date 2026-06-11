@@ -24,16 +24,18 @@ class CreateUserBloc extends Bloc<CreateUserEvent, CreateUserState> {
       if (event.userId != null && body['password'].toString().isEmpty) {
         body.remove('password');
       }
+
       final response = event.userId == null
           ? await _createUserUseCase.call(event.params)
           : await _createUserUseCase.update(event.userId!, body);
+
       if (response.success) {
         emit(CreateUserSubmitSuccess(response.message));
       } else {
         emit(CreateUserError(response.message));
       }
     } catch (e) {
-      emit(CreateUserError("Lỗi hệ thống: ${e.toString()}"));
+      emit(CreateUserError(_cleanErrorMessage(e)));
     }
   }
 
@@ -47,7 +49,11 @@ class CreateUserBloc extends Bloc<CreateUserEvent, CreateUserState> {
       final departments = await _departmentListUseCase.callResources();
       emit(CreateUserFormReady(roles: roles, departments: departments));
     } catch (e) {
-      emit(CreateUserError("Lỗi hệ thống: ${e.toString()}"));
+      emit(CreateUserError(_cleanErrorMessage(e)));
     }
+  }
+
+  String _cleanErrorMessage(Object e) {
+    return e.toString().replaceFirst('Exception: ', '');
   }
 }

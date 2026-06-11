@@ -11,6 +11,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogoutPressed>(_onLogoutPressed);
     on<AppStarted>(_onAppStarted);
     on<UpdateFcmTokenEvent>(_onUpdateFcmTokenEvent);
+    on<ChangePasswordSubmitted>(_onChangePasswordSubmitted);
+    on<ForgotPasswordRequested>(_onForgotPasswordRequested);
   }
 
   Future<void> _onUpdateFcmTokenEvent(
@@ -54,6 +56,36 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(Authenticated(user: currentUser));
     } else {
       emit(Unauthenticated());
+    }
+  }
+
+  Future<void> _onChangePasswordSubmitted(
+    ChangePasswordSubmitted event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final user = await repository.changePassword(
+        currentPassword: event.currentPassword,
+        newPassword: event.newPassword,
+        newPasswordConfirmation: event.newPasswordConfirmation,
+      );
+      emit(Authenticated(user: user));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  Future<void> _onForgotPasswordRequested(
+    ForgotPasswordRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      await repository.forgotPassword(event.identifier);
+      emit(ForgotPasswordSent());
+    } catch (e) {
+      emit(AuthError(e.toString()));
     }
   }
 }

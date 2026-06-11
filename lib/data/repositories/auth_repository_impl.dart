@@ -30,7 +30,7 @@ class AuthRepositoryImpl extends AuthRepository {
       _sessionId = sessionRes["session_id"];
 
       final userModel = await api.getAccount(_sessionId!);
-      final userEntity = userModel.toEntity();
+      final userEntity = userModel.toEntity().copyWith(sessionId: _sessionId);
 
       await saveUserToLocal(userEntity);
       return userEntity;
@@ -54,6 +54,14 @@ class AuthRepositoryImpl extends AuthRepository {
       email: user.email,
       sessionId: user.sessionId,
       departmentId: user.departmentId,
+      departmentName: user.departmentName,
+      token: user.token,
+      status: user.status,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      totalSubmissions: user.totalSubmissions,
+      unreadNotifications: user.unreadNotifications,
+      isFirstLogin: user.isFirstLogin,
       roles:
           user.roles
               ?.map(
@@ -90,17 +98,63 @@ class AuthRepositoryImpl extends AuthRepository {
     try {
       String? tokenToUse = _sessionId;
 
-      if (tokenToUse == null) {
+      if (tokenToUse == null || tokenToUse.isEmpty) {
         final user = await getUserFromLocal();
         tokenToUse = user?.sessionId;
       }
-      if (tokenToUse != null) {
+      if (tokenToUse != null && tokenToUse.isNotEmpty) {
         await api.saveFcmToken("Bearer $tokenToUse", {"token": token});
       } else {
         print("Repository Error: Không tìm thấy Session ID để xác thực");
       }
     } catch (e) {
       print("Repository Error: Không thể lưu FCM Token: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<UserEntity> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String newPasswordConfirmation,
+  }) async {
+    try {
+      String? tokenToUse = _sessionId;
+
+      if (tokenToUse == null || tokenToUse.isEmpty) {
+        final user = await getUserFromLocal();
+        tokenToUse = user?.sessionId;
+      }
+
+      if (tokenToUse == null || tokenToUse.isEmpty) {
+        throw Exception("Không tìm thấy phiên đăng nhập");
+      }
+
+      await api.changePassword("Bearer $tokenToUse", {
+        "current_password": currentPassword,
+        "password": newPassword,
+        "password_confirmation": newPasswordConfirmation,
+      });
+
+      final currentUser = await getUserFromLocal();
+      if (currentUser == null) {
+        throw Exception("Không tìm thấy thông tin người dùng");
+      }
+
+      final updatedUser = currentUser.copyWith(isFirstLogin: false);
+      await saveUserToLocal(updatedUser);
+      return updatedUser;
+    } catch (e) {
+      throw Exception("Đổi mật khẩu thất bại: ${e.toString()}");
+    }
+  }
+
+  @override
+  Future<void> forgotPassword(String identifier) async {
+    try {
+      await api.forgotPassword({"identifier": identifier});
+    } catch (e) {
+      throw Exception("Không thể gửi mật khẩu mới: ${e.toString()}");
     }
   }
 }

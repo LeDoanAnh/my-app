@@ -10,4 +10,12 @@ abstract class AuthRepository {
   Future<UserEntity?> getUserFromLocal();
 
   Future<void> saveFcmToken(String token);
+
+  Future<UserEntity> changePassword({
+    required String currentPassword,
+    required String newPassword,
+    required String newPasswordConfirmation,
+  });
+
+  Future<void> forgotPassword(String identifier);
 }

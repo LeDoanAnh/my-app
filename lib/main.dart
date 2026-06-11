@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_ce_flutter/adapters.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
+import 'package:my_app/core/l10n/app_localizations.dart';
 import 'package:my_app/core/router/app_router.dart';
+import 'package:my_app/core/settings/app_settings_controller.dart';
 import 'package:my_app/core/theme/app_colors.dart';
+import 'package:my_app/firebase_options.dart';
+import 'package:my_app/injection_container.dart' as di;
 import 'package:my_app/notification_service.dart';
 import 'package:my_app/ui/auth/blog/auth_bloc.dart';
 import 'package:my_app/ui/auth/blog/auth_event.dart';
@@ -35,12 +41,9 @@ import 'package:my_app/ui/workflow/create_workflow/create_workflow_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_detail/workflow_detail_bloc.dart';
 import 'package:my_app/ui/workflow/workflow_list/workflow_list_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
-import 'package:my_app/injection_container.dart' as di;
 import 'package:talker_flutter/talker_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'data/local/search_history_box.dart';
-import 'firebase_options.dart';
-import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +60,7 @@ Future<void> main() async {
 
   final messaging = FirebaseMessaging.instance;
   final token = await messaging.getToken();
-  if (kDebugMode) print('TOKEN CỦA MÁY NÀY: $token');
+  if (kDebugMode) print('FCM token: $token');
 
   final settings = await messaging.requestPermission(
     alert: true,
@@ -73,6 +76,7 @@ Future<void> main() async {
   final notificationService = NotificationService();
   await notificationService.initFCM();
   await SearchHistoryBox.init();
+  await appSettingsController.load();
 
   FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
 
@@ -87,9 +91,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // Khởi tạo AuthBloc sớm để AppRouter có thể dùng ngay
   late final AuthBloc _authBloc = di.sl<AuthBloc>()..add(AppStarted());
   late final AppRouter _appRouter = AppRouter(authBloc: _authBloc);
+
   @override
   void dispose() {
     _authBloc.close();
@@ -100,7 +104,6 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        // AuthBloc dùng instance đã tạo ở trên (cùng 1 instance với AppRouter)
         BlocProvider<AuthBloc>.value(value: _authBloc),
         BlocProvider<HomeBloc>(create: (_) => di.sl<HomeBloc>()),
         BlocProvider(create: (_) => di.sl<CalendarBloc>()),
@@ -129,11 +132,24 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(create: (_) => di.sl<HandoverHistoryBloc>()),
         BlocProvider(create: (_) => di.sl<SearchBloc>()),
       ],
-      child: MaterialApp.router(
-        routerConfig: _appRouter.router,
-        title: 'Hệ thống phê duyệt',
-        debugShowCheckedModeBanner: false,
-        theme: AppColors.theme(),
+      child: AnimatedBuilder(
+        animation: appSettingsController,
+        builder: (context, _) => MaterialApp.router(
+          routerConfig: _appRouter.router,
+          title: AppLocalizations(appSettingsController.locale).t('appTitle'),
+          debugShowCheckedModeBanner: false,
+          theme: AppColors.theme(),
+          darkTheme: AppColors.darkTheme(),
+          themeMode: appSettingsController.themeMode,
+          locale: appSettingsController.locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+        ),
       ),
     );
   }

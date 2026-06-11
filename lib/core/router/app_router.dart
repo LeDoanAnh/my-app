@@ -7,6 +7,7 @@ import 'package:my_app/domain/entities/location_detail_entity.dart';
 import 'package:my_app/domain/entities/user_entity.dart';
 import 'package:my_app/ui/auth/blog/auth_bloc.dart';
 import 'package:my_app/ui/auth/blog/auth_state.dart';
+import 'package:my_app/ui/auth/change_password_screen.dart';
 import 'package:my_app/ui/auth/blog/login_screen.dart';
 import 'package:my_app/ui/auth/profile_screen.dart';
 import 'package:my_app/ui/calendar/calendar_screen.dart';
@@ -66,10 +67,19 @@ class AppRouter {
       final authState = authBloc.state;
       final location = state.matchedLocation;
       final isLoginRoute = location == '/login';
+      final isChangePasswordRoute = location == '/change-password';
 
       if (authState is AuthLoading) return null;
       if (authState is Unauthenticated && !isLoginRoute) return '/login';
-      if (authState is Authenticated && isLoginRoute) return '/main';
+      if (authState is Authenticated) {
+        if (authState.user.isFirstLogin == true && !isChangePasswordRoute) {
+          return '/change-password';
+        }
+        if (authState.user.isFirstLogin != true &&
+            (isLoginRoute || isChangePasswordRoute)) {
+          return '/main';
+        }
+      }
       return null;
     },
 
@@ -81,6 +91,12 @@ class AppRouter {
         path: '/login',
         name: 'login',
         builder: (context, state) => const LoginScreen(),
+      ),
+
+      GoRoute(
+        path: '/change-password',
+        name: 'change-password',
+        builder: (context, state) => const ChangePasswordScreen(),
       ),
 
       GoRoute(

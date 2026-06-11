@@ -48,6 +48,15 @@ abstract class AuthApi {
     @Body() Map<String, dynamic> body,
   );
 
+  @POST("/change-password")
+  Future<dynamic> changePassword(
+    @Header("Authorization") String bearerToken,
+    @Body() Map<String, dynamic> body,
+  );
+
+  @POST("/forgot-password")
+  Future<dynamic> forgotPassword(@Body() Map<String, dynamic> body);
+
   @GET("/v1/user/statistics")
   Future<SubmissionStatsModel> getStatistics(@Query("user_id") int userId);
 

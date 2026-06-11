@@ -23,6 +23,9 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) => UserModel(
   updatedAt: json['updated_at'] as String?,
   totalSubmissions: (json['total_submissions'] as num?)?.toInt(),
   unreadNotifications: (json['unread_notifications'] as num?)?.toInt(),
+  isFirstLogin: UserModel._boolFromJson(
+    json['is_first_login'] ?? json['isFirstLogin'],
+  ),
 );
 
 Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
@@ -40,6 +43,7 @@ Map<String, dynamic> _$UserModelToJson(UserModel instance) => <String, dynamic>{
   'updated_at': instance.updatedAt,
   'total_submissions': instance.totalSubmissions,
   'unread_notifications': instance.unreadNotifications,
+  'is_first_login': instance.isFirstLogin,
 };
 
 UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(

@@ -57,8 +57,18 @@ class _LoginScreenState extends State<LoginScreen> {
             }
 
             if (context.mounted) {
-              context.go('/main', extra: state.user);
+              if (state.user.isFirstLogin == true) {
+                context.go('/change-password');
+              } else {
+                context.go('/main', extra: state.user);
+              }
             }
+          } else if (state is ForgotPasswordSent) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Mật khẩu mới đã được gửi về email của bạn'),
+              ),
+            );
           } else if (state is AuthError) {
             _showErrorDialog(context, state.message);
           }
@@ -178,15 +188,51 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   void _showForgotPasswordDialog(BuildContext context) {
+    final identifierController = TextEditingController();
+
     showDialog(
       context: context,
-      builder: (context) => AppConfirmationDialog(
-        title: 'Quên mật khẩu?',
-        content:
-            'Vui lòng liên hệ Quản trị viên (IT Support) để cấp lại mật khẩu mới.',
-        confirmText: 'Đã hiểu',
-        onConfirm: () {},
-      ),
+      builder: (dialogContext) {
+        String? errorText;
+
+        return StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+            title: const Text('Quên mật khẩu'),
+            content: TextField(
+              controller: identifierController,
+              decoration: InputDecoration(
+                labelText: 'Email hoặc mã nhân viên',
+                hintText: 'Nhập email hoặc tài khoản',
+                errorText: errorText,
+              ),
+              autofocus: true,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('Hủy'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  final identifier = identifierController.text.trim();
+                  if (identifier.isEmpty) {
+                    setDialogState(
+                      () => errorText = 'Vui lòng nhập email hoặc mã nhân viên',
+                    );
+                    return;
+                  }
+
+                  context.read<AuthBloc>().add(
+                    ForgotPasswordRequested(identifier),
+                  );
+                  Navigator.pop(dialogContext);
+                },
+                child: const Text('Gửi'),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
